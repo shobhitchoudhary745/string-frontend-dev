@@ -1,0 +1,87 @@
+.nav-bar {
+  width: 257px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.nav-bar:hover::-webkit-scrollbar {
+  background: rgb(130, 142, 148);
+}
+
+.nav-bar::-webkit-scrollbar {
+  background: rgba(0, 0, 0, 0);
+  width: 7px;
+  opacity: 0.4;
+  border-radius: 7px;
+  visibility: visible;
+}
+
+.nav-bar > ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar > ul > li {
+  font-size: 14px;
+  background-color: #1c1c1e;
+  margin: 1.8px;
+  color: #f9f9f9;
+  font-weight: 600;
+  padding: 9px;
+  cursor: pointer;
+  overflow-x: hidden;
+  &:hover{
+    color: #caa257;
+  }
+  &.active{
+    background-color: #caa257;
+    color:#f9f9f9;
+   &:hover{
+    color:#f9f9f9;
+   }
+  }
+}
+
+.sidebar_list_show{
+  max-height:200px;
+  transition:all ease-out;
+  transition-duration: 0.4s;
+  overflow-y: hidden;
+}
+
+.sidebar_list_hide{
+  max-height: 0px;
+  transition:all ease-out;
+  transition-duration: 0.4s;
+  overflow-y: hidden;
+}
+
+.hidden-list {
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 3.5rem;
+}
+
+.hidden-list:hover {
+  color: #caa257;
+}
+
+@media only screen and (max-width: 767px) {
+  .nav-bar {
+    overflow-x: hidden;
+    overflow-y: scroll !important;
+    position: fixed;
+    background-color: black;
+    top: 80px;
+    bottom: 0;
+  }
+  .nav-bar::-webkit-scrollbar {
+    background: rgb(130, 142, 148);
+    width: 0px;
+    opacity: 0.4;
+    border-radius: 7px;
+    visibility: visible;
+  }
+}
