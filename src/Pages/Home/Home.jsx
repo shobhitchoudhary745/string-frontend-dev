@@ -1,9 +1,8 @@
 import React from "react";
 import "./Home.scss";
 import { dashBoardArray } from "../../utils/helper";
+
 const Home = () => {
-
-
   return (
     <div className="d-flex w-100 align-items-center text-center justify-content-center">
       <div className="d-flex flex-wrap gap-3">

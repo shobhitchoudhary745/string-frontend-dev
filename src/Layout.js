@@ -6,18 +6,19 @@ import Login from "./Pages/Auth/Login.jsx";
 import Home from "./Pages/Home/Home.jsx";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute.js";
+
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
 
   return (
     <div className={`${token ? "App" : ""}`}>
       {token && <Header />}
-      <div
-        style={{ overflowY:"hidden"}}
-        className="d-flex  my-2"
-      >
+      <div style={{ overflowY: "hidden" }} className="d-flex  my-2">
         {token && <Sidebar />}
-        <div className="mx-3 my-1 flex-1" style={{ overflowY: "auto",minHeight:"100%" }}>
+        <div
+          className="mx-3 my-1 flex-1"
+          style={{ overflowY: "auto", minHeight: "100%" }}
+        >
           <Routes>
             <Route
               path="/"
