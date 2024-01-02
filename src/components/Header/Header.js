@@ -10,12 +10,17 @@ import { toggle } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from "../../features/authSlice";
 
-
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentPage } = useSelector((state) => state.general);
-  
+
+  const logout = (e) => {
+    dispatch(removeToken());
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
     <div className="Header">
       <div className="d-flex parent">
@@ -44,7 +49,7 @@ export default function Header() {
               <FaDesktop size={25} style={{ cursor: "pointer" }} />
               <Dropdown>
                 <Dropdown.Toggle
-                  className="dropdown-toggle p-0" 
+                  className="dropdown-toggle p-0"
                   style={{ backgroundColor: "black", border: "none" }}
                 >
                   <img
@@ -59,11 +64,7 @@ export default function Header() {
                     <TfiUser size={17} /> Profile
                   </Dropdown.Item>
                   <Dropdown.Item
-                    onClick={() => {
-                      dispatch(removeToken());
-                      localStorage.removeItem("token");
-                      navigate("/login")
-                    }}
+                    onClick={logout}
                     className="d-flex gap-2 align-items-center"
                   >
                     <CiPower size={18} /> Logout
