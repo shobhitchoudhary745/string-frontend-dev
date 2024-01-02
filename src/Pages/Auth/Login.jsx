@@ -62,12 +62,8 @@ const Login = () => {
           >
             LOGIN OR SIGN UP TO CONTINUE
           </Button>
-          <Link
-            to="/forgot-password"
-            style={{ color: "#98a6ad", fontSize: "14px" }}
-            className="forgot-password"
-          >
-            <FaLock style={{ fontSize: "10px" }} />{" "}
+          <Link to="/forgot-password" className="forgot-password">
+            <FaLock style={{ fontSize: "10px" }} />
             <span>Forgot your password?</span>
           </Link>
         </Form>
