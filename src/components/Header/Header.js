@@ -8,6 +8,8 @@ import { FiMenu } from "react-icons/fi";
 import "./Header.scss";
 import { toggle } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
+import { removeToken } from "../../features/authSlice";
+
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -58,6 +60,8 @@ export default function Header() {
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={() => {
+                      dispatch(removeToken());
+                      localStorage.removeItem("token");
                       navigate("/login")
                     }}
                     className="d-flex gap-2 align-items-center"

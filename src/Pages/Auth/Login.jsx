@@ -1,8 +1,17 @@
 import React from "react";
 import "./Login.scss";
-import { FaLock } from "react-icons/fa6"; 
+import { FaLock } from "react-icons/fa6";
+import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setToken } from "../../features/authSlice";
 const Login = () => {
-  return (
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("token");
+
+  return token ? (
+    <Navigate to="/" />
+  ) : (
     <div className="login-main-container">
       <div>
         <img
@@ -12,7 +21,14 @@ const Login = () => {
         />
       </div>
       <div className="login-container">
-        <h3 style={{ color: "#f9f9f9", fontSize: "24px", fontWeight:"500", margin: "8px" }}>
+        <h3
+          style={{
+            color: "#f9f9f9",
+            fontSize: "24px",
+            fontWeight: "500",
+            margin: "8px",
+          }}
+        >
           SIGN IN
         </h3>
         <input
@@ -21,7 +37,14 @@ const Login = () => {
           placeholder="Email Address"
         />
         <input className="input-text" type="password" placeholder="Password" />
-        <div style={{ display: "flex", gap:"5px", width: "100%", alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "5px",
+            width: "100%",
+            alignItems: "center",
+          }}
+        >
           <input
             style={{ color: "#ffffff", width: "17px", height: "17px" }}
             type="checkbox"
@@ -30,15 +53,24 @@ const Login = () => {
             Remember me
           </label>
         </div>
-        <button type="submit" className="submit-button">
+        <button
+          onClick={() => {
+            localStorage.setItem("token", "dummytoken");
+            dispatch(setToken({ token: "dummytoken" }));
+            navigate("/");
+          }}
+          type="submit"
+          className="submit-button"
+        >
           LOG IN OR SIGN UP TO CONTINUE
         </button>
-        <a
-          href="www.mysirg.com"
-          style={{ textDecoration: "none", color: "#98a6ad", fontSize: "14px" }}
+        <div
+          style={{ color: "#98a6ad", fontSize: "14px" }}
+          className="d-flex gap-1 align-items-center"
         >
-          <FaLock /> Forgot Your Password?
-        </a>
+          <FaLock />{" "}
+          <span style={{ marginTop: "2px" }}>Forgot Your Password?</span>
+        </div>
       </div>
     </div>
   );
