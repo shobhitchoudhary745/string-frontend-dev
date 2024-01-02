@@ -1,5 +1,5 @@
 .Header {
-  height: 18vh;
+  // height: 18vh;
   border-top: 3px solid #caa257;
   margin: 0px;
   padding: 0px;
@@ -10,6 +10,10 @@
   background-color: black;
 }
 
+.parent{
+  min-height:70px;
+}
+ 
 .header_first_child {
   border-right: 1px solid #caa257;
   align-items: center;
@@ -48,9 +52,9 @@
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1025px) {
-  .Header {
-    height: 8vh;
-  }
+  // .Header {
+  //   height: 8vh;
+  // }
   .string-geo-logo {
     height: 85%;
   }
@@ -65,6 +69,9 @@
     display: none;
     border: none;
     width: 0px;
+  }
+  .parent{
+    height:100%;
   }
   .menu_icon {
     width: 22px;

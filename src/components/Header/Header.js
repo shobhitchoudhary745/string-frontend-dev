@@ -18,7 +18,7 @@ export default function Header() {
   
   return (
     <div className="Header">
-      <div className="d-flex h-100">
+      <div className="d-flex parent">
         <div className="d-flex header_first_child ">
           <img
             className="string-geo-logo"

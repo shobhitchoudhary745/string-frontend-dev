@@ -13,15 +13,22 @@ export default function Layout() {
     <div className={`${token ? "App" : ""}`}>
       {token && <Header />}
       <div
-        style={{ overflowY: token ? "hidden" : "" }}
-        className={`${token ? "d-flex flex-1  mt-2" : ""}`}
+        style={{ overflowY:"hidden"}}
+        className="d-flex  my-2"
       >
         {token && <Sidebar />}
-        <div className="mx-1" style={{ overflowY: "auto" }}>
-            <Routes>
-              <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-              <Route path="/login" element={<Login />} />
-            </Routes>
+        <div className="mx-3 my-1 flex-1" style={{ overflowY: "auto",minHeight:"100%" }}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<Login />} />
+          </Routes>
         </div>
       </div>
     </div>

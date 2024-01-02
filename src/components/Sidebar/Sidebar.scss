@@ -1,12 +1,13 @@
 .nav-bar {
-  width: 257px;
+  min-width: 257px !important;
   overflow-y: auto;
   overflow-x: hidden;
+  z-index:9999;
 }
 
-.nav-bar:hover::-webkit-scrollbar {
-  background: rgb(130, 142, 148);
-}
+// .nav-bar:hover::-webkit-scrollbar {
+//   background: rgb(130, 142, 148);
+// }
 
 .nav-bar::-webkit-scrollbar {
   background: rgba(0, 0, 0, 0);
@@ -16,14 +17,23 @@
   visibility: visible;
 }
 
-.nav-bar > ul {
+.nav-bar:hover::-webkit-scrollbar-thumb {
+  background: rgba(130, 142, 148, 0.4);
+  width: 7px;
+  border-radius: 7px;
+  visibility: visible;
+}
+
+.nav-bar  > ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  width: 256px;
 }
 
 .nav-bar > ul > li {
   font-size: 14px;
+  width: 256px;
   background-color: #1c1c1e;
   margin: 1.8px;
   color: #f9f9f9;
@@ -31,29 +41,29 @@
   padding: 9px;
   cursor: pointer;
   overflow-x: hidden;
-  &:hover{
+  &:hover {
     color: #caa257;
   }
-  &.active{
+  &.active {
     background-color: #caa257;
-    color:#f9f9f9;
-   &:hover{
-    color:#f9f9f9;
-   }
+    color: #f9f9f9;
+    &:hover {
+      color: #f9f9f9;
+    }
   }
 }
 
-.sidebar_list_show{
-  max-height:200px;
-  transition:all ease-out;
-  transition-duration: 0.4s;
+.sidebar_list_show {
+  max-height: 200px;
+  transition: all ease-out;
+  transition-duration: 0.8s;
   overflow-y: hidden;
 }
 
-.sidebar_list_hide{
+.sidebar_list_hide {
   max-height: 0px;
-  transition:all ease-out;
-  transition-duration: 0.4s;
+  transition: all ease-out;
+  transition-duration: 0.5s;
   overflow-y: hidden;
 }
 
