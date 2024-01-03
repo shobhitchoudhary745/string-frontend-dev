@@ -17,3 +17,8 @@
         padding:23px;
     }
   }
+
+  .card-container::-webkit-scrollbar{
+     width:0px;
+     color:transparent;
+  }
