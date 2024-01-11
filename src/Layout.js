@@ -16,8 +16,8 @@ export default function Layout() {
       <div style={{ overflowY: "hidden" }} className="d-flex  my-2">
         {token && <Sidebar />}
         <div
-          className="mx-3 my-1 flex-1"
-          style={{ overflowY: "auto", minHeight: "100%" }}
+          className="mx-3 my-1 flex-1 card-container"
+          style={{overflowY:"scroll",  minHeight: "100%" }}
         >
           <Routes>
             <Route

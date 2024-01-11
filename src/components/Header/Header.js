@@ -16,8 +16,10 @@ export default function Header() {
   const { currentPage } = useSelector((state) => state.general);
 
   const logout = (e) => {
+    e.preventDefault();
     dispatch(removeToken());
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     navigate("/login");
   };
 

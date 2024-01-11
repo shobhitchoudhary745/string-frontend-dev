@@ -1,20 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.scss";
 import { FaLock } from "react-icons/fa6";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../features/authSlice";
 import { Form, Button } from "react-bootstrap";
+import axiosInstance from "../../utils/axiosUtil";
+
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    localStorage.setItem("token", "dummytoken");
-    dispatch(setToken({ token: "dummytoken" }));
-    navigate("/");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axiosInstance.post("/api/admin/admin-login", {
+        email,
+        password,
+      });
+    
+      if (data.success) {
+        localStorage.setItem("token",data.accessToken);
+        localStorage.setItem("refreshToken",data.refreshToken);
+        dispatch(
+          setToken({ token: data.accessToken })
+        );
+      navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return token ? (
@@ -34,9 +53,11 @@ const Login = () => {
         <div className="text-center">
           <h3>SIGN IN</h3>
         </div>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3">
             <Form.Control
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="input-text"
               type="email"
               placeholder="Email Address"
@@ -45,6 +66,8 @@ const Login = () => {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Control
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="input-text"
               type="password"
               placeholder="Password"
@@ -56,7 +79,6 @@ const Login = () => {
           </Form.Group>
 
           <Button
-            onClick={handleSubmit}
             type="submit"
             className="submit-button"
           >
@@ -67,7 +89,9 @@ const Login = () => {
             <span>Forgot your password?</span>
           </Link>
         </Form>
+      
       </div>
+      
     </div>
   );
 };
