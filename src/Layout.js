@@ -7,6 +7,7 @@ import Home from "./Pages/Home/Home.jsx";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute.js";
 import User from "./Pages/Users/User.jsx";
+import Transaction from "./Pages/Transactions/Transaction.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -34,6 +35,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <User />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/transactions"
+              element={
+                <ProtectedRoute>
+                  <Transaction />
                 </ProtectedRoute>
               }
             />

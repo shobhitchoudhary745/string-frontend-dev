@@ -199,9 +199,9 @@ export default function Sidebar() {
           current === "Transactions" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
       >
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        <Link to={"/admin/transactions"} className="d-flex hidden-list align-items-center gap-3  my-2">
           <VscListUnordered size={18} /> Transactions
-        </div>
+        </Link>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <FaListUl size={18} /> Attempt History
         </div>
