@@ -6,6 +6,7 @@ import Login from "./Pages/Auth/Login.jsx";
 import Home from "./Pages/Home/Home.jsx";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute.js";
+import User from "./Pages/Users/User.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -28,6 +29,15 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
+             <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute>
+                  <User />
+                </ProtectedRoute>
+              }
+            />
+            
             <Route path="/login" element={<Login />} />
           </Routes>
         </div>

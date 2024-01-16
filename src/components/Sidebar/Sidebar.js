@@ -23,6 +23,7 @@ import {
 } from "react-icons/md";
 import { setCurrentPage } from "../../features/generalSlice";
 import { firstArray,secondArray } from "../../utils/helper";
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const dispatch = useDispatch();
@@ -152,9 +153,9 @@ export default function Sidebar() {
           current === "Users" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
       >
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        <Link to={"/admin/users"} className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiUsersThreeFill size={18} /> Users
-        </div>
+        </Link>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiUsersThreeFill size={18} /> Sub Admin
         </div>
