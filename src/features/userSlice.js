@@ -9,7 +9,6 @@ const userSlice = createSlice({
   },
   reducers: {
     setUsers: (state, action) => {
-      console.log(action)
       state.users = action.payload.users;
       state.userCount = action.payload.userCount;
       state.filteredUsers = action.payload.filteredUsers;
