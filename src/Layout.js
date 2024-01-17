@@ -20,7 +20,7 @@ export default function Layout() {
         {token && <Sidebar />}
         <div
           className="mx-3 my-1 flex-1 card-container"
-          style={{ overflowY: "scroll", minHeight: "100%" }}
+          style={{ overflowY: "scroll", minHeight: "100%",width:"100%" }}
         >
           <Routes>
             <Route

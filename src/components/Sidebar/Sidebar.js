@@ -23,9 +23,10 @@ import {
 } from "react-icons/md";
 import { setCurrentPage } from "../../features/generalSlice";
 import { firstArray, secondArray } from "../../utils/helper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [current, setCurrent] = useState("");
   const screenWidth = window.screen.width;
@@ -42,6 +43,7 @@ export default function Sidebar() {
               onClick={() => {
                 dispatch(setCurrentPage({ currentPage: data.content }));
                 setCurrent("");
+                navigate("/")
               }}
               className={`${currentPage === data.content ? "active" : ""}`}
             >

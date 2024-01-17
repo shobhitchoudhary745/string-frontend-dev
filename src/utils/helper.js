@@ -9,6 +9,7 @@ export const firstArray = [
   {
     icon: <AiFillDashboard className="mx-2" size={18} />,
     content: "Dashboard",
+    link:"/"
   },
   {
     icon: <FaVideo className="mx-2" size={18} />,
