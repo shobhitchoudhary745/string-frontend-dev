@@ -2,15 +2,26 @@ import React from "react";
 import "./Home.scss";
 import CountUp from "react-countup";
 import { dashBoardArray } from "../../utils/helper";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCurrentPage } from "../../features/generalSlice";
 
 
 const Home = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   return (
     <div className="d-flex w-100 align-items-center text-center justify-content-center">
       <div className="d-flex  flex-wrap gap-3">
         {dashBoardArray.map((data, index) => {
           return (
             <div
+              onClick={()=>{
+                navigate(data.path);
+                dispatch(setCurrentPage({ currentPage: data.content }));
+              }}
               key={index}
               style={{ backgroundColor: "#1c1c1e" }}
               className="dashboard_cards card d-flex justify-content-center align-items-center gap-1 flex-column"

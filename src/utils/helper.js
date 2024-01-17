@@ -61,14 +61,14 @@ export const secondArray = [
 ];
 
 export const dashBoardArray = [
-  { key: "Language", value: 4, color: "#caa257" },
-  { key: "Genres", value: 5, color: "#ff8acc" },
-  { key: "Movies", value: 1, color: "#f9c851" },
-  { key: "Shows", value: 7, color: "#797979" },
-  { key: "Users", value: 15965, color: "#5b69bc" },
-  { key: "Transactions", value: 2873, color: "#caa257" },
-  { key: "Daily Revenue", value: 5923, color: "#caa257" },
-  { key: "Weekly Revenue", value: 26102, color: "#ff8acc" },
-  { key: "Monthly Revenue", value: 26102, color: "#f9c851" },
-  { key: "Yearly Revenue", value: 26102, color: "#10c469" },
+  { key: "Language", value: 4, color: "#caa257",path:"/",content:"" },
+  { key: "Genres", value: 5, color: "#ff8acc",path:"/",content:"" },
+  { key: "Movies", value: 1, color: "#f9c851",path:"/",content:"" },
+  { key: "Shows", value: 7, color: "#797979",path:"/",content:"" },
+  { key: "Users", value: 15965, color: "#5b69bc",path:"/admin/users",content:"Users" },
+  { key: "Transactions", value: 2873, color: "#caa257",path:"/admin/transactions",content:"Transactions" },
+  { key: "Daily Revenue", value: 5923, color: "#caa257",path:"/",content:"" },
+  { key: "Weekly Revenue", value: 26102, color: "#ff8acc",path:"/",content:"" },
+  { key: "Monthly Revenue", value: 26102, color: "#f9c851",path:"/",content:"" },
+  { key: "Yearly Revenue", value: 26102, color: "#10c469",path:"/",content:"" },
 ];
