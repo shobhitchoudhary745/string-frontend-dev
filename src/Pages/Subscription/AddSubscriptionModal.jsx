@@ -4,12 +4,13 @@ import "./Subscription.scss";
 import axios from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../features/generalSlice";
+import { getAllPlans } from "../../features/apiCall";
 
 export default function AddSubscriptionModal(props) {
-
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
+
   const [name, setName] = useState("");
   const [allow_devices, setAllow_devices] = useState(0);
   const [monthly_price, setMonthly_price] = useState(0);
@@ -18,7 +19,6 @@ export default function AddSubscriptionModal(props) {
   const [usd_price_yearly, setUsd_Yearly_price] = useState(0);
 
   const resetForm = () => {
-
     setName("");
     setAllow_devices(0);
     setMonthly_price(0);
@@ -26,6 +26,7 @@ export default function AddSubscriptionModal(props) {
     setUsd_Monthly_price(0);
     setUsd_Yearly_price(0);
   };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -43,13 +44,15 @@ export default function AddSubscriptionModal(props) {
         { headers: { authorization: `Bearer ${token}` } }
       );
       if (data.success) {
+        getAllPlans(dispatch, token);
         dispatch(setLoading());
+        window.alert(data.message);
         resetForm();
         props.onHide();
       }
     } catch (err) {
       dispatch(setLoading());
-      window.alert("something went wrong");
+      window.alert(err);
       console.log(err);
     }
   };
@@ -142,14 +145,9 @@ export default function AddSubscriptionModal(props) {
           <Button
             variant="success"
             type="submit"
-            // disabled={loadingUpdate ? true : false}
+            disabled={loading ? true : false}
           >
-            {loading ? (
-              <Spinner animation="border" size="sm" />
-            ) : (
-              "Submit"
-            )}
-            
+            {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
           </Button>
         </Modal.Footer>
       </Form>

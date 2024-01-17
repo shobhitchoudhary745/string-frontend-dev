@@ -8,27 +8,47 @@ import { FaEdit } from "react-icons/fa";
 import AddSubscriptionModal from "./AddSubscriptionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPlans } from "../../features/apiCall";
+import EditSubscriptionModal from "./EditSubscriptionModal";
+import { setLoading } from "../../features/generalSlice";
+import axios from "../../utils/axiosUtil";
 
 const Subscription = () => {
-  const [modalShow, setModalShow] = useState(false);
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { plans, filteredPlans } = useSelector((state) => state.plan);
+  const { plans } = useSelector((state) => state.plan);
 
-  const [curPage, setCurPage] = useState(1);
-  const [searchInput, setSearchInput] = useState("");
-  const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const resultPerPage = 10;
-  const curPageHandler = (p) => setCurPage(p);
+  const [modalShow, setModalShow] = useState(false);
+  const [editModalShow, setEditModalShow] = useState(false);
 
   useEffect(() => {
-    if (token)
-      getAllPlans(dispatch, token, curPage, resultPerPage, query, setLoading);
-  }, [dispatch, token, curPage, resultPerPage, query, setLoading,modalShow]);
+    if (token) getAllPlans(dispatch, token);
+  }, [dispatch, token]);
 
-  const numOfPages = Math.ceil(filteredPlans / resultPerPage);
+  const deleteHandler = async (id) => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this plan?\nThis action cannot be undone."
+      ) === true
+    ) {
+      try {
+        dispatch(setLoading());
+        const { data } = await axios.delete(`/api/plan/delete-plan/${id}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        if (data.success) {
+          getAllPlans(dispatch, token);
+          dispatch(setLoading());
+          window.alert(data.message);
+        }
+      } catch (error) {
+        dispatch(setLoading());
+        window.alert(error);
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <>
@@ -62,13 +82,24 @@ const Subscription = () => {
                       <span className="active">Active</span>
                     </td>
                     <td className="action-link">
-                      <Link className="btn btn-success">
+                      <Link
+                        onClick={() => setEditModalShow(true)}
+                        className="btn btn-success"
+                      >
                         <FaEdit />
                       </Link>
-                      <Link className="btn btn-danger">
+                      <Link
+                        onClick={() => deleteHandler(data._id)}
+                        className="btn btn-danger"
+                      >
                         <IoClose />
                       </Link>
                     </td>
+                    <EditSubscriptionModal
+                      show={editModalShow}
+                      onHide={() => setEditModalShow(false)}
+                      plan={data}
+                    />
                   </tr>
                 );
               })}

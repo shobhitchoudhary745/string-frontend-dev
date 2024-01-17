@@ -23,7 +23,6 @@ export const getAllUsers = async (
       }
     );
     if (data.success) {
-      //   console.log(data);
       setLoading(false);
       dispatch(
         setUsers({
@@ -73,37 +72,17 @@ export const getAllTransactions = async (
   }
 };
 
-export const getAllPlans = async (
-  dispatch,
-  token,
-  curPage,
-  resultPerPage,
-  query,
-  setLoading
-) => {
+export const getAllPlans = async (dispatch, token) => {
   try {
-    setLoading(true);
-    const { data } = await axios.get(
-      `/api/plan/get-plans`,
-      {
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const { data } = await axios.get(`/api/plan/get-plans`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
     if (data.success) {
-        console.log(data);
-      setLoading(false);
-      dispatch(
-        setPlans({
-          plans: data.plans,
-          planCount: 0,
-          filteredPlans: 0
-        })
-      );
+      dispatch(setPlans({ plans: data.plans }));
     }
   } catch (error) {
-    setLoading(false);
     console.log(error);
   }
 };
