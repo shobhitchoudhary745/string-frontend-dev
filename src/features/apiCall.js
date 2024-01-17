@@ -1,4 +1,5 @@
 import axios from "../utils/axiosUtil";
+import { setPlans } from "./planSlice";
 // import { setLoading } from "./generalSlice";
 import { setTransactions } from "./transactionSlice";
 import { setUsers } from "./userSlice";
@@ -63,6 +64,41 @@ export const getAllTransactions = async (
           transactions: data.transactions,
           transactionCount: data.transactionCount,
           filteredTransactions: data.filteredTransactions,
+        })
+      );
+    }
+  } catch (error) {
+    setLoading(false);
+    console.log(error);
+  }
+};
+
+export const getAllPlans = async (
+  dispatch,
+  token,
+  curPage,
+  resultPerPage,
+  query,
+  setLoading
+) => {
+  try {
+    setLoading(true);
+    const { data } = await axios.get(
+      `/api/plan/get-plans`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+        console.log(data);
+      setLoading(false);
+      dispatch(
+        setPlans({
+          plans: data.plans,
+          planCount: 0,
+          filteredPlans: 0
         })
       );
     }

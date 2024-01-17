@@ -1,14 +1,59 @@
 import React, { useState } from "react";
-import { Button, Container, Modal, Form } from "react-bootstrap";
+import { Button, Container, Modal, Form, Spinner } from "react-bootstrap";
 import "./Subscription.scss";
+import axios from "../../utils/axiosUtil";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../features/generalSlice";
 
 export default function AddSubscriptionModal(props) {
-  const [name, setName] = useState("");
-  const [allow_devices, setAllow_devices] = useState("");
-  const [monthly_price, setMonthly_price] = useState();
-  const [yearly_price, setYearly_price] = useState();
 
-  const submitHandler = async () => {};
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.general);
+  const [name, setName] = useState("");
+  const [allow_devices, setAllow_devices] = useState(0);
+  const [monthly_price, setMonthly_price] = useState(0);
+  const [yearly_price, setYearly_price] = useState(0);
+  const [usd_price_monthly, setUsd_Monthly_price] = useState(0);
+  const [usd_price_yearly, setUsd_Yearly_price] = useState(0);
+
+  const resetForm = () => {
+
+    setName("");
+    setAllow_devices(0);
+    setMonthly_price(0);
+    setYearly_price(0);
+    setUsd_Monthly_price(0);
+    setUsd_Yearly_price(0);
+  };
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(setLoading());
+      const { data } = await axios.post(
+        "/api/plan/create-plan",
+        {
+          name,
+          allow_devices,
+          monthly_price,
+          yearly_price,
+          usd_price_monthly,
+          usd_price_yearly,
+        },
+        { headers: { authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
+        dispatch(setLoading());
+        resetForm();
+        props.onHide();
+      }
+    } catch (err) {
+      dispatch(setLoading());
+      window.alert("something went wrong");
+      console.log(err);
+    }
+  };
+
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter">
       <Modal.Header>
@@ -37,8 +82,9 @@ export default function AddSubscriptionModal(props) {
                   value={allow_devices}
                   placeholder="Enter Allowed Devices"
                   onChange={(e) => setAllow_devices(e.target.value)}
-                  type="email"
+                  type="number"
                   required
+                  min={1}
                 />
               </Form.Group>
 
@@ -50,6 +96,7 @@ export default function AddSubscriptionModal(props) {
                   onChange={(e) => setMonthly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
               <Form.Group>
@@ -60,26 +107,29 @@ export default function AddSubscriptionModal(props) {
                   onChange={(e) => setYearly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Monthly Price - USD</Form.Label>
                 <Form.Control
                   placeholder="Enter Monthly Price"
-                  value={monthly_price}
-                  onChange={(e) => setMonthly_price(e.target.value)}
+                  value={usd_price_monthly}
+                  onChange={(e) => setUsd_Monthly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
               <Form.Group>
                 <Form.Label>Yearly Price - USD</Form.Label>
                 <Form.Control
-                  value={yearly_price}
+                  value={usd_price_yearly}
                   placeholder="Enter Yearly Price"
-                  onChange={(e) => setYearly_price(e.target.value)}
+                  onChange={(e) => setUsd_Yearly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
             </div>
@@ -94,12 +144,12 @@ export default function AddSubscriptionModal(props) {
             type="submit"
             // disabled={loadingUpdate ? true : false}
           >
-            {/* {loadingUpdate ? (
+            {loading ? (
               <Spinner animation="border" size="sm" />
             ) : (
               "Submit"
-            )} */}
-            Submit
+            )}
+            
           </Button>
         </Modal.Footer>
       </Form>
