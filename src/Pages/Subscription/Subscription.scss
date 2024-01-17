@@ -1,0 +1,90 @@
+.modal-content{
+    margin-left: 8rem;
+    margin-top: 5rem;
+}
+.modal-header {
+    background-color: #1c1c1e;
+
+    div {
+        font-size: 20px;
+        color: #f9f9f9;
+        font-weight: 700;
+    }
+}
+form {
+    background-color: #1c1c1e;
+    color: #f9f9f9;
+    font-size: 14px;
+    font-weight: 700;
+    .modal-body {
+        .small-container {
+            display: flex;
+            flex-direction: column;
+
+            .inner-div {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 1rem;
+
+                div {
+                    width: 45%;
+                    input {
+                        background-color: #313133;
+                        color: #f9f9f9;
+                        border: none;
+                        box-shadow: none;
+                        height: 44px !important;
+                        font-weight: 500;
+                        border-radius: 4px;
+                        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+
+                        &::placeholder {
+                            color: #6c757d;
+                            font-weight: bold;
+                            font-size: 14px;
+                        }
+
+                        &:focus {
+                            background: #48484a;
+                            box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+                            transition: all 0.5s ease;
+                            border: 0;
+                            color: #f9f9f9;
+                            outline: 0 !important;
+                        }
+                    }
+                }
+            }
+            .description {
+                .form-control {
+                    background-color: #313133 !important;
+                    color: #f9f9f9;
+                    border: none;
+                    box-shadow: none;
+                    font-weight: 500;
+                    border-radius: 4px;
+                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+
+                    &::placeholder {
+                        color: #6c757d;
+                        font-weight: bold;
+                        font-size: 14px;
+                    }
+
+                    &:focus {
+                        background: #48484a;
+                        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+                        transition: all 0.5s ease;
+                        border: 0;
+                        color: #f9f9f9;
+                        outline: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+}
