@@ -22,7 +22,7 @@ import {
   MdPlayCircle,
 } from "react-icons/md";
 import { setCurrentPage } from "../../features/generalSlice";
-import { firstArray,secondArray } from "../../utils/helper";
+import { firstArray, secondArray } from "../../utils/helper";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
@@ -30,9 +30,10 @@ export default function Sidebar() {
   const [current, setCurrent] = useState("");
   const screenWidth = window.screen.width;
   const { isOpen, currentPage } = useSelector((state) => state.general);
-  
+  console.log(isOpen);
+
   return isOpen || screenWidth >= 768 ? (
-    <nav className="nav-bar">
+    <nav className={`sidebar ${isOpen ? "nav-bar open" : "nav-bar"}`}>
       <ul>
         {firstArray.map((data, index) => {
           return (
@@ -153,7 +154,10 @@ export default function Sidebar() {
           current === "Users" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
       >
-        <Link to={"/admin/users"} className="d-flex hidden-list align-items-center gap-3  my-2">
+        <Link
+          to={"/admin/users"}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
           <PiUsersThreeFill size={18} /> Users
         </Link>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
@@ -164,12 +168,15 @@ export default function Sidebar() {
         <li
           onClick={() => {
             dispatch(setCurrentPage({ currentPage: "Subscription Plans" }));
+
             setCurrent("");
           }}
           className={`${currentPage === "Subscription Plans" ? "active" : ""}`}
         >
-          <FaDollarSign size={18} className="mx-2" />
-          Subscription Plans
+          <Link to="/admin/subscription">
+            <FaDollarSign size={18} className="mx-2" />
+            Subscription Plans
+          </Link>
         </li>
       </ul>
       <ul>
@@ -199,7 +206,10 @@ export default function Sidebar() {
           current === "Transactions" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
       >
-        <Link to={"/admin/transactions"} className="d-flex hidden-list align-items-center gap-3  my-2">
+        <Link
+          to={"/admin/transactions"}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
           <VscListUnordered size={18} /> Transactions
         </Link>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
@@ -241,22 +251,20 @@ export default function Sidebar() {
         </div>
       </div>
       <ul>
-        {
-          secondArray.map((data, index) => {
-            return (
-              <li
-                key={index+"keys"}
-                onClick={() => {
-                  dispatch(setCurrentPage({ currentPage: data.content }));
-                  setCurrent("");
-                }}
-                className={`${currentPage === data.content ? "active" : ""}`}
-              >
-                {data.icon} {data.content}
-              </li>
-            );
-          })
-        }
+        {secondArray.map((data, index) => {
+          return (
+            <li
+              key={index + "keys"}
+              onClick={() => {
+                dispatch(setCurrentPage({ currentPage: data.content }));
+                setCurrent("");
+              }}
+              className={`${currentPage === data.content ? "active" : ""}`}
+            >
+              {data.icon} {data.content}
+            </li>
+          );
+        })}
       </ul>
       <ul>
         <li

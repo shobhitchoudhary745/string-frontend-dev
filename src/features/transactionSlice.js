@@ -9,7 +9,6 @@ const transactionSlice = createSlice({
   },
   reducers: {
     setTransactions: (state, action) => {
-      console.log(action);
       state.transactions = action.payload.transactions;
       state.transactionCount = action.payload.transactionCount;
       state.filteredTransactions = action.payload.filteredTransactions;

@@ -13,8 +13,8 @@ import { removeToken } from "../../features/authSlice";
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentPage } = useSelector((state) => state.general);
-
+  const { currentPage, isOpen } = useSelector((state) => state.general);
+  console.log(isOpen);
   const logout = (e) => {
     e.preventDefault();
     dispatch(removeToken());
@@ -41,6 +41,7 @@ export default function Header() {
                   onClick={() => {
                     dispatch(toggle());
                   }}
+                  cursor={"pointer"}
                   className="menu_icon"
                   size={25}
                 />

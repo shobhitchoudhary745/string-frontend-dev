@@ -1,14 +1,15 @@
 .user-table {
     .user-body {
+        font-weight: bold;
         tbody {
             border-color: #313133;
             tr {
                 td {
                     &:nth-child(1) {
-                        min-width: 13rem;
+                        min-width: 8rem;
                     }
                     &:nth-child(2) {
-                        min-width: 16rem;
+                        min-width: 10rem;
                     }
                 }
             }

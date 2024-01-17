@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute.js";
 import User from "./Pages/Users/User.jsx";
 import Transaction from "./Pages/Transactions/Transaction.jsx";
+import Subscription from "./Pages/Subscription/Subscription.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -19,7 +20,7 @@ export default function Layout() {
         {token && <Sidebar />}
         <div
           className="mx-3 my-1 flex-1 card-container"
-          style={{overflowY:"scroll",  minHeight: "100%" }}
+          style={{ overflowY: "scroll", minHeight: "100%" }}
         >
           <Routes>
             <Route
@@ -30,7 +31,7 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
-             <Route
+            <Route
               path="/admin/users"
               element={
                 <ProtectedRoute>
@@ -46,7 +47,14 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
-            
+            <Route
+              path="/admin/subscription"
+              element={
+                <ProtectedRoute>
+                  <Subscription />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/login" element={<Login />} />
           </Routes>
         </div>

@@ -5,6 +5,7 @@ import { Card, Form, InputGroup, Table } from "react-bootstrap";
 import CustomPagination from "../../utils/CustomPagination";
 import { FaRegFileExcel, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import "./Transaction.scss";
 
 export default function Transaction() {
   const dispatch = useDispatch();

@@ -3,9 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 const generalSlice = createSlice({
   name: "general",
   initialState: {
-    isOpen:false,
-    currentPage:"Dashboard",
-    loading:false
+    isOpen: false,
+    currentPage: "Dashboard",
+    loading: false,
   },
   reducers: {
     toggle: (state, action) => {
@@ -16,10 +16,9 @@ const generalSlice = createSlice({
     },
     setLoading: (state, action) => {
       state.loading = !state.loading;
-    }
+    },
   },
 });
 
-export const { toggle, setCurrentPage, setLoading } =
-  generalSlice.actions;
+export const { toggle, setCurrentPage, setLoading } = generalSlice.actions;
 export default generalSlice.reducer;

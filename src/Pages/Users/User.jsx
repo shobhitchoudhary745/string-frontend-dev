@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Form, InputGroup, Spinner, Table } from "react-bootstrap";
+import { Card, Form, InputGroup, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
 import { FaRegFileExcel, FaEye, FaEdit } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
 import { IoClose } from "react-icons/io5";
-import "./User.scss";
+import "../../utils/style.scss";
+import "./User.scss"
 import CustomPagination from "../../utils/CustomPagination";
 
 export default function User() {
@@ -17,7 +18,6 @@ export default function User() {
   const { users, filteredUsers } = useSelector((state) => state.user);
 
   const [curPage, setCurPage] = useState(1);
-  // const [resultPerPage, setResultPerPage] = useState(10);
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
@@ -111,8 +111,9 @@ export default function User() {
                     <td>{user.email}</td>
                     <td>{user.mobile}</td>
                     <td>
-                      {user.subscription_plans?.plan_name ?
-                        user.subscription_plans?.plan_name:"N/A"}
+                      {user.subscription_plans?.plan_name
+                        ? user.subscription_plans?.plan_name
+                        : "N/A"}
                     </td>
                     <td>
                       <span className="active">Active</span>
