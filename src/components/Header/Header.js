@@ -13,8 +13,7 @@ import { removeToken } from "../../features/authSlice";
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentPage, isOpen } = useSelector((state) => state.general);
-  console.log(isOpen);
+  const { currentPage } = useSelector((state) => state.general);
   const logout = (e) => {
     e.preventDefault();
     dispatch(removeToken());

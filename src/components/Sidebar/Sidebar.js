@@ -31,8 +31,7 @@ export default function Sidebar() {
   const [current, setCurrent] = useState("");
   const screenWidth = window.screen.width;
   const { isOpen, currentPage } = useSelector((state) => state.general);
-  console.log(isOpen);
-
+  
   return isOpen || screenWidth >= 768 ? (
     <nav className={`sidebar ${isOpen ? "nav-bar open" : "nav-bar"}`}>
       <ul>
@@ -43,7 +42,7 @@ export default function Sidebar() {
               onClick={() => {
                 dispatch(setCurrentPage({ currentPage: data.content }));
                 setCurrent("");
-                navigate("/")
+                navigate("/");
               }}
               className={`${currentPage === data.content ? "active" : ""}`}
             >
@@ -170,15 +169,13 @@ export default function Sidebar() {
         <li
           onClick={() => {
             dispatch(setCurrentPage({ currentPage: "Subscription Plans" }));
-
+            navigate("/admin/subscription");
             setCurrent("");
           }}
           className={`${currentPage === "Subscription Plans" ? "active" : ""}`}
         >
-          <Link to="/admin/subscription">
-            <FaDollarSign size={18} className="mx-2" />
-            Subscription Plans
-          </Link>
+          <FaDollarSign size={18} className="mx-2" />
+          Subscription Plans
         </li>
       </ul>
       <ul>

@@ -78,7 +78,6 @@ export default function Transaction() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
             />
-            <FaSearch />
           </InputGroup>
           <div className="button">
             <Link>
@@ -106,7 +105,11 @@ export default function Transaction() {
                     <td>{transaction.user.name}</td>
                     <td>{transaction.user.email}</td>
                     <td>{transaction.order.plan_type}</td>
-                    <td>{transaction.amount}</td>
+                    <td>
+                      {transaction.gateway === "Razorpay"
+                        ? `₹ ${transaction.amount / 100}`
+                        : `₹0`}
+                    </td>
                     <td>{transaction.gateway}</td>
                     <td>{transaction.razorpay_payment_id}</td>
                     <td>{transaction.createdAt}</td>

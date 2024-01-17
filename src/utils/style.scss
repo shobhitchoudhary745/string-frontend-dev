@@ -62,12 +62,18 @@
                     outline: 0 !important;
                 }
             }
+            svg {
+                color: #f9f9f9;
+            }
             span {
                 background-color: #313133;
                 border: none;
                 svg {
                     color: white;
                 }
+            }
+            ::-webkit-calendar-picker-indicator {
+                filter: invert(1);
             }
         }
         .button {
