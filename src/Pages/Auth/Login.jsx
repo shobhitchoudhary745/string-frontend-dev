@@ -4,9 +4,8 @@ import { FaLock } from "react-icons/fa6";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../features/authSlice";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Spinner } from "react-bootstrap";
 import axiosInstance from "../../utils/axiosUtil";
-
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,24 +13,26 @@ const Login = () => {
   const token = localStorage.getItem("token");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const { data } = await axiosInstance.post("/api/admin/admin-login", {
         email,
         password,
       });
-    
+
       if (data.success) {
-        localStorage.setItem("token",data.accessToken);
-        localStorage.setItem("refreshToken",data.refreshToken);
-        dispatch(
-          setToken({ token: data.accessToken })
-        );
-      navigate("/");
+        setLoading(false);
+        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+        dispatch(setToken({ token: data.accessToken }));
+        navigate("/");
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
@@ -78,20 +79,19 @@ const Login = () => {
             <Form.Check type="checkbox" label="Remember me" />
           </Form.Group>
 
-          <Button
-            type="submit"
-            className="submit-button"
-          >
-            LOGIN OR SIGN UP TO CONTINUE
+          <Button type="submit" className="submit-button">
+            {loading ? (
+              <Spinner as="span" animation="border" size="sm" />
+            ) : (
+              "LOGIN OR SIGN UP TO CONTINUE"
+            )}
           </Button>
           <Link to="/forgot-password" className="forgot-password">
             <FaLock style={{ fontSize: "11px" }} />
             <span>Forgot your password?</span>
           </Link>
         </Form>
-      
       </div>
-      
     </div>
   );
 };

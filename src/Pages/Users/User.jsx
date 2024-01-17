@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Form, InputGroup, Table } from "react-bootstrap";
+import { Card, Form, InputGroup, Spinner, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
@@ -20,13 +20,15 @@ export default function User() {
   // const [resultPerPage, setResultPerPage] = useState(10);
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
 
   useEffect(() => {
-    if (token) getAllUsers(dispatch, token, curPage, resultPerPage, query);
-  }, [dispatch, token, curPage, resultPerPage, query]);
+    if (token)
+      getAllUsers(dispatch, token, curPage, resultPerPage, query, setLoading);
+  }, [dispatch, token, curPage, resultPerPage, query, setLoading]);
 
   const numOfPages = Math.ceil(filteredUsers / resultPerPage);
   return (
@@ -87,7 +89,7 @@ export default function User() {
           </div>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover size="xl">
+          <Table responsive striped bordered hover>
             <thead>
               <tr>
                 <th>Name</th>
@@ -98,6 +100,9 @@ export default function User() {
                 <th>Actions</th>
               </tr>
             </thead>
+            {/* {loading ? (
+              <div className="loader">Loading...</div>
+            ) : ( */}
             <tbody>
               {users.map((user, index) => {
                 return (
@@ -105,7 +110,10 @@ export default function User() {
                     <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.mobile}</td>
-                    <td>{"Premium"}</td>
+                    <td>
+                      {user.subscription_plans?.plan_name ?
+                        user.subscription_plans?.plan_name:"N/A"}
+                    </td>
                     <td>
                       <span className="active">Active</span>
                     </td>

@@ -107,6 +107,7 @@
             font-weight: bold;
             thead {
                 border-color: #313133;
+                border-bottom: 2px solid #313133;
                 tr {
                     th {
                         padding: 0.75rem;
@@ -140,10 +141,10 @@
                     .action-link {
                         display: flex;
                         // align-items: center;
-                        gap: 5px;
+                        gap: 10px;
 
                         a {
-                            padding: 7px;
+                            padding: 5px 8px;
                             color: #f9f9f9;
                             font-weight: bold;
                             border-radius: 3px !important;

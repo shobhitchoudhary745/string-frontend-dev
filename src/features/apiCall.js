@@ -1,5 +1,5 @@
 import axios from "../utils/axiosUtil";
-import { setLoading } from "./generalSlice";
+// import { setLoading } from "./generalSlice";
 import { setTransactions } from "./transactionSlice";
 import { setUsers } from "./userSlice";
 
@@ -8,10 +8,11 @@ export const getAllUsers = async (
   token,
   curPage,
   resultPerPage,
-  query
+  query,
+  setLoading
 ) => {
   try {
-    setLoading();
+    setLoading(true);
     const { data } = await axios.get(
       `/api/admin/get-all-users?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
@@ -22,7 +23,7 @@ export const getAllUsers = async (
     );
     if (data.success) {
       //   console.log(data);
-      setLoading();
+      setLoading(false);
       dispatch(
         setUsers({
           users: data.users,
@@ -32,15 +33,23 @@ export const getAllUsers = async (
       );
     }
   } catch (error) {
+    setLoading(false);
     console.log(error);
   }
 };
 
-export const getAllTransactions = async (dispatch, token) => {
+export const getAllTransactions = async (
+  dispatch,
+  token,
+  curPage,
+  resultPerPage,
+  query,
+  setLoading
+) => {
   try {
-    setLoading();
+    setLoading(true);
     const { data } = await axios.get(
-      "/api/transaction/get-all-transaction?gateway=all",
+      `/api/transaction/get-all-transaction?gateway=all&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -48,17 +57,17 @@ export const getAllTransactions = async (dispatch, token) => {
       }
     );
     if (data.success) {
-      //   console.log(data);
-      setLoading();
+      setLoading(false);
       dispatch(
         setTransactions({
           transactions: data.transactions,
-          usetransactionCount: data.transactionCount,
+          transactionCount: data.transactionCount,
           filteredTransactions: data.filteredTransactions,
         })
       );
     }
   } catch (error) {
+    setLoading(false);
     console.log(error);
   }
 };
