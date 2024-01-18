@@ -11,6 +11,7 @@ import { getAllPlans } from "../../features/apiCall";
 import EditSubscriptionModal from "./EditSubscriptionModal";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
+import { setPlan } from "../../features/planSlice";
 
 const Subscription = () => {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ const Subscription = () => {
                     <td className="action-link">
                       <Link
                         onClick={() => {
-                        
+                          dispatch(setPlan({plan:data}));
                           setEditModalShow(true);
                         }}
                         className="btn btn-success"
@@ -102,7 +103,7 @@ const Subscription = () => {
                     <EditSubscriptionModal
                       show={editModalShow}
                       onHide={() => setEditModalShow(false)}
-                      plan={data}
+                      
                       
                     />
                   </tr>

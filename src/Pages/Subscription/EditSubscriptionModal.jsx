@@ -1,25 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Form, Modal, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { getAllPlans } from "../../features/apiCall";
 
-export default function EditSubscriptionModal({ plan, ...props }) {
-  
+export default function EditSubscriptionModal({ ...props }) {
+
+  const { plan } = useSelector((state) => state.plan);
+
+  // console.log("plan is ",plan);
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
-  const [name, setName] = useState(plan.name||"");
-  // const [allow_devices, setAllow_devices] = useState(plan.allow_devices);
-  const [monthly_price, setMonthly_price] = useState(plan.prices&&plan.prices[0]?.price||0);
-  const [yearly_price, setYearly_price] = useState(plan.prices&&plan.prices[1]?.price||0);
-  const [usd_price_monthly, setUsd_Monthly_price] = useState(
-    plan.prices&&plan.prices[0]?.usd_price||0
-  );
-  const [usd_price_yearly, setUsd_Yearly_price] = useState(
-    plan.prices&&plan.prices[1]?.usd_price||0
-  );
+  const [name, setName] = useState("");
+  const [monthly_price, setMonthly_price] = useState(0);
+  const [yearly_price, setYearly_price] = useState(0);
+  const [usd_price_monthly, setUsd_Monthly_price] = useState(0);
+  const [usd_price_yearly, setUsd_Yearly_price] = useState(0);
 
   const resetForm = () => {
     setName("");
@@ -28,6 +26,16 @@ export default function EditSubscriptionModal({ plan, ...props }) {
     setUsd_Monthly_price(0);
     setUsd_Yearly_price(0);
   };
+
+  useEffect(()=>{
+    if(plan.name){
+      setName(plan.name);
+      setMonthly_price(plan.prices[0].price);
+      setYearly_price(plan.prices[1].price);
+      setUsd_Monthly_price(plan.prices[0].usd_price);
+      setUsd_Yearly_price(plan.prices[1].usd_price);
+    }
+  },[plan])
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -133,11 +141,7 @@ export default function EditSubscriptionModal({ plan, ...props }) {
             type="submit"
             // disabled={loadingUpdate ? true : false}
           >
-            {loading ? (
-              <Spinner animation="border" size="sm" />
-            ) : (
-              "Submit"
-            )}
+            {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
             {/* Submit */}
           </Button>
         </Modal.Footer>
