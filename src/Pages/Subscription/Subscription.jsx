@@ -16,6 +16,7 @@ const Subscription = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { plans } = useSelector((state) => state.plan);
+  
 
   const [modalShow, setModalShow] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
@@ -83,7 +84,10 @@ const Subscription = () => {
                     </td>
                     <td className="action-link">
                       <Link
-                        onClick={() => setEditModalShow(true)}
+                        onClick={() => {
+                        
+                          setEditModalShow(true);
+                        }}
                         className="btn btn-success"
                       >
                         <FaEdit />
@@ -99,6 +103,7 @@ const Subscription = () => {
                       show={editModalShow}
                       onHide={() => setEditModalShow(false)}
                       plan={data}
+                      
                     />
                   </tr>
                 );

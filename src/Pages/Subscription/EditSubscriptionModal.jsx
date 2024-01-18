@@ -1,19 +1,63 @@
 import React, { useState } from "react";
-import { Button, Container, Form, Modal } from "react-bootstrap";
+import { Button, Container, Form, Modal, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../features/generalSlice";
+import axios from "../../utils/axiosUtil";
+import { getAllPlans } from "../../features/apiCall";
 
 export default function EditSubscriptionModal({ plan, ...props }) {
-  const [name, setName] = useState(plan.name);
-  const [allow_devices, setAllow_devices] = useState(plan.allow_devices);
-  const [monthly_price, setMonthly_price] = useState(plan.prices[0].price);
-  const [yearly_price, setYearly_price] = useState(plan.prices[1].price);
+  
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.general);
+  const [name, setName] = useState(plan.name||"");
+  // const [allow_devices, setAllow_devices] = useState(plan.allow_devices);
+  const [monthly_price, setMonthly_price] = useState(plan.prices&&plan.prices[0]?.price||0);
+  const [yearly_price, setYearly_price] = useState(plan.prices&&plan.prices[1]?.price||0);
   const [usd_price_monthly, setUsd_Monthly_price] = useState(
-    plan.prices[0]?.usd_price
+    plan.prices&&plan.prices[0]?.usd_price||0
   );
   const [usd_price_yearly, setUsd_Yearly_price] = useState(
-    plan.prices[1]?.usd_price
+    plan.prices&&plan.prices[1]?.usd_price||0
   );
 
-  const submitHandler = async () => {};
+  const resetForm = () => {
+    setName("");
+    setMonthly_price(0);
+    setYearly_price(0);
+    setUsd_Monthly_price(0);
+    setUsd_Yearly_price(0);
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(setLoading());
+      const { data } = await axios.patch(
+        `/api/plan/update-plan/${plan._id}`,
+        {
+          name,
+          monthly_price,
+          yearly_price,
+          usd_price_monthly,
+          usd_price_yearly,
+        },
+        { headers: { authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
+        getAllPlans(dispatch, token);
+        dispatch(setLoading());
+        window.alert(data.message);
+        resetForm();
+        props.onHide();
+      }
+    } catch (err) {
+      dispatch(setLoading());
+      window.alert(err);
+      console.log(err);
+    }
+  };
+
   return (
     <Modal {...props} size="lg" aria-labelledby="contained-modal-title-vcenter">
       <Modal.Header>
@@ -33,18 +77,6 @@ export default function EditSubscriptionModal({ plan, ...props }) {
                   required
                 />
               </Form.Group>
-
-              <Form.Group>
-                <Form.Label>Allowed Devices</Form.Label>
-                <Form.Control
-                  value={allow_devices}
-                  placeholder="Enter Allowed Devices"
-                  onChange={(e) => setAllow_devices(e.target.value)}
-                  type="number"
-                  required
-                />
-              </Form.Group>
-
               <Form.Group>
                 <Form.Label>Monthly Price - INR</Form.Label>
                 <Form.Control
@@ -53,6 +85,7 @@ export default function EditSubscriptionModal({ plan, ...props }) {
                   onChange={(e) => setMonthly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
               <Form.Group>
@@ -63,6 +96,7 @@ export default function EditSubscriptionModal({ plan, ...props }) {
                   onChange={(e) => setYearly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
               <Form.Group>
@@ -73,6 +107,7 @@ export default function EditSubscriptionModal({ plan, ...props }) {
                   onChange={(e) => setUsd_Monthly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
               <Form.Group>
@@ -83,6 +118,7 @@ export default function EditSubscriptionModal({ plan, ...props }) {
                   onChange={(e) => setUsd_Yearly_price(e.target.value)}
                   required
                   type="number"
+                  min={1}
                 />
               </Form.Group>
             </div>
@@ -97,12 +133,12 @@ export default function EditSubscriptionModal({ plan, ...props }) {
             type="submit"
             // disabled={loadingUpdate ? true : false}
           >
-            {/* {loadingUpdate ? (
+            {loading ? (
               <Spinner animation="border" size="sm" />
             ) : (
               "Submit"
-            )} */}
-            Submit
+            )}
+            {/* Submit */}
           </Button>
         </Modal.Footer>
       </Form>
