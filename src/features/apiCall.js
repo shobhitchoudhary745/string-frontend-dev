@@ -11,12 +11,10 @@ export const getAllUsers = async (
   curPage,
   resultPerPage,
   query,
-  setLoading,
   plan_name,
-  plan_type,
+  plan_type
 ) => {
   try {
-    setLoading(true);
     const { data } = await axios.get(
       `/api/admin/get-all-users?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&plan_name=${plan_name}&plan_type=${plan_type}`,
       {
@@ -26,7 +24,6 @@ export const getAllUsers = async (
       }
     );
     if (data.success) {
-      setLoading(false);
       dispatch(
         setUsers({
           users: data.users,
@@ -36,8 +33,7 @@ export const getAllUsers = async (
       );
     }
   } catch (error) {
-    setLoading(false);
-    toast.error(error.response.data.message)
+    toast.error(error.message);
     console.log(error);
   }
 };
@@ -47,13 +43,15 @@ export const getAllTransactions = async (
   token,
   curPage,
   resultPerPage,
-  query,
-  setLoading
+  gateway,
+  date,
+  query
 ) => {
   try {
-    setLoading(true);
+    let input_date = null;
+    if (date) input_date = new Date(date);
     const { data } = await axios.get(
-      `/api/transaction/get-all-transaction?gateway=all&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      `/api/transaction/get-all-transaction?gateway=${gateway}&from=${input_date}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -61,7 +59,6 @@ export const getAllTransactions = async (
       }
     );
     if (data.success) {
-      setLoading(false);
       dispatch(
         setTransactions({
           transactions: data.transactions,
@@ -71,8 +68,7 @@ export const getAllTransactions = async (
       );
     }
   } catch (error) {
-    setLoading(false);
-    toast.error(error.response.data.message)
+    toast.error(error.message);
     console.log(error);
   }
 };
@@ -88,7 +84,7 @@ export const getAllPlans = async (dispatch, token) => {
       dispatch(setPlans({ plans: data.plans }));
     }
   } catch (error) {
-    toast.error(error.response.data.message)
+    toast.error(error.message);
     console.log(error);
   }
 };
@@ -101,7 +97,7 @@ export const downloadAsCsv = async (Model, Filename = "data") => {
     const blob = new Blob([data], { type: "text/csv" });
     const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute("download", Filename + ".csv"); 
+    link.setAttribute("download", Filename + ".csv");
     link.style.display = "none";
     document.body.appendChild(link);
     link.click();
@@ -111,7 +107,7 @@ export const downloadAsCsv = async (Model, Filename = "data") => {
     }, 1000);
     console.log(blob);
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error.message);
     console.log(error);
   }
 };

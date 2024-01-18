@@ -12,14 +12,12 @@ import EditSubscriptionModal from "./EditSubscriptionModal";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { setPlan } from "../../features/planSlice";
-import { ToastContainer, toast } from "react-toastify";
-import Toastify from "../../utils/Toastify";
+import { toast } from "react-toastify";
 
 const Subscription = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { plans } = useSelector((state) => state.plan);
-  
 
   const [modalShow, setModalShow] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
@@ -88,7 +86,7 @@ const Subscription = () => {
                     <td className="action-link">
                       <Link
                         onClick={() => {
-                          dispatch(setPlan({plan:data}));
+                          dispatch(setPlan({ plan: data }));
                           setEditModalShow(true);
                         }}
                         className="btn btn-success"
@@ -105,8 +103,6 @@ const Subscription = () => {
                     <EditSubscriptionModal
                       show={editModalShow}
                       onHide={() => setEditModalShow(false)}
-                      
-                      
                     />
                   </tr>
                 );
@@ -114,7 +110,7 @@ const Subscription = () => {
             </tbody>
           </Table>
         </Card.Body>
-        
+
         <AddSubscriptionModal
           show={modalShow}
           onHide={() => setModalShow(false)}

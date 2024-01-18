@@ -11,6 +11,9 @@ import { IoClose } from "react-icons/io5";
 import "../../utils/style.scss";
 import "./User.scss";
 import CustomPagination from "../../utils/CustomPagination";
+import { toast } from "react-toastify";
+import { setLoading } from "../../features/generalSlice";
+import axios from "../../utils/axiosUtil";
 
 export default function User() {
   const dispatch = useDispatch();
@@ -20,17 +23,57 @@ export default function User() {
   const [curPage, setCurPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [plan_name,setPlanName] = useState("");
-  const [plan_type,setPlanType] = useState("");
+  const [plan_name, setPlanName] = useState("");
+  const [plan_type, setPlanType] = useState("");
 
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
 
+  const deleteUserHandler = async (id) => {
+    if (
+      window.confirm("Are you sure you want to delete/remove this user?") ===
+      true
+    ) {
+      try {
+        dispatch(setLoading());
+        const { data } = await axios.delete(`/api/admin/delete-user/${id}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        if (data.success) {
+          dispatch(setLoading());
+          getAllUsers(
+            dispatch,
+            token,
+            curPage,
+            resultPerPage,
+            query,
+            plan_name,
+            plan_type
+          );
+          toast.success(data.message);
+        }
+      } catch (error) {
+        dispatch(setLoading());
+        toast.error(error.message);
+        console.log(error);
+      }
+    }
+  };
+
   useEffect(() => {
     if (token)
-      getAllUsers(dispatch, token, curPage, resultPerPage, query, setLoading,plan_name,plan_type);
-  }, [dispatch, token, curPage, resultPerPage, query, setLoading,plan_name,plan_type]);
+      getAllUsers(
+        dispatch,
+        token,
+        curPage,
+        resultPerPage,
+        query,
+        plan_name,
+        plan_type
+      );
+  }, [dispatch, token, curPage, resultPerPage, query, plan_name, plan_type]);
 
   const numOfPages = Math.ceil(filteredUsers / resultPerPage);
   return (
@@ -39,13 +82,13 @@ export default function User() {
         <Card.Header className="user-header">
           <Form.Group>
             <Form.Select
-            value={plan_name}
-            onChange={(e) => {
-              setPlanName(e.target.value);
-              setCurPage(1);
-            }}
+              value={plan_name}
+              onChange={(e) => {
+                setPlanName(e.target.value);
+                setCurPage(1);
+              }}
             >
-              <option value="all" >Filter By Plan</option>
+              <option value="all">Filter By Plan</option>
               <option value="Individual">Individual</option>
               <option value="Family">Family</option>
             </Form.Select>
@@ -58,7 +101,7 @@ export default function User() {
                 setCurPage(1);
               }}
             >
-              <option value="all" >Filter By Duration</option>
+              <option value="all">Filter By Duration</option>
               <option value="monthly">Monthly</option>
               <option value="annual">Annually</option>
             </Form.Select>
@@ -85,9 +128,11 @@ export default function User() {
             <Link>
               <HiPlus /> Add User
             </Link>
-            <Button onClick = {()=>{
-              downloadAsCsv("User","users");
-            }}>
+            <Button
+              onClick={() => {
+                downloadAsCsv("User", "users");
+              }}
+            >
               <FaRegFileExcel /> Export Users
             </Button>
           </div>
@@ -132,7 +177,10 @@ export default function User() {
                       <Link className="btn btn-success">
                         <FaEdit />
                       </Link>
-                      <Link className="btn btn-danger">
+                      <Link
+                        onClick={() => deleteUserHandler(user?._id)}
+                        className="btn btn-danger"
+                      >
                         <IoClose />
                       </Link>
                     </td>

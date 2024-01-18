@@ -4,7 +4,6 @@ import { downloadAsCsv, getAllTransactions } from "../../features/apiCall";
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
 import CustomPagination from "../../utils/CustomPagination";
 import { FaRegFileExcel, FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import "./Transaction.scss";
 
 export default function Transaction() {
@@ -17,7 +16,8 @@ export default function Transaction() {
   const [curPage, setCurPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [gateway, setGateway] = useState("");
+  const [date, setData] = useState("");
 
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
@@ -29,10 +29,11 @@ export default function Transaction() {
         token,
         curPage,
         resultPerPage,
-        query,
-        setLoading
+        gateway,
+        date,
+        query
       );
-  }, [dispatch, token, curPage, resultPerPage, query, setLoading]);
+  }, [dispatch, token, curPage, resultPerPage, gateway, query, date]);
 
   const numOfPages = Math.ceil(filteredTransactions / resultPerPage);
   return (
@@ -41,21 +42,21 @@ export default function Transaction() {
         <Card.Header className="user-header">
           <Form.Group>
             <Form.Select
-            // value={status}
-            // onChange={(e) => {
-            //   setStatus(e.target.value);
-            //   setCurPage(1);
-            // }}
+              value={gateway}
+              onChange={(e) => {
+                setGateway(e.target.value);
+                setCurPage(1);
+              }}
             >
               <option value="all">Filter By Gateway</option>
-              <option value="razorpay">Razorpay</option>
-              <option value="paypal">Paypal</option>
+              <option value="Razorpay">Razorpay</option>
+              <option value="Paypal">Paypal</option>
             </Form.Select>
           </Form.Group>
           <InputGroup className="user-search">
             <Form.Control
               aria-label="Search Input"
-              placeholder="Search By name or email"
+              placeholder="Search By PaymentId or email"
               type="search"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
@@ -73,16 +74,17 @@ export default function Transaction() {
           <InputGroup className="user-search">
             <Form.Control
               aria-label="Search Input"
-              placeholder="Search By name or email"
               type="date"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              value={date}
+              onChange={(e) => setData(e.target.value)}
             />
           </InputGroup>
           <div className="button">
-            <Button onClick={() => {
-              downloadAsCsv("Transaction","transactions")
-            }}>
+            <Button
+              onClick={() => {
+                downloadAsCsv("Transaction", "transactions");
+              }}
+            >
               <FaRegFileExcel /> Export Transactions
             </Button>
           </div>
@@ -101,23 +103,32 @@ export default function Transaction() {
               </tr>
             </thead>
             <tbody>
-              {transactions.map((transaction, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{transaction.user.name}</td>
-                    <td>{transaction.user.email}</td>
-                    <td>{transaction.order.plan_type}</td>
-                    <td>
-                      {transaction.gateway === "Razorpay"
-                        ? `₹ ${transaction.amount / 100}`
-                        : `₹0`}
-                    </td>
-                    <td>{transaction.gateway}</td>
-                    <td>{transaction.razorpay_payment_id}</td>
-                    <td>{transaction.createdAt}</td>
-                  </tr>
-                );
-              })}
+              {transactions &&
+                transactions.length > 0 &&
+                transactions.map((transaction, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{transaction.user.name}</td>
+                      <td>{transaction.user.email}</td>
+                      <td>{transaction.order.plan_type}</td>
+                      <td>
+                        {transaction.gateway === "Razorpay"
+                          ? `₹ ${transaction.amount / 100}`
+                          : `₹0`}
+                      </td>
+                      <td>{transaction.gateway}</td>
+                      <td>{transaction.razorpay_payment_id}</td>
+                      <td>{transaction.createdAt}</td>
+                    </tr>
+                  );
+                })}
+              {transactions.length === 0 && (
+                <tr>
+                  <td colSpan="7" className="text-center">
+                    No Transactions Found
+                  </td>
+                </tr>
+              )}
             </tbody>
           </Table>
         </Card.Body>
