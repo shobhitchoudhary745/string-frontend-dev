@@ -12,6 +12,8 @@ import EditSubscriptionModal from "./EditSubscriptionModal";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { setPlan } from "../../features/planSlice";
+import { ToastContainer, toast } from "react-toastify";
+import Toastify from "../../utils/Toastify";
 
 const Subscription = () => {
   const dispatch = useDispatch();
@@ -42,11 +44,11 @@ const Subscription = () => {
         if (data.success) {
           getAllPlans(dispatch, token);
           dispatch(setLoading());
-          window.alert(data.message);
+          toast.success(data.message);
         }
       } catch (error) {
         dispatch(setLoading());
-        window.alert(error);
+        toast.error(error.message);
         console.log(error);
       }
     }
@@ -112,6 +114,7 @@ const Subscription = () => {
             </tbody>
           </Table>
         </Card.Body>
+        
         <AddSubscriptionModal
           show={modalShow}
           onHide={() => setModalShow(false)}

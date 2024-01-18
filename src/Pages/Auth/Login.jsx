@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { setToken } from "../../features/authSlice";
 import { Form, Button, Spinner } from "react-bootstrap";
 import axiosInstance from "../../utils/axiosUtil";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const Login = () => {
 
       if (data.success) {
         setLoading(false);
+        toast.success(data.message)
         localStorage.setItem("token", data.accessToken);
         localStorage.setItem("refreshToken", data.refreshToken);
         dispatch(setToken({ token: data.accessToken }));
@@ -33,6 +35,7 @@ const Login = () => {
       }
     } catch (error) {
       setLoading(false);
+      toast.error(error.response.data.message);
       console.log(error);
     }
   };

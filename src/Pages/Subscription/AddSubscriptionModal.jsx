@@ -5,6 +5,7 @@ import axios from "../../utils/axiosUtil";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../features/generalSlice";
 import { getAllPlans } from "../../features/apiCall";
+import { toast } from "react-toastify";
 
 export default function AddSubscriptionModal(props) {
   const dispatch = useDispatch();
@@ -46,13 +47,19 @@ export default function AddSubscriptionModal(props) {
       if (data.success) {
         getAllPlans(dispatch, token);
         dispatch(setLoading());
-        window.alert(data.message);
+        toast.success(data.message);
         resetForm();
         props.onHide();
       }
     } catch (err) {
       dispatch(setLoading());
-      window.alert(err);
+      if(err.response.data.message.includes("11000")){
+        toast.error("Plan name already exist");
+      }
+      else{
+        toast.error(err.response.data.message);
+      }
+      
       console.log(err);
     }
   };
@@ -147,7 +154,7 @@ export default function AddSubscriptionModal(props) {
             type="submit"
             disabled={loading ? true : false}
           >
-            {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
+            {loading ? <Spinner animation="border" size="sm" /> : "Add Plan"}
           </Button>
         </Modal.Footer>
       </Form>

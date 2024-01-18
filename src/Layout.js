@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute.js";
 import User from "./Pages/Users/User.jsx";
 import Transaction from "./Pages/Transactions/Transaction.jsx";
 import Subscription from "./Pages/Subscription/Subscription.jsx";
+import Toastify from "./utils/Toastify.js";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -57,6 +58,7 @@ export default function Layout() {
             />
             <Route path="/login" element={<Login />} />
           </Routes>
+          <Toastify/>
         </div>
       </div>
     </div>

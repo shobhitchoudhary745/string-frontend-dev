@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { getAllPlans } from "../../features/apiCall";
+import { toast } from "react-toastify";
 
 export default function EditSubscriptionModal({ ...props }) {
 
@@ -55,7 +56,7 @@ export default function EditSubscriptionModal({ ...props }) {
       if (data.success) {
         getAllPlans(dispatch, token);
         dispatch(setLoading());
-        window.alert(data.message);
+        toast.success("Plan Edit Successfully.")
         resetForm();
         props.onHide();
       }
@@ -141,7 +142,7 @@ export default function EditSubscriptionModal({ ...props }) {
             type="submit"
             // disabled={loadingUpdate ? true : false}
           >
-            {loading ? <Spinner animation="border" size="sm" /> : "Submit"}
+            {loading ? <Spinner animation="border" size="sm" /> : "Update"}
             {/* Submit */}
           </Button>
         </Modal.Footer>

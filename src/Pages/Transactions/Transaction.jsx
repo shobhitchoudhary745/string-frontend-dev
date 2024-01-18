@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTransactions } from "../../features/apiCall";
-import { Card, Form, InputGroup, Table } from "react-bootstrap";
+import { downloadAsCsv, getAllTransactions } from "../../features/apiCall";
+import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
 import CustomPagination from "../../utils/CustomPagination";
 import { FaRegFileExcel, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -80,9 +80,11 @@ export default function Transaction() {
             />
           </InputGroup>
           <div className="button">
-            <Link>
+            <Button onClick={() => {
+              downloadAsCsv("Transaction","transactions")
+            }}>
               <FaRegFileExcel /> Export Transactions
-            </Link>
+            </Button>
           </div>
         </Card.Header>
         <Card.Body className="user-body">

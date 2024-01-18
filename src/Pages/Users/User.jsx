@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { getAllUsers } from "../../features/apiCall";
+import { downloadAsCsv, getAllUsers } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Form, InputGroup, Table } from "react-bootstrap";
+import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
@@ -9,7 +9,7 @@ import { FaRegFileExcel, FaEye, FaEdit } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
 import { IoClose } from "react-icons/io5";
 import "../../utils/style.scss";
-import "./User.scss"
+import "./User.scss";
 import CustomPagination from "../../utils/CustomPagination";
 
 export default function User() {
@@ -21,14 +21,16 @@ export default function User() {
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [plan_name,setPlanName] = useState("");
+  const [plan_type,setPlanType] = useState("");
 
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
 
   useEffect(() => {
     if (token)
-      getAllUsers(dispatch, token, curPage, resultPerPage, query, setLoading);
-  }, [dispatch, token, curPage, resultPerPage, query, setLoading]);
+      getAllUsers(dispatch, token, curPage, resultPerPage, query, setLoading,plan_name,plan_type);
+  }, [dispatch, token, curPage, resultPerPage, query, setLoading,plan_name,plan_type]);
 
   const numOfPages = Math.ceil(filteredUsers / resultPerPage);
   return (
@@ -37,28 +39,28 @@ export default function User() {
         <Card.Header className="user-header">
           <Form.Group>
             <Form.Select
-            // value={status}
-            // onChange={(e) => {
-            //   setStatus(e.target.value);
-            //   setCurPage(1);
-            // }}
+            value={plan_name}
+            onChange={(e) => {
+              setPlanName(e.target.value);
+              setCurPage(1);
+            }}
             >
-              <option value="all">Filter By Plan</option>
-              <option value="active">Individual</option>
-              <option value="inactive">Family</option>
+              <option value="all" >Filter By Plan</option>
+              <option value="Individual">Individual</option>
+              <option value="Family">Family</option>
             </Form.Select>
           </Form.Group>
           <Form.Group>
             <Form.Select
-            //   value={status}
-            //   onChange={(e) => {
-            //     setStatus(e.target.value);
-            //     setCurPage(1);
-            //   }}
+              value={plan_type}
+              onChange={(e) => {
+                setPlanType(e.target.value);
+                setCurPage(1);
+              }}
             >
-              <option value="all">Filter By Duration</option>
-              <option value="active">Monthly</option>
-              <option value="inactive">Annually</option>
+              <option value="all" >Filter By Duration</option>
+              <option value="monthly">Monthly</option>
+              <option value="annual">Annually</option>
             </Form.Select>
           </Form.Group>
           <InputGroup className="user-search">
@@ -83,9 +85,11 @@ export default function User() {
             <Link>
               <HiPlus /> Add User
             </Link>
-            <Link>
+            <Button onClick = {()=>{
+              downloadAsCsv("User","users");
+            }}>
               <FaRegFileExcel /> Export Users
-            </Link>
+            </Button>
           </div>
         </Card.Header>
         <Card.Body className="user-body">
