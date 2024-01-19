@@ -6,9 +6,10 @@ import { TfiUser } from "react-icons/tfi";
 import { CiPower } from "react-icons/ci";
 import { FiMenu } from "react-icons/fi";
 import "./Header.scss";
-import { toggle } from "../../features/generalSlice";
+import { setCurrentPage, toggle } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 import { removeToken } from "../../features/authSlice";
+import { toast } from "react-toastify";
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -18,8 +19,9 @@ export default function Header() {
     e.preventDefault();
     dispatch(removeToken());
     localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
     navigate("/login");
+    toast.success("Logout Successfully");
+    dispatch(setCurrentPage({ currentPage: "Dashboard" }));
   };
 
   return (

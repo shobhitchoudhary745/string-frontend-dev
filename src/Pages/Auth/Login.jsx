@@ -29,13 +29,13 @@ const Login = () => {
         setLoading(false);
         toast.success(data.message)
         localStorage.setItem("token", data.accessToken);
-        localStorage.setItem("refreshToken", data.refreshToken);
+        // localStorage.setItem("refreshToken", data.refreshToken);
         dispatch(setToken({ token: data.accessToken }));
         navigate("/");
       }
     } catch (error) {
       setLoading(false);
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   };
 

@@ -107,7 +107,7 @@ export const downloadAsCsv = async (Model, Filename = "data") => {
     }, 1000);
     console.log(blob);
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.response.data.message);
     console.log(error);
   }
 };
