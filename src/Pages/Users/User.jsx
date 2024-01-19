@@ -3,7 +3,7 @@ import { downloadAsCsv, getAllUsers } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
 import { FaRegFileExcel, FaEye, FaEdit } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
@@ -17,7 +17,7 @@ import axios from "../../utils/axiosUtil";
 
 export default function User() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
   const { users, filteredUsers } = useSelector((state) => state.user);
 

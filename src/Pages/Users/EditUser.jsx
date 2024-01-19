@@ -41,7 +41,8 @@ export default function EditUser() {
 
   useEffect(() => {
     getUser(dispatch, token, id);
-  }, [token]);
+  }, [dispatch, token, id]);
+
   useEffect(() => {
     if (user.name) {
       setName(user.name);
@@ -74,18 +75,17 @@ export default function EditUser() {
         states: state,
         city,
         mobile,
-        
       });
       if (data.success) {
         dispatch(setLoading());
-        toast.success("User Updated Successfully.    Redirecting...");
+        toast.success("User Updated Successfully.  Redirecting...");
         setTimeout(() => {
           navigate("/admin/users");
         }, 1200);
       }
     } catch (error) {
       dispatch(setLoading());
-      console.log(error)
+      console.log(error);
       toast.error(error.response.data.message);
     }
   };

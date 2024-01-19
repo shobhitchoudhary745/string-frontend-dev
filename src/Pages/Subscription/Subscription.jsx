@@ -1,26 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./Subscription.scss";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Card, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
-import AddSubscriptionModal from "./AddSubscriptionModal";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPlans } from "../../features/apiCall";
-import EditSubscriptionModal from "./EditSubscriptionModal";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
-import { setPlan } from "../../features/planSlice";
 import { toast } from "react-toastify";
 
 const Subscription = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { plans } = useSelector((state) => state.plan);
-
-  const [modalShow, setModalShow] = useState(false);
-  const [editModalShow, setEditModalShow] = useState(false);
 
   useEffect(() => {
     if (token) getAllPlans(dispatch, token);
@@ -57,7 +51,7 @@ const Subscription = () => {
       <Card className="user-table">
         <Card.Header className="user-header">
           <div className="button">
-            <Link onClick={() => setModalShow(true)}>
+            <Link to={"/admin/add-subscription"}>
               <HiPlus /> Add Plan
             </Link>
           </div>
@@ -85,10 +79,7 @@ const Subscription = () => {
                     </td>
                     <td className="action-link">
                       <Link
-                        onClick={() => {
-                          dispatch(setPlan({ plan: data }));
-                          setEditModalShow(true);
-                        }}
+                        to={`/admin/edit-subscription/${data._id}`}
                         className="btn btn-success"
                       >
                         <FaEdit />
@@ -100,21 +91,12 @@ const Subscription = () => {
                         <IoClose />
                       </Link>
                     </td>
-                    <EditSubscriptionModal
-                      show={editModalShow}
-                      onHide={() => setEditModalShow(false)}
-                    />
                   </tr>
                 );
               })}
             </tbody>
           </Table>
         </Card.Body>
-
-        <AddSubscriptionModal
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
       </Card>
     </>
   );

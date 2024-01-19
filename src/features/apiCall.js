@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import axios from "../utils/axiosUtil";
-import { setPlans } from "./planSlice";
+import { setPlan, setPlans } from "./planSlice";
 // import { setLoading } from "./generalSlice";
 import { setTransactions } from "./transactionSlice";
 import { setUser, setUsers } from "./userSlice";
@@ -121,6 +121,22 @@ export const getUser = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setUser({ user: data.user }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getPlan = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/plan/get-plan/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setPlan({ plan: data.plan }));
     }
   } catch (error) {
     toast.error(error.message);

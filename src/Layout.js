@@ -12,6 +12,8 @@ import Subscription from "./Pages/Subscription/Subscription.jsx";
 import Toastify from "./utils/Toastify.js";
 import AddUser from "./Pages/Users/AddUser.jsx";
 import EditUser from "./Pages/Users/EditUser.jsx";
+import AddSubscription from "./Pages/Subscription/AddSubscription.jsx";
+import EditSubscription from "./Pages/Subscription/EditSubscription.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -23,7 +25,7 @@ export default function Layout() {
         {token && <Sidebar />}
         <div
           className="mx-3 my-1 flex-1 card-container"
-          style={{ overflowY: "scroll", minHeight: "100%",width:"100%" }}
+          style={{ overflowY: "scroll", minHeight: "100%", width: "100%" }}
         >
           <Routes>
             <Route
@@ -74,9 +76,25 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/admin/add-subscription"
+              element={
+                <ProtectedRoute>
+                  <AddSubscription />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-subscription/:id"
+              element={
+                <ProtectedRoute>
+                  <EditSubscription />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/login" element={<Login />} />
           </Routes>
-          <Toastify/>
+          <Toastify />
         </div>
       </div>
     </div>
