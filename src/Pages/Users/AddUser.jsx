@@ -119,7 +119,7 @@ export default function AddUser() {
             </Col>
           </Row>
           <Row className="align-items-center mb-4">
-            <Col sm={12} md={3}>
+            <Col className="mb-2" sm={12} md={3}>
               <label>Country</label>
             </Col>
             <Col sm={12} md={8}>
@@ -151,7 +151,7 @@ export default function AddUser() {
           </Row>
 
           <Row className="align-items-center mb-4">
-            <Col sm={12} md={3}>
+            <Col className="mb-2" sm={12} md={3}>
               <label>State</label>
             </Col>
             <Col sm={12} md={8}>
@@ -183,7 +183,7 @@ export default function AddUser() {
             </Col>
           </Row>
           <Row className="align-items-center mb-4">
-            <Col sm={12} md={3}>
+            <Col className="mb-2" sm={12} md={3}>
               <label>City</label>
             </Col>
             <Col sm={12} md={8}>

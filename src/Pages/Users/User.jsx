@@ -12,11 +12,10 @@ import "../../utils/style.scss";
 import "./User.scss";
 import CustomPagination from "../../utils/CustomPagination";
 import { toast } from "react-toastify";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 
 export default function User() {
-  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
@@ -127,7 +126,12 @@ export default function User() {
             </InputGroup.Text>
           </InputGroup>
           <div className="button">
-            <Link to="/admin/add-users">
+            <Link
+              to="/admin/add-users"
+              onClick={() => {
+                dispatch(setCurrentPage({ currentPage: "Add User" }));
+              }}
+            >
               <HiPlus /> Add User
             </Link>
             <Button
@@ -179,6 +183,11 @@ export default function User() {
                       <Link
                         to={`/admin/edit-user/${user?._id}`}
                         className="btn btn-success"
+                        onClick={() => {
+                          dispatch(
+                            setCurrentPage({ currentPage: "Edit User" })
+                          );
+                        }}
                       >
                         <FaEdit />
                       </Link>
