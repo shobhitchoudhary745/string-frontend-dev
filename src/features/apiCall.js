@@ -3,7 +3,7 @@ import axios from "../utils/axiosUtil";
 import { setPlans } from "./planSlice";
 // import { setLoading } from "./generalSlice";
 import { setTransactions } from "./transactionSlice";
-import { setUsers } from "./userSlice";
+import { setUser, setUsers } from "./userSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -108,6 +108,22 @@ export const downloadAsCsv = async (Model, Filename = "data") => {
     console.log(blob);
   } catch (error) {
     toast.error(error.response.data.message);
+    console.log(error);
+  }
+};
+
+export const getUser = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/admin/get-user/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setUser({ user: data.user }));
+    }
+  } catch (error) {
+    toast.error(error.message);
     console.log(error);
   }
 };

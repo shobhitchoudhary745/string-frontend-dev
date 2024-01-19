@@ -3,7 +3,7 @@ import { downloadAsCsv, getAllUsers } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
 import { FaRegFileExcel, FaEye, FaEdit } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
@@ -16,7 +16,9 @@ import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 
 export default function User() {
+  
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
   const { users, filteredUsers } = useSelector((state) => state.user);
 
@@ -174,7 +176,10 @@ export default function User() {
                       <Link className="btn btn-primary">
                         <FaEye />
                       </Link>
-                      <Link className="btn btn-success">
+                      <Link
+                        to={`/admin/edit-user/${user?._id}`}
+                        className="btn btn-success"
+                      >
                         <FaEdit />
                       </Link>
                       <Link

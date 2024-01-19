@@ -11,6 +11,7 @@ import Transaction from "./Pages/Transactions/Transaction.jsx";
 import Subscription from "./Pages/Subscription/Subscription.jsx";
 import Toastify from "./utils/Toastify.js";
 import AddUser from "./Pages/Users/AddUser.jsx";
+import EditUser from "./Pages/Users/EditUser.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -54,6 +55,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <AddUser />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-user/:id"
+              element={
+                <ProtectedRoute>
+                  <EditUser />
                 </ProtectedRoute>
               }
             />

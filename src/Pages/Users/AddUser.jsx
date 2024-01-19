@@ -29,7 +29,7 @@ export default function AddUser() {
   const [city, setCity] = useState("");
 
   const { loading } = useSelector((state) => state.general);
-  console.log(city,state,country)
+  // console.log(city,state,country)
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
