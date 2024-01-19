@@ -10,6 +10,7 @@ import User from "./Pages/Users/User.jsx";
 import Transaction from "./Pages/Transactions/Transaction.jsx";
 import Subscription from "./Pages/Subscription/Subscription.jsx";
 import Toastify from "./utils/Toastify.js";
+import AddUser from "./Pages/Users/AddUser.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -45,6 +46,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <Transaction />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-users"
+              element={
+                <ProtectedRoute>
+                  <AddUser />
                 </ProtectedRoute>
               }
             />

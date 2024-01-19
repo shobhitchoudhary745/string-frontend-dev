@@ -31,8 +31,9 @@ export default function Sidebar() {
   const [current, setCurrent] = useState("");
   const screenWidth = window.screen.width;
   const { isOpen, currentPage } = useSelector((state) => state.general);
+ 
   
-  return isOpen || screenWidth >= 768 ? (
+  return (true) ? (
     <nav className={`sidebar ${isOpen ? "nav-bar open" : "nav-bar"}`}>
       <ul>
         {firstArray.map((data, index) => {

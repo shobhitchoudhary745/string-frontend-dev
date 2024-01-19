@@ -1,0 +1,51 @@
+.input-fieleds {
+    label{
+      color:#f9f9f9;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    button{
+      background-color: #caa257;
+      border:none;
+      font-weight: 600;
+      font-size: 14px;
+      
+    }
+   
+    select{
+      width:100%;
+      background-color: #313133;
+      color: #f9f9f9;
+      border: none;
+      height: 46px !important;
+      padding:10px;
+    }
+    button:hover{
+      background-color: #48484a;
+    }
+    input {
+      background-color: #313133;
+      color: #f9f9f9;
+      border: none;
+      box-shadow: none;
+      height: 50px !important;
+      font-weight: 500;
+      // max-width: 100%;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+  
+      input::placeholder {
+        color: #6c757d;
+        font-weight: bold;
+        font-size: 14px;
+      }
+  
+      input:focus {
+        background: #48484a;
+        box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+        transition: all 0.5s ease;
+        border: 0;
+        color: #f9f9f9;
+        outline: 0 !important;
+      }
+    }
+  }

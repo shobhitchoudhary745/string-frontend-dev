@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "react-bootstrap";
 import { FaDesktop } from "react-icons/fa6";
@@ -14,7 +14,8 @@ import { toast } from "react-toastify";
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentPage } = useSelector((state) => state.general);
+  const { currentPage, isOpen } = useSelector((state) => state.general);
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(removeToken());
@@ -37,11 +38,11 @@ export default function Header() {
         <div className="header_second_child mx-3">
           <div className="d-flex align-items-center h-100 justify-content-between">
             <div className={`d-flex sub_child align-items-center`}>
-              <div>
+              <div >
                 <FiMenu
                   onClick={() => {
                     dispatch(toggle());
-                  }}
+                  }} 
                   cursor={"pointer"}
                   className="menu_icon"
                   size={25}

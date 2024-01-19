@@ -125,7 +125,7 @@ export default function User() {
             </InputGroup.Text>
           </InputGroup>
           <div className="button">
-            <Link>
+            <Link to="/admin/add-users">
               <HiPlus /> Add User
             </Link>
             <Button
