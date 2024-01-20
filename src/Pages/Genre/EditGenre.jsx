@@ -77,7 +77,7 @@ export default function EditGenre() {
         <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
-              <Form.Label>Genre Name</Form.Label>
+              <Form.Label>Genre Title</Form.Label>
             </Col>
             <Col sm={12} md={8}>
               <Form.Control
