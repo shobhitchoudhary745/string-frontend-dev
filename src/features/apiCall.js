@@ -4,6 +4,7 @@ import { setPlan, setPlans } from "./planSlice";
 // import { setLoading } from "./generalSlice";
 import { setTransactions } from "./transactionSlice";
 import { setUser, setUsers } from "./userSlice";
+import { setLanguage, setLanguages } from "./languageSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -89,6 +90,23 @@ export const getAllPlans = async (dispatch, token) => {
   }
 };
 
+export const getAllLanguages = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/language/get-languages`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      // console.log(data)
+      dispatch(setLanguages({ languages: data.languages }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
 export const downloadAsCsv = async (Model, Filename = "data") => {
   try {
     const { data } = await axios.get(
@@ -137,6 +155,22 @@ export const getPlan = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setPlan({ plan: data.plan }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getLanguage = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/language/get-language/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setLanguage({ language: data.language }));
     }
   } catch (error) {
     toast.error(error.message);

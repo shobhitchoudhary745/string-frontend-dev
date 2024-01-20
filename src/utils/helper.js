@@ -37,6 +37,7 @@ export const secondArray = [
   {
     icon: <IoLanguage size={18} className="mx-2" />,
     content: "Languages",
+    link:"/admin/languages"
   },
   {
     icon: <VscListUnordered size={18} className="mx-2" />,
@@ -61,7 +62,7 @@ export const secondArray = [
 ];
 
 export const dashBoardArray = [
-  { key: "Language", value: 4, color: "#caa257",path:"/",content:"" },
+  { key: "Language", value: 4, color: "#caa257",path:"/admin/languages",content:"" },
   { key: "Genres", value: 5, color: "#ff8acc",path:"/",content:"" },
   { key: "Movies", value: 1, color: "#f9c851",path:"/",content:"" },
   { key: "Shows", value: 7, color: "#797979",path:"/",content:"" },

@@ -258,6 +258,7 @@ export default function Sidebar() {
               onClick={() => {
                 dispatch(setCurrentPage({ currentPage: data.content }));
                 setCurrent("");
+                navigate(data.link)
               }}
               className={`${currentPage === data.content ? "active" : ""}`}
             >

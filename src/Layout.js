@@ -14,6 +14,9 @@ import AddUser from "./Pages/Users/AddUser.jsx";
 import EditUser from "./Pages/Users/EditUser.jsx";
 import AddSubscription from "./Pages/Subscription/AddSubscription.jsx";
 import EditSubscription from "./Pages/Subscription/EditSubscription.jsx";
+import Language from "./Pages/Language/Language.jsx";
+import AddLanguage from "./Pages/Language/AddLanguage.jsx";
+import EditLanguage from "./Pages/Language/EditLanguage.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -89,6 +92,30 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditSubscription />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/languages"
+              element={
+                <ProtectedRoute>
+                  <Language />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-language"
+              element={
+                <ProtectedRoute>
+                  <AddLanguage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-language/:id"
+              element={
+                <ProtectedRoute>
+                  <EditLanguage />
                 </ProtectedRoute>
               }
             />
