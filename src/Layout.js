@@ -17,6 +17,9 @@ import EditSubscription from "./Pages/Subscription/EditSubscription.jsx";
 import Language from "./Pages/Language/Language.jsx";
 import AddLanguage from "./Pages/Language/AddLanguage.jsx";
 import EditLanguage from "./Pages/Language/EditLanguage.jsx";
+import Genre from "./Pages/Genre/Genre.jsx";
+import AddGenre from "./Pages/Genre/AddGenre.jsx";
+import EditGenre from "./Pages/Genre/EditGenre.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -119,6 +122,32 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/admin/genres"
+              element={
+                <ProtectedRoute>
+                  <Genre />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-genre"
+              element={
+                <ProtectedRoute>
+                  <AddGenre />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-genre/:id"
+              element={
+                <ProtectedRoute>
+                  <EditGenre />
+                </ProtectedRoute>
+              }
+            />
+
             <Route path="/login" element={<Login />} />
           </Routes>
           <Toastify />

@@ -5,6 +5,7 @@ import { setPlan, setPlans } from "./planSlice";
 import { setTransactions } from "./transactionSlice";
 import { setUser, setUsers } from "./userSlice";
 import { setLanguage, setLanguages } from "./languageSlice";
+import { setGenre, setGenres } from "./genreSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -107,6 +108,23 @@ export const getAllLanguages = async (dispatch, token) => {
   }
 };
 
+export const getAllGenres = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/genre/get-genres`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      // console.log(data)
+      dispatch(setGenres({ genres: data.genres }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
 export const downloadAsCsv = async (Model, Filename = "data") => {
   try {
     const { data } = await axios.get(
@@ -171,6 +189,22 @@ export const getLanguage = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setLanguage({ language: data.language }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getGenre = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/genre/get-genre/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setGenre({ genre: data.genre }));
     }
   } catch (error) {
     toast.error(error.message);

@@ -5,6 +5,7 @@ import userSlice from './userSlice';
 import transactionSlice from './transactionSlice';
 import planSlice from './planSlice';
 import languageSlice from './languageSlice';
+import genreSlice from './genreSlice';
 export default configureStore({
   reducer: {
     general: generalReducer,
@@ -12,6 +13,7 @@ export default configureStore({
     user: userSlice,
     transaction:transactionSlice,
     plan:planSlice,
-    language:languageSlice
+    language:languageSlice,
+    genre:genreSlice
   },
 });

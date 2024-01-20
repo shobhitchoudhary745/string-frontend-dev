@@ -42,6 +42,7 @@ export const secondArray = [
   {
     icon: <VscListUnordered size={18} className="mx-2" />,
     content: "Genres",
+    link:"/admin/genres"
   },
   {
     icon: <IoGiftSharp size={18} className="mx-2" />,
