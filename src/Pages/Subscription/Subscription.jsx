@@ -79,12 +79,14 @@ const Subscription = () => {
                     </td>
                     <td className="action-link">
                       <Link
+                        style={{backgroundColor:"#10c469",border:"none"}}
                         to={`/admin/edit-subscription/${data._id}`}
                         className="btn btn-success"
                       >
                         <FaEdit />
                       </Link>
                       <Link
+                        style={{backgroundColor:"#ff5b5b",border:"none"}}
                         onClick={() => deleteHandler(data._id)}
                         className="btn btn-danger"
                       >

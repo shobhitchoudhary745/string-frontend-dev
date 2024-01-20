@@ -81,6 +81,7 @@ export default function Transaction() {
           </InputGroup>
           <div className="button">
             <Button
+              style={{backgroundColor:"#35b8e0",border:"none"}}
               onClick={() => {
                 downloadAsCsv("Transaction", "transactions");
               }}
