@@ -74,7 +74,16 @@ export default function User() {
         plan_name,
         plan_type
       );
-  }, [dispatch, token, curPage, resultPerPage, query, plan_name, plan_type]);
+  }, [
+    dispatch,
+    token,
+    curPage,
+    resultPerPage,
+    query,
+    plan_name,
+    plan_type,
+    users,
+  ]);
 
   const numOfPages = Math.ceil(filteredUsers / resultPerPage);
   return (
@@ -135,7 +144,7 @@ export default function User() {
               <HiPlus /> Add User
             </Link>
             <Button
-              style={{backgroundColor:"#35b8e0",border:"none"}}
+              style={{ backgroundColor: "#35b8e0", border: "none" }}
               onClick={() => {
                 downloadAsCsv("User", "users");
               }}
@@ -175,14 +184,20 @@ export default function User() {
                       <span className="active">Active</span>
                     </td>
                     <td className="action-link">
-                      <Link style={{backgroundColor:"#35b8e0",border:"none"}} className="btn btn-info">
+                      <Link
+                        style={{ backgroundColor: "#35b8e0", border: "none" }}
+                        className="btn btn-info"
+                      >
                         <VscListUnordered />
                       </Link>
-                      <Link style={{backgroundColor:"#caa257",border:"none"}} className="btn btn-primary">
+                      <Link
+                        style={{ backgroundColor: "#caa257", border: "none" }}
+                        className="btn btn-primary"
+                      >
                         <FaEye />
                       </Link>
                       <Link
-                      style={{backgroundColor:"#10c469",border:"none"}}
+                        style={{ backgroundColor: "#10c469", border: "none" }}
                         to={`/admin/edit-user/${user?._id}`}
                         className="btn btn-success"
                         onClick={() => {
@@ -194,7 +209,7 @@ export default function User() {
                         <FaEdit />
                       </Link>
                       <Link
-                      style={{backgroundColor:"#ff5b5b",border:"none"}}
+                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
                         onClick={() => deleteUserHandler(user?._id)}
                         className="btn btn-danger"
                       >
