@@ -109,17 +109,17 @@ export default function Transaction() {
                 transactions.map((transaction, index) => {
                   return (
                     <tr key={index}>
-                      <td>{transaction.user.name}</td>
-                      <td>{transaction.user.email}</td>
-                      <td>{transaction.order.plan_type}</td>
+                      <td>{transaction?.user?.name}</td>
+                      <td>{transaction?.user?.email}</td>
+                      <td>{transaction?.order?.plan_type}</td>
                       <td>
-                        {transaction.gateway === "Razorpay"
-                          ? `₹ ${transaction.amount / 100}`
+                        {transaction?.gateway === "Razorpay"
+                          ? `₹ ${transaction?.amount / 100}`
                           : `₹0`}
                       </td>
-                      <td>{transaction.gateway}</td>
-                      <td>{transaction.razorpay_payment_id}</td>
-                      <td>{transaction.createdAt}</td>
+                      <td>{transaction?.gateway}</td>
+                      <td>{transaction?.razorpay_payment_id}</td>
+                      <td>{transaction?.createdAt}</td>
                     </tr>
                   );
                 })}

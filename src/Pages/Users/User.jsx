@@ -82,7 +82,7 @@ export default function User() {
     query,
     plan_name,
     plan_type,
-    users,
+    
   ]);
 
   const numOfPages = Math.ceil(filteredUsers / resultPerPage);
