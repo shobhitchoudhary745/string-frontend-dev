@@ -20,6 +20,7 @@ import EditLanguage from "./Pages/Language/EditLanguage.jsx";
 import Genre from "./Pages/Genre/Genre.jsx";
 import AddGenre from "./Pages/Genre/AddGenre.jsx";
 import EditGenre from "./Pages/Genre/EditGenre.jsx";
+import Video from "./Pages/Video/Video.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -147,7 +148,14 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
-
+            <Route
+              path="/admin/add-video"
+              element={
+                <ProtectedRoute>
+                  <Video />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/login" element={<Login />} />
           </Routes>
           <Toastify />

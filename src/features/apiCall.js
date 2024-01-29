@@ -6,6 +6,7 @@ import { setTransactions } from "./transactionSlice";
 import { setUser, setUsers } from "./userSlice";
 import { setLanguage, setLanguages } from "./languageSlice";
 import { setGenre, setGenres } from "./genreSlice";
+import { setURL } from "./getURLSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -125,29 +126,6 @@ export const getAllGenres = async (dispatch, token) => {
   }
 };
 
-export const downloadAsCsv = async (Model, Filename = "data") => {
-  try {
-    const { data } = await axios.get(
-      `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`
-    );
-    const blob = new Blob([data], { type: "text/csv" });
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.setAttribute("download", Filename + ".csv");
-    link.style.display = "none";
-    document.body.appendChild(link);
-    link.click();
-    toast.success("File Downloaded Successfully");
-    setTimeout(() => {
-      document.body.removeChild(link);
-    }, 1000);
-    console.log(blob);
-  } catch (error) {
-    toast.error(error.response.data.message);
-    console.log(error);
-  }
-};
-
 export const getUser = async (dispatch, token, id) => {
   try {
     const { data } = await axios.get(`/api/admin/get-user/${id}`, {
@@ -208,6 +186,45 @@ export const getGenre = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getURL = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/admin/get-url`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setURL({ url: data.url }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const downloadAsCsv = async (Model, Filename = "data") => {
+  try {
+    const { data } = await axios.get(
+      `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`
+    );
+    const blob = new Blob([data], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", Filename + ".csv");
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    toast.success("File Downloaded Successfully");
+    setTimeout(() => {
+      document.body.removeChild(link);
+    }, 1000);
+    console.log(blob);
+  } catch (error) {
+    toast.error(error.response.data.message);
     console.log(error);
   }
 };
