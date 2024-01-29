@@ -197,6 +197,7 @@ export const getURL = async (dispatch, token) => {
         authorization: `Bearer ${token}`,
       },
     });
+    // console.log(data)
     if (data.success) {
       dispatch(setURL({ url: data.url }));
     }
