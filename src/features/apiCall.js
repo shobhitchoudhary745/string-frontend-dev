@@ -192,14 +192,14 @@ export const getGenre = async (dispatch, token, id) => {
 
 export const getURL = async (dispatch, token) => {
   try {
-    const { data } = await axios.get(`/api/admin/get-url`, {
+    const { data } = await axios.post(`/api/admin/get-url`,{}, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
-    // console.log(data)
+    console.log(data)
     if (data.success) {
-      dispatch(setURL({ url: data.url }));
+      dispatch(setURL({ url: data.data.uploadURL,imageName:data.data.imageName }));
     }
   } catch (error) {
     toast.error(error.message);
