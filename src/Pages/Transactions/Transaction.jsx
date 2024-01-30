@@ -4,6 +4,7 @@ import { downloadAsCsv, getAllTransactions } from "../../features/apiCall";
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
 import CustomPagination from "../../utils/CustomPagination";
 import { FaRegFileExcel, FaSearch } from "react-icons/fa";
+import { LiaFileDownloadSolid } from "react-icons/lia";
 import "./Transaction.scss";
 
 export default function Transaction() {
@@ -95,12 +96,13 @@ export default function Transaction() {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Email address</th>
+                <th>Email</th>
                 <th>Plan</th>
                 <th>Amount</th>
                 <th>Payment Gateway</th>
                 <th>Payment ID</th>
                 <th>Payment Date</th>
+                <th>Download Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -120,12 +122,13 @@ export default function Transaction() {
                       <td>{transaction?.gateway}</td>
                       <td>{transaction?.razorpay_payment_id}</td>
                       <td>{transaction?.createdAt}</td>
+                      <td><a href={transaction?.invoice_url}><LiaFileDownloadSolid /></a></td>
                     </tr>
                   );
                 })}
               {transactions.length === 0 && (
                 <tr>
-                  <td colSpan="7" className="text-center">
+                  <td colSpan="8" className="text-center">
                     No Transactions Found
                   </td>
                 </tr>
