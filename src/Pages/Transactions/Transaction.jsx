@@ -122,7 +122,7 @@ export default function Transaction() {
                       <td>{transaction?.gateway}</td>
                       <td>{transaction?.razorpay_payment_id}</td>
                       <td>{transaction?.createdAt}</td>
-                      <td><a href={transaction?.invoice_url}><LiaFileDownloadSolid /></a></td>
+                      <td><a className="p-2 rounded" style={{color:"#f9f9f9",backgroundColor:"#35b8e0"}} href={transaction?.invoice_url}><LiaFileDownloadSolid /></a></td>
                     </tr>
                   );
                 })}
