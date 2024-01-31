@@ -124,7 +124,7 @@ const EditSubscription = () => {
         </Row>
         <Row className="align-items-center mb-4">
           <Col sm={12} md={3}>
-            <Form.Label>Yearly Price - USD</Form.Label>
+            <Form.Label>Monthly Price - USD</Form.Label>
           </Col>
           <Col sm={12} md={8}>
             <Form.Control
