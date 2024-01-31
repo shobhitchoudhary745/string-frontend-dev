@@ -1,25 +1,15 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  Row,
-  Spinner,
-} from "react-bootstrap";
-
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import "./Video.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axiosInstance from "../../utils/axiosUtil";
 import axios from "axios";
 import { setLoading } from "../../features/generalSlice";
-import { useNavigate } from "react-router-dom";
+import { MdClose } from "react-icons/md";
 
 function Video() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
 
   const { loading } = useSelector((state) => state.general);
@@ -30,12 +20,63 @@ function Video() {
   const [category, setCategory] = useState("Big Expose");
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
-  const [keywords, setKeywords] = useState("");
+  const [keywords, setKeywords] = useState([]);
+  const [currentKeyword, setCurrentKeyword] = useState("");
+  const [videoPreview, setVideoPreview] = useState("");
+  const [progress, setProgress] = useState(0);
+
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setVideo(file);
+      setVideoPreview(reader.result);
+    };
+  };
+
+  const handleKeywordChange = (e) => {
+    setCurrentKeyword(e.target.value);
+  };
+
+  const handleAddKeyword = () => {
+    if (currentKeyword.trim() !== "") {
+      setKeywords([...keywords, currentKeyword.trim()]);
+      setCurrentKeyword("");
+    }
+  };
+
+  const handleRemoveKeyword = (index) => {
+    const newKeywords = [...keywords];
+    newKeywords.splice(index, 1);
+    setKeywords(newKeywords);
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setDescription("");
+    setLanguage("Hindi");
+    setCategory("Big Expose");
+    setThumbnail("");
+    setVideo("");
+    setKeywords("");
+    setVideoPreview("");
+    setProgress(0);
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!video) {
-      toast.warning("Video is required");
+    if (
+      !video ||
+      !thumbnail ||
+      !title ||
+      !description ||
+      !category ||
+      !language ||
+      !keywords
+    ) {
+      toast.warning("All fields are required");
       return;
     }
 
@@ -52,13 +93,18 @@ function Video() {
       );
 
       if (data.success) {
-      
         const data2 = await axios.put(data.data.uploadURL, video, {
-          "Content-Type": "multipart/form-data",
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          onUploadProgress: (progressEvent) => {
+            const { loaded, total } = progressEvent;
+            let percent = Math.floor((loaded * 100) / total);
+            setProgress(percent);
+          },
         });
 
-        if (data2.status==200) {
-          
+        if (data2.status === 200) {
           const data3 = await axiosInstance.post(
             "/api/admin/create-video",
             {
@@ -74,25 +120,28 @@ function Video() {
               headers: { authorization: `Bearer ${token}` },
             }
           );
-          if(data3.data.success){
+          if (data3.data.success) {
             toast.success("Video Uploaded Successfully");
             dispatch(setLoading());
+            resetForm();
           }
         }
-      }
-      else{
-        console.log("some error")
+      } else {
+        console.log("some error");
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dispatch(setLoading());
       toast.error(error.response.data.message || error.message);
     }
   };
 
+  const lang = ["Hindi", "English", "Tamil", "Telugu", "Malayalam"];
+  const cat = ["Big Expose", "Small Expose", "Dramas", "Comedy"];
+
   return (
     <div>
-      <Card className="user-table ">
+      <Form className="user-table">
         <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
@@ -103,7 +152,7 @@ function Video() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 type="text"
-                required
+                placeholder="Enter Video Title"
               />
             </Col>
           </Row>
@@ -117,7 +166,8 @@ function Video() {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 type="text"
-                required
+                as="textarea"
+                placeholder="Enter Video Description"
               />
             </Col>
           </Row>
@@ -130,15 +180,14 @@ function Video() {
               <select
                 value={language}
                 className="rounded"
-                defaultValue="Hindi"
-                onChange={(e) => {
-                  setLanguage(e.target.value);
-                }}
+                onChange={(e) => setLanguage(e.target.value)}
               >
-                <option value="Hindi">Hindi</option>
-                <option value="Tamil">Tamil</option>
-                <option value="Telugu">Telugu</option>
-                <option value="English">English</option>
+                <option value="">Select Language</option>
+                {lang.map((l) => (
+                  <option key={l} value={l}>
+                    {l}
+                  </option>
+                ))}
               </select>
             </Col>
           </Row>
@@ -151,15 +200,14 @@ function Video() {
               <select
                 value={category}
                 className="rounded"
-                defaultValue="Hindi"
-                onChange={(e) => {
-                  setCategory(e.target.value);
-                }}
+                onChange={(e) => setCategory(e.target.value)}
               >
-                <option value="Big Expose">Big Expose</option>
-                <option value="Podcast">Podcast</option>
-                <option value="Sanatan Dharma">Sanatan Dharma</option>
-                <option value="Truth">Truth</option>
+                <option value="">Select Category</option>
+                {cat.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
               </select>
             </Col>
           </Row>
@@ -173,51 +221,107 @@ function Video() {
                 value={thumbnail}
                 onChange={(e) => setThumbnail(e.target.value)}
                 type="text"
-                required
+                placeholder="Enter Thumbnail Url"
               />
             </Col>
           </Row>
 
-          <Row className="align-items-center mb-4">
+          <Row
+            className={`align-items-center ${videoPreview ? "mb-1" : "mb-4"}`}
+          >
             <Col sm={12} md={3}>
               <Form.Label>Video</Form.Label>
             </Col>
             <Col sm={12} md={8}>
               <Form.Control
-                // value={video}
-                onChange={(e) => setVideo(e.target.files[0])}
+                onChange={handleVideoChange}
                 type="file"
-                required
                 accept="video/*"
               />
             </Col>
           </Row>
+          {videoPreview && (
+            <Row className="align-items-center mb-1">
+              <Col sm={12} md={3}>
+                <Form.Label></Form.Label>
+              </Col>
+              <Col sm={12} md={8} className="edit-video">
+                {videoPreview && <video src={videoPreview} controls />}
+              </Col>
+            </Row>
+          )}
 
-          <Row className="align-items-center mb-4">
+          <Row
+            className={`align-items-center ${
+              keywords && keywords.length > 0 ? "mb-5" : "mb-3"
+            }`}
+          >
             <Col sm={12} md={3}>
               <Form.Label>Keywords</Form.Label>
             </Col>
-            <Col sm={12} md={8}>
+            <Col
+              style={{ display: "flex", gap: "10px", position: "relative" }}
+              sm={12}
+              md={8}
+            >
               <Form.Control
-                value={keywords}
-                onChange={(e) => setKeywords(e.target.value)}
                 type="text"
+                placeholder="Enter a Keyword"
+                value={currentKeyword}
+                onChange={handleKeywordChange}
               />
+              <Button onClick={handleAddKeyword} disabled={!currentKeyword}>
+                Add
+              </Button>
+              <div className="video_keywords">
+                {keywords &&
+                  keywords.map((k, index) => (
+                    <li key={index}>
+                      <span>{k}</span>
+                      <MdClose onClick={() => handleRemoveKeyword(index)} />
+                    </li>
+                  ))}
+              </div>
             </Col>
           </Row>
-
-          <Row className="align-items-center mb-4">
-            <Col className="d-none d-md-block" md={3}>
+          <Row className="align-items-center">
+            <Col sm={12} md={3}>
               <Form.Label></Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <Button onClick={submitHandler}>
-                {loading ? <Spinner /> : "Save"}
-              </Button>
+              {progress > 0 ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "10px",
+                    width: "100%",
+                  }}
+                >
+                  <progress
+                    style={{ width: "100%" }}
+                    max="100"
+                    value={progress}
+                  />
+                  <Button style={{ width: "100%" }} variant="success">
+                    {progress > 99 ? "Processing..." : `Uploading ${progress}%`}
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  style={{ width: "100%",padding:"10px" }}
+                  type="submit"
+                  onClick={submitHandler}
+                  disabled={loading ? true : false}
+                >
+                  Submit
+                </Button>
+              )}
             </Col>
           </Row>
         </Container>
-      </Card>
+      </Form>
     </div>
   );
 }
