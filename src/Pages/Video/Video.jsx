@@ -107,17 +107,17 @@ function Video() {
         });
 
         if (data2.status === 200) {
+          const formData = new FormData();
+          formData.append("title",title);
+          formData.append("description",description);
+          formData.append("keywords",keywords);
+          formData.append("category",category);
+          formData.append("language",language);
+          formData.append("image",thumbnail);
+          formData.append("video_url",data.data.imageName);
           const data3 = await axiosInstance.post(
             "/api/admin/create-video",
-            {
-              title,
-              description,
-              keywords,
-              category,
-              language,
-              thumbnail_url: thumbnail,
-              video_url: data.data.imageName,
-            },
+            formData,
             {
               headers: { authorization: `Bearer ${token}` },
             }
@@ -154,7 +154,7 @@ function Video() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 type="text"
-                placeholder="Enter Video Title"
+                // placeholder="Enter Video Title"
               />
             </Col>
           </Row>
@@ -169,7 +169,7 @@ function Video() {
                 onChange={(e) => setDescription(e.target.value)}
                 type="text"
                 as="textarea"
-                placeholder="Enter Video Description"
+                // placeholder="Enter Video Description"
               />
             </Col>
           </Row>
@@ -220,10 +220,11 @@ function Video() {
             </Col>
             <Col sm={12} md={8}>
               <Form.Control
-                value={thumbnail}
-                onChange={(e) => setThumbnail(e.target.value)}
-                type="text"
-                placeholder="Enter Thumbnail Url"
+                // value={thumbnail}
+                onChange={(e) => setThumbnail(e.target.files[0])}
+                type="file"
+                accept="image/*"
+                // placeholder="Enter Thumbnail Url"
               />
             </Col>
           </Row>
@@ -236,10 +237,12 @@ function Video() {
             </Col>
             <Col sm={12} md={8}>
               <Form.Control
+                className="choose-video"
                 onChange={handleVideoChange}
                 type="file"
                 accept="video/*"
               />
+              
             </Col>
           </Row>
           {videoPreview && (
@@ -248,7 +251,13 @@ function Video() {
                 <Form.Label>Preview</Form.Label>
               </Col>
               <Col sm={12} md={8} className="edit-video">
-                {videoPreview && <video src={videoPreview} controls />}
+                {videoPreview && (
+                  <video
+                    style={{ height: "300px" }}
+                    src={videoPreview}
+                    controls
+                  />
+                )}
               </Col>
             </Row>
           )}
@@ -268,7 +277,7 @@ function Video() {
             >
               <Form.Control
                 type="text"
-                placeholder="Enter a Keyword"
+                // placeholder="Enter a Keyword"
                 value={currentKeyword}
                 onChange={handleKeywordChange}
               />
@@ -284,12 +293,12 @@ function Video() {
               </div>
             </Col>
           </Row>
-          {progress > 0 && 
+          {progress > 0 && (
             <Row className="align-items-center">
               <Col sm={12} md={3}>
                 <Form.Label></Form.Label>
               </Col>
-              
+
               <Col sm={12} md={8}>
                 <div
                   style={{
@@ -310,24 +319,22 @@ function Video() {
                   </Button>
                 </div>
               </Col>
-              
             </Row>
-          }
+          )}
 
-          {progress == 0 && 
+          {progress == 0 && (
             <Row className="align-items-center">
               <Col sm={12} md={3}>
                 <Form.Label></Form.Label>
               </Col>
-              
+
               <Col sm={12} md={8}>
                 <Button onClick={submitHandler} className="submit-button">
                   {loading ? <Spinner /> : "Upload"}
                 </Button>
               </Col>
-              
             </Row>
-          }
+          )}
         </Container>
       </Form>
     </div>
