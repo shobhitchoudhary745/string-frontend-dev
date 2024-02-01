@@ -16,13 +16,15 @@ function Video() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [language, setLanguage] = useState("Hindi");
-  const [category, setCategory] = useState("Big Expose");
+  const [language, setLanguage] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
   const [keywords, setKeywords] = useState([]);
   const [currentKeyword, setCurrentKeyword] = useState("");
   const [videoPreview, setVideoPreview] = useState("");
+  const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [progress, setProgress] = useState(0);
 
   const handleVideoChange = (e) => {
@@ -33,6 +35,17 @@ function Video() {
     reader.onloadend = () => {
       setVideo(file);
       setVideoPreview(reader.result);
+    };
+  };
+
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setThumbnail(file);
+      setThumbnailPreview(reader.result);
     };
   };
 
@@ -58,12 +71,15 @@ function Video() {
   const resetForm = () => {
     setTitle("");
     setDescription("");
-    setLanguage("Hindi");
-    setCategory("Big Expose");
+    setLanguage("");
+    setCategory("");
     setThumbnail("");
     setVideo("");
     setKeywords("");
     setVideoPreview("");
+    setThumbnailPreview("");
+    setCurrentKeyword("");
+    setCategories([]);
     setProgress(0);
   };
 
@@ -74,7 +90,7 @@ function Video() {
       !thumbnail ||
       !title ||
       !description ||
-      !category ||
+      !categories ||
       !language ||
       !keywords
     ) {
@@ -108,13 +124,15 @@ function Video() {
 
         if (data2.status === 200) {
           const formData = new FormData();
-          formData.append("title",title);
-          formData.append("description",description);
-          formData.append("keywords",keywords);
-          formData.append("category",category);
-          formData.append("language",language);
-          formData.append("image",thumbnail);
-          formData.append("video_url",data.data.imageName);
+
+          formData.append("title", title);
+          formData.append("description", description);
+          formData.append("keywords", keywords);
+          formData.append("categories", categories);
+          formData.append("language", language);
+          formData.append("image", thumbnail);
+          formData.append("video_url", data.data.imageName);
+
           const data3 = await axiosInstance.post(
             "/api/admin/create-video",
             formData,
@@ -141,6 +159,22 @@ function Video() {
   const lang = ["Hindi", "English", "Tamil", "Telugu", "Malayalam"];
   const cat = ["Big Expose", "Small Expose", "Dramas", "Comedy"];
 
+  const handleCateoryChange = (e) => {
+    const selectedCategory = e.target.value;
+
+    if (!categories.includes(selectedCategory)) {
+      setCategories([...categories, selectedCategory]);
+      setCategory("");
+    }
+  };
+
+  const handleRemoveCategory = (selectedCategory) => {
+    const newCategories = categories.filter((c) => c !== selectedCategory);
+    setCategories(newCategories);
+  };
+
+  const availableCategories = cat.filter((c) => !categories.includes(c));
+
   return (
     <div>
       <Form className="user-table">
@@ -154,7 +188,7 @@ function Video() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 type="text"
-                // placeholder="Enter Video Title"
+                placeholder="Enter Video Title"
               />
             </Col>
           </Row>
@@ -169,7 +203,7 @@ function Video() {
                 onChange={(e) => setDescription(e.target.value)}
                 type="text"
                 as="textarea"
-                // placeholder="Enter Video Description"
+                placeholder="Enter Video Description"
               />
             </Col>
           </Row>
@@ -194,43 +228,80 @@ function Video() {
             </Col>
           </Row>
 
-          <Row className="align-items-center mb-4">
+          <Row
+            className={`align-items-center ${
+              categories && categories.length > 0 ? "mb-5" : "mb-4"
+            }`}
+          >
             <Col className="mb-2" sm={12} md={3}>
               <label>Video Category</label>
             </Col>
-            <Col sm={12} md={8}>
+            <Col style={{ position: "relative" }} sm={12} md={8}>
               <select
                 value={category}
                 className="rounded"
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={handleCateoryChange}
               >
                 <option value="">Select Category</option>
-                {cat.map((c) => (
+                {availableCategories.map((c) => (
                   <option key={c} value={c}>
                     {c}
                   </option>
                 ))}
               </select>
-            </Col>
-          </Row>
-
-          <Row className="align-items-center mb-4">
-            <Col sm={12} md={3}>
-              <Form.Label>Thumbnail Url</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                // value={thumbnail}
-                onChange={(e) => setThumbnail(e.target.files[0])}
-                type="file"
-                accept="image/*"
-                // placeholder="Enter Thumbnail Url"
-              />
+              <div className="video_keywords">
+                {categories &&
+                  categories.map((c, i) => (
+                    <li key={i}>
+                      <span>{c}</span>
+                      <MdClose onClick={() => handleRemoveCategory(c)} />
+                    </li>
+                  ))}
+              </div>
             </Col>
           </Row>
 
           <Row
-            className={`align-items-center ${videoPreview ? "mb-1" : "mb-4"}`}
+            className={`align-items-center ${
+              thumbnailPreview ? "mb-2" : "mb-4"
+            }`}
+          >
+            <Col sm={12} md={3}>
+              <Form.Label>Thumbnail</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <Form.Control
+                // value={thumbnail}
+                onChange={handleThumbnailChange}
+                type="file"
+                accept="image/*"
+                placeholder="Select Thumbnail"
+              />
+            </Col>
+          </Row>
+          {thumbnailPreview && (
+            <Row className="align-items-center mb-2">
+              <Col sm={12} md={3}>
+                <Form.Label></Form.Label>
+              </Col>
+              <Col sm={12} md={8} className="edit-video">
+                {thumbnailPreview && (
+                  <img
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      borderRadius: "7px",
+                    }}
+                    src={thumbnailPreview}
+                    alt="thumbnail"
+                  />
+                )}
+              </Col>
+            </Row>
+          )}
+
+          <Row
+            className={`align-items-center ${videoPreview ? "mb-0" : "mb-4"}`}
           >
             <Col sm={12} md={3}>
               <Form.Label>Video</Form.Label>
@@ -242,18 +313,17 @@ function Video() {
                 type="file"
                 accept="video/*"
               />
-              
             </Col>
           </Row>
           {videoPreview && (
             <Row className="align-items-center mb-1">
               <Col sm={12} md={3}>
-                <Form.Label>Preview</Form.Label>
+                <Form.Label></Form.Label>
               </Col>
               <Col sm={12} md={8} className="edit-video">
                 {videoPreview && (
                   <video
-                    style={{ height: "300px" }}
+                    style={{ height: "100%", width: "100%" }}
                     src={videoPreview}
                     controls
                   />
@@ -277,7 +347,7 @@ function Video() {
             >
               <Form.Control
                 type="text"
-                // placeholder="Enter a Keyword"
+                placeholder="Enter a Keyword"
                 value={currentKeyword}
                 onChange={handleKeywordChange}
               />
@@ -315,22 +385,26 @@ function Video() {
                     value={progress}
                   />
                   <Button style={{ width: "100%" }} variant="success">
-                    {progress > 99 ? "Processing..." : `Uploading ${progress}%`}
+                    {progress > 99 ? "Processing..." : `Uploading - ${progress}%`}
                   </Button>
                 </div>
               </Col>
             </Row>
           )}
 
-          {progress == 0 && (
+          {progress === 0 && (
             <Row className="align-items-center">
               <Col sm={12} md={3}>
                 <Form.Label></Form.Label>
               </Col>
 
               <Col sm={12} md={8}>
-                <Button onClick={submitHandler} className="submit-button">
-                  {loading ? <Spinner /> : "Upload"}
+                <Button onClick={submitHandler} className="pt-2 pb-2">
+                  {loading ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    "Upload Video"
+                  )}
                 </Button>
               </Col>
             </Row>
