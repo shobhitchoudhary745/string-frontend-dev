@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import "./Video.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -42,7 +42,9 @@ function Video() {
 
   const handleAddKeyword = () => {
     if (currentKeyword.trim() !== "") {
-      setKeywords([...keywords, currentKeyword.trim()]);
+      setKeywords(
+        Array.from(new Set([...keywords, currentKeyword.toLowerCase()]))
+      );
       setCurrentKeyword("");
     }
   };
@@ -243,7 +245,7 @@ function Video() {
           {videoPreview && (
             <Row className="align-items-center mb-1">
               <Col sm={12} md={3}>
-                <Form.Label></Form.Label>
+                <Form.Label>Preview</Form.Label>
               </Col>
               <Col sm={12} md={8} className="edit-video">
                 {videoPreview && <video src={videoPreview} controls />}
@@ -270,9 +272,7 @@ function Video() {
                 value={currentKeyword}
                 onChange={handleKeywordChange}
               />
-              <Button onClick={handleAddKeyword} disabled={!currentKeyword}>
-                Add
-              </Button>
+              <Button onClick={handleAddKeyword}>Add</Button>
               <div className="video_keywords">
                 {keywords &&
                   keywords.map((k, index) => (
@@ -284,12 +284,13 @@ function Video() {
               </div>
             </Col>
           </Row>
-          <Row className="align-items-center">
-            <Col sm={12} md={3}>
-              <Form.Label></Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              {progress > 0 ? (
+          {progress > 0 && 
+            <Row className="align-items-center">
+              <Col sm={12} md={3}>
+                <Form.Label></Form.Label>
+              </Col>
+              
+              <Col sm={12} md={8}>
                 <div
                   style={{
                     display: "flex",
@@ -308,18 +309,25 @@ function Video() {
                     {progress > 99 ? "Processing..." : `Uploading ${progress}%`}
                   </Button>
                 </div>
-              ) : (
-                <Button
-                  style={{ width: "100%",padding:"10px" }}
-                  type="submit"
-                  onClick={submitHandler}
-                  disabled={loading ? true : false}
-                >
-                  Submit
+              </Col>
+              
+            </Row>
+          }
+
+          {progress == 0 && 
+            <Row className="align-items-center">
+              <Col sm={12} md={3}>
+                <Form.Label></Form.Label>
+              </Col>
+              
+              <Col sm={12} md={8}>
+                <Button onClick={submitHandler} className="submit-button">
+                  {loading ? <Spinner /> : "Upload"}
                 </Button>
-              )}
-            </Col>
-          </Row>
+              </Col>
+              
+            </Row>
+          }
         </Container>
       </Form>
     </div>
