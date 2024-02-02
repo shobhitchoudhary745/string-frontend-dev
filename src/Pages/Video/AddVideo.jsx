@@ -171,7 +171,7 @@ function AddVideo() {
   };
 
   // const lang = ["Hindi", "English", "Tamil", "Telugu", "Malayalam"];
-  const cat = ["Big Expose", "Small Expose", "Dramas", "Comedy"];
+  // const cat = ["Big Expose", "Small Expose", "Dramas", "Comedy"];
 
   const handleCateoryChange = (e) => {
     const selectedCategory = e.target.value;
@@ -338,7 +338,7 @@ function AddVideo() {
               <Col sm={12} md={8} className="edit-video">
                 {videoPreview && (
                   <video
-                    style={{ height: "100%", width: "100%" }}
+                    style={{ height: "300px", width: "100%" }}
                     src={videoPreview}
                     controls
                   />
