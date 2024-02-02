@@ -103,7 +103,7 @@ const Video = () => {
             </Form.Select>
           </Form.Group>
           <InputGroup className="user-search">
-            <Form.Control 
+            <Form.Control
               aria-label="Search Input"
               placeholder="Search By title or description"
               type="search"
@@ -132,6 +132,7 @@ const Video = () => {
               <tr>
                 <th>Title</th>
                 <th>Description</th>
+                <th>Language</th>
                 <th>Poster</th>
                 <th>Actions</th>
               </tr>
@@ -142,6 +143,7 @@ const Video = () => {
                   <tr key={index}>
                     <td>{data.title}</td>
                     <td>{data.description}</td>
+                    <td>{data.language}</td>
                     <td>
                       <img className="poster" src={data.thumbnail_url} />
                     </td>
