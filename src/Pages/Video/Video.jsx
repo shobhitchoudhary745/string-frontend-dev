@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import "./Video.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,11 +7,13 @@ import axiosInstance from "../../utils/axiosUtil";
 import axios from "axios";
 import { setLoading } from "../../features/generalSlice";
 import { MdClose } from "react-icons/md";
+import { getAllGenres, getAllLanguages } from "../../features/apiCall";
 
 function Video() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-
+  const { genres } = useSelector((state) => state.genre);
+  const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
 
   const [title, setTitle] = useState("");
@@ -26,6 +28,13 @@ function Video() {
   const [videoPreview, setVideoPreview] = useState("");
   const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (token) {
+      getAllGenres(dispatch, token);
+      getAllLanguages(dispatch, token);
+    }
+  }, [token]);
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
@@ -156,7 +165,7 @@ function Video() {
     }
   };
 
-  const lang = ["Hindi", "English", "Tamil", "Telugu", "Malayalam"];
+  // const lang = ["Hindi", "English", "Tamil", "Telugu", "Malayalam"];
   const cat = ["Big Expose", "Small Expose", "Dramas", "Comedy"];
 
   const handleCateoryChange = (e) => {
@@ -173,7 +182,7 @@ function Video() {
     setCategories(newCategories);
   };
 
-  const availableCategories = cat.filter((c) => !categories.includes(c));
+  const availableCategories = genres.filter((genre) => !categories.includes(genre.name));
 
   return (
     <div>
@@ -219,9 +228,9 @@ function Video() {
                 onChange={(e) => setLanguage(e.target.value)}
               >
                 <option value="">Select Language</option>
-                {lang.map((l) => (
-                  <option key={l} value={l}>
-                    {l}
+                {languages.map((language) => (
+                  <option key={language._id} value={language.name}>
+                    {language.name}
                   </option>
                 ))}
               </select>
@@ -243,9 +252,9 @@ function Video() {
                 onChange={handleCateoryChange}
               >
                 <option value="">Select Category</option>
-                {availableCategories.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
+                {availableCategories.map((genre) => (
+                  <option key={genre._id} value={genre.name}>
+                    {genre.name}
                   </option>
                 ))}
               </select>
@@ -288,9 +297,10 @@ function Video() {
                 {thumbnailPreview && (
                   <img
                     style={{
-                      height: "100%",
-                      width: "100%",
+                      height: "250px",
+                      width: "300px",
                       borderRadius: "7px",
+                      objectFit:"fill"
                     }}
                     src={thumbnailPreview}
                     alt="thumbnail"
@@ -351,7 +361,7 @@ function Video() {
                 value={currentKeyword}
                 onChange={handleKeywordChange}
               />
-              <Button onClick={handleAddKeyword}>Add</Button>
+              <Button type="button" onClick={handleAddKeyword}>Add</Button>
               <div className="video_keywords">
                 {keywords &&
                   keywords.map((k, index) => (
@@ -385,7 +395,9 @@ function Video() {
                     value={progress}
                   />
                   <Button style={{ width: "100%" }} variant="success">
-                    {progress > 99 ? "Processing..." : `Uploading - ${progress}%`}
+                    {progress > 99
+                      ? "Processing..."
+                      : `Uploading - ${progress}%`}
                   </Button>
                 </div>
               </Col>
