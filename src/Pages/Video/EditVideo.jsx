@@ -23,13 +23,11 @@ function EditVideo() {
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
   const { video: video1 } = useSelector((state) => state.video);
-  console.log(video1);
+  //   console.log(video1);
 
   useEffect(() => {
     getVideo(dispatch, token, id);
   }, [dispatch, token, id]);
-
-  
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -51,17 +49,17 @@ function EditVideo() {
     }
   }, [token]);
 
-  useEffect(()=>{
-    if(video1.description){
-        setDescription(video1.description);
-        setTitle(video1.title);
-        setLanguage(video1.language);
-        setKeywords(video1.keywords);
-        setCategories(video1.categories);
-        setThumbnailPreview(video1.thumbnail_url);
-        setVideoPreview(video1.video_url);
+  useEffect(() => {
+    if (video1.description) {
+      setDescription(video1.description);
+      setTitle(video1.title);
+      setLanguage(video1.language);
+      setKeywords(video1.keywords);
+      setCategories(video1.categories);
+      setThumbnailPreview(video1.thumbnail_url);
+      setVideoPreview(video1.video_url);
     }
-  },[video1])
+  }, [video1]);
 
   useEffect(() => {
     if (token) {
@@ -128,6 +126,8 @@ function EditVideo() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    console.log(video, thumbnail, keywords, categories);
+    // return ;
     if (
       !video &&
       !thumbnail &&
@@ -143,27 +143,31 @@ function EditVideo() {
 
     try {
       dispatch(setLoading());
-      const { data } = await axiosInstance.post(
-        `/api/admin/get-url`,
-        {},
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const { data } = !video
+        ? { data: { success: true } }
+        : await axiosInstance.post(
+            `/api/admin/get-url`,
+            {},
+            {
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
       if (data.success) {
-        const data2 = await axios.put(data.data.uploadURL, video, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const { loaded, total } = progressEvent;
-            let percent = Math.floor((loaded * 100) / total);
-            setProgress(percent);
-          },
-        });
+        const data2 = !video
+          ? { status: 200 }
+          : await axios.put(data.data.uploadURL, video, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+              onUploadProgress: (progressEvent) => {
+                const { loaded, total } = progressEvent;
+                let percent = Math.floor((loaded * 100) / total);
+                setProgress(percent);
+              },
+            });
 
         if (data2.status === 200) {
           const formData = new FormData();
@@ -173,18 +177,18 @@ function EditVideo() {
           formData.append("keywords", keywords);
           formData.append("categories", categories);
           formData.append("language", language);
-          formData.append("image", thumbnail);
-          formData.append("video_url", data.data.imageName);
+          thumbnail && formData.append("image", thumbnail);
+          video && formData.append("video_url", data.data.imageName);
 
-          const data3 = await axiosInstance.post(
-            "/api/video/create-video",
+          const data3 = await axiosInstance.patch(
+            `/api/video/update-video/${id}`,
             formData,
             {
               headers: { authorization: `Bearer ${token}` },
             }
           );
           if (data3.data.success) {
-            toast.success("Video Uploaded Successfully.    ...Redirecting");
+            toast.success("Video Updated Successfully.    ...Redirecting");
             dispatch(setLoading());
             resetForm();
             setTimeout(() => {
@@ -201,9 +205,6 @@ function EditVideo() {
       toast.error(error.response.data.message || error.message);
     }
   };
-
-  
- 
 
   const handleCateoryChange = (e) => {
     const selectedCategory = e.target.value;
@@ -414,7 +415,7 @@ function EditVideo() {
               </div>
             </Col>
           </Row>
-          {progress > 0 && (
+          {progress > 0 && video && (
             <Row className="align-items-center">
               <Col sm={12} md={3}>
                 <Form.Label></Form.Label>
