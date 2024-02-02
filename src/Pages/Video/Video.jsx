@@ -1,430 +1,175 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
-import "./Video.scss";
+import { HiPlus } from "react-icons/hi";
+import { Link } from "react-router-dom";
+import { Card, Form, InputGroup, Table } from "react-bootstrap";
+import { IoClose } from "react-icons/io5";
+import { FaEdit, FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import axiosInstance from "../../utils/axiosUtil";
-import axios from "axios";
+import {
+  getAllGenres,
+  getAllLanguages,
+  getAllVideos,
+} from "../../features/apiCall";
 import { setLoading } from "../../features/generalSlice";
-import { MdClose } from "react-icons/md";
-import { getAllGenres, getAllLanguages } from "../../features/apiCall";
+import axios from "../../utils/axiosUtil";
+import { toast } from "react-toastify";
+import "./Video.scss";
 
-function Video() {
+const Video = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { genres } = useSelector((state) => state.genre);
+  const { videos } = useSelector((state) => state.video);
   const { languages } = useSelector((state) => state.language);
-  const { loading } = useSelector((state) => state.general);
-
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const { genres } = useSelector((state) => state.genre);
   const [language, setLanguage] = useState("");
-  const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
-  const [video, setVideo] = useState("");
-  const [keywords, setKeywords] = useState([]);
-  const [currentKeyword, setCurrentKeyword] = useState("");
-  const [videoPreview, setVideoPreview] = useState("");
-  const [thumbnailPreview, setThumbnailPreview] = useState("");
-  const [progress, setProgress] = useState(0);
-
+  const [search, setSearch] = useState("");
+  const [query, setQuery] = useState("");
   useEffect(() => {
     if (token) {
-      getAllGenres(dispatch, token);
-      getAllLanguages(dispatch, token);
+      getAllVideos(dispatch, token, language, category, query);
     }
-  }, [token]);
+  }, [dispatch, token, language, category, query]);
 
-  const handleVideoChange = (e) => {
-    const file = e.target.files[0];
+  useEffect(() => {
+    getAllLanguages(dispatch, token);
+    getAllGenres(dispatch, token);
+  }, [token, dispatch]);
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setVideo(file);
-      setVideoPreview(reader.result);
-    };
-  };
-
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
-
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setThumbnail(file);
-      setThumbnailPreview(reader.result);
-    };
-  };
-
-  const handleKeywordChange = (e) => {
-    setCurrentKeyword(e.target.value);
-  };
-
-  const handleAddKeyword = () => {
-    if (currentKeyword.trim() !== "") {
-      setKeywords(
-        Array.from(new Set([...keywords, currentKeyword.toLowerCase()]))
-      );
-      setCurrentKeyword("");
-    }
-  };
-
-  const handleRemoveKeyword = (index) => {
-    const newKeywords = [...keywords];
-    newKeywords.splice(index, 1);
-    setKeywords(newKeywords);
-  };
-
-  const resetForm = () => {
-    setTitle("");
-    setDescription("");
-    setLanguage("");
-    setCategory("");
-    setThumbnail("");
-    setVideo("");
-    setKeywords("");
-    setVideoPreview("");
-    setThumbnailPreview("");
-    setCurrentKeyword("");
-    setCategories([]);
-    setProgress(0);
-  };
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const deleteHandler = async (id) => {
     if (
-      !video ||
-      !thumbnail ||
-      !title ||
-      !description ||
-      !categories ||
-      !language ||
-      !keywords
+      window.confirm(
+        "Are you sure you want to delete this Video?\nThis action cannot be undone."
+      ) === true
     ) {
-      toast.warning("All fields are required");
-      return;
-    }
-
-    try {
-      dispatch(setLoading());
-      const { data } = await axiosInstance.post(
-        `/api/admin/get-url`,
-        {},
-        {
+      try {
+        dispatch(setLoading());
+        const { data } = await axios.delete(`/api/video/delete-video/${id}`, {
           headers: {
             authorization: `Bearer ${token}`,
           },
-        }
-      );
-
-      if (data.success) {
-        const data2 = await axios.put(data.data.uploadURL, video, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const { loaded, total } = progressEvent;
-            let percent = Math.floor((loaded * 100) / total);
-            setProgress(percent);
-          },
         });
-
-        if (data2.status === 200) {
-          const formData = new FormData();
-
-          formData.append("title", title);
-          formData.append("description", description);
-          formData.append("keywords", keywords);
-          formData.append("categories", categories);
-          formData.append("language", language);
-          formData.append("image", thumbnail);
-          formData.append("video_url", data.data.imageName);
-
-          const data3 = await axiosInstance.post(
-            "/api/admin/create-video",
-            formData,
-            {
-              headers: { authorization: `Bearer ${token}` },
-            }
-          );
-          if (data3.data.success) {
-            toast.success("Video Uploaded Successfully");
-            dispatch(setLoading());
-            resetForm();
-          }
+        if (data.success) {
+          getAllVideos(dispatch, token);
+          dispatch(setLoading());
+          toast.success(data.message);
         }
-      } else {
-        console.log("some error");
+      } catch (error) {
+        dispatch(setLoading());
+        toast.error(error.message);
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-      dispatch(setLoading());
-      toast.error(error.response.data.message || error.message);
     }
   };
-
-  // const lang = ["Hindi", "English", "Tamil", "Telugu", "Malayalam"];
-  const cat = ["Big Expose", "Small Expose", "Dramas", "Comedy"];
-
-  const handleCateoryChange = (e) => {
-    const selectedCategory = e.target.value;
-
-    if (!categories.includes(selectedCategory)) {
-      setCategories([...categories, selectedCategory]);
-      setCategory("");
-    }
-  };
-
-  const handleRemoveCategory = (selectedCategory) => {
-    const newCategories = categories.filter((c) => c !== selectedCategory);
-    setCategories(newCategories);
-  };
-
-  const availableCategories = genres.filter((genre) => !categories.includes(genre.name));
 
   return (
-    <div>
-      <Form className="user-table">
-        <Container className="input-fieleds p-4">
-          <Row className="align-items-center mb-4">
-            <Col sm={12} md={3}>
-              <Form.Label>Video Title</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                type="text"
-                placeholder="Enter Video Title"
-              />
-            </Col>
-          </Row>
-
-          <Row className="align-items-center mb-4">
-            <Col sm={12} md={3}>
-              <Form.Label>Video Description</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                type="text"
-                as="textarea"
-                placeholder="Enter Video Description"
-              />
-            </Col>
-          </Row>
-
-          <Row className="align-items-center mb-4">
-            <Col className="mb-2" sm={12} md={3}>
-              <label>Video Language</label>
-            </Col>
-            <Col sm={12} md={8}>
-              <select
-                value={language}
-                className="rounded"
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                <option value="">Select Language</option>
-                {languages.map((language) => (
-                  <option key={language._id} value={language.name}>
+    <>
+      <Card className="user-table">
+        <Card.Header className="user-header">
+          <Form.Group>
+            <Form.Select
+              value={language}
+              onChange={(e) => {
+                setLanguage(e.target.value);
+                // setCurPage(1);
+              }}
+            >
+              <option value="all">Filter By Language</option>
+              {languages.map((language) => {
+                return (
+                  <option value={language.name} key={language._id}>
                     {language.name}
                   </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
-
-          <Row
-            className={`align-items-center ${
-              categories && categories.length > 0 ? "mb-5" : "mb-4"
-            }`}
-          >
-            <Col className="mb-2" sm={12} md={3}>
-              <label>Video Category</label>
-            </Col>
-            <Col style={{ position: "relative" }} sm={12} md={8}>
-              <select
-                value={category}
-                className="rounded"
-                onChange={handleCateoryChange}
-              >
-                <option value="">Select Category</option>
-                {availableCategories.map((genre) => (
-                  <option key={genre._id} value={genre.name}>
+                );
+              })}
+            </Form.Select>
+          </Form.Group>
+          <Form.Group>
+            <Form.Select
+              value={category}
+              onChange={(e) => {
+                setCategory(e.target.value);
+                // setCurPage(1);
+              }}
+            >
+              <option value="all">Filter By Category</option>
+              {genres.map((genre) => {
+                return (
+                  <option value={genre.name} key={genre._id}>
                     {genre.name}
                   </option>
-                ))}
-              </select>
-              <div className="video_keywords">
-                {categories &&
-                  categories.map((c, i) => (
-                    <li key={i}>
-                      <span>{c}</span>
-                      <MdClose onClick={() => handleRemoveCategory(c)} />
-                    </li>
-                  ))}
-              </div>
-            </Col>
-          </Row>
-
-          <Row
-            className={`align-items-center ${
-              thumbnailPreview ? "mb-2" : "mb-4"
-            }`}
-          >
-            <Col sm={12} md={3}>
-              <Form.Label>Thumbnail</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                // value={thumbnail}
-                onChange={handleThumbnailChange}
-                type="file"
-                accept="image/*"
-                placeholder="Select Thumbnail"
-              />
-            </Col>
-          </Row>
-          {thumbnailPreview && (
-            <Row className="align-items-center mb-2">
-              <Col sm={12} md={3}>
-                <Form.Label></Form.Label>
-              </Col>
-              <Col sm={12} md={8} className="edit-video">
-                {thumbnailPreview && (
-                  <img
-                    style={{
-                      height: "250px",
-                      width: "300px",
-                      borderRadius: "7px",
-                      objectFit:"fill"
-                    }}
-                    src={thumbnailPreview}
-                    alt="thumbnail"
-                  />
-                )}
-              </Col>
-            </Row>
-          )}
-
-          <Row
-            className={`align-items-center ${videoPreview ? "mb-0" : "mb-4"}`}
-          >
-            <Col sm={12} md={3}>
-              <Form.Label>Video</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                className="choose-video"
-                onChange={handleVideoChange}
-                type="file"
-                accept="video/*"
-              />
-            </Col>
-          </Row>
-          {videoPreview && (
-            <Row className="align-items-center mb-1">
-              <Col sm={12} md={3}>
-                <Form.Label></Form.Label>
-              </Col>
-              <Col sm={12} md={8} className="edit-video">
-                {videoPreview && (
-                  <video
-                    style={{ height: "100%", width: "100%" }}
-                    src={videoPreview}
-                    controls
-                  />
-                )}
-              </Col>
-            </Row>
-          )}
-
-          <Row
-            className={`align-items-center ${
-              keywords && keywords.length > 0 ? "mb-5" : "mb-3"
-            }`}
-          >
-            <Col sm={12} md={3}>
-              <Form.Label>Keywords</Form.Label>
-            </Col>
-            <Col
-              style={{ display: "flex", gap: "10px", position: "relative" }}
-              sm={12}
-              md={8}
+                );
+              })}
+            </Form.Select>
+          </Form.Group>
+          <InputGroup className="user-search">
+            <Form.Control 
+              aria-label="Search Input"
+              placeholder="Search By title or description"
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <InputGroup.Text
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                setQuery(search);
+                // setCurPage(1);
+              }}
             >
-              <Form.Control
-                type="text"
-                placeholder="Enter a Keyword"
-                value={currentKeyword}
-                onChange={handleKeywordChange}
-              />
-              <Button type="button" onClick={handleAddKeyword}>Add</Button>
-              <div className="video_keywords">
-                {keywords &&
-                  keywords.map((k, index) => (
-                    <li key={index}>
-                      <span>{k}</span>
-                      <MdClose onClick={() => handleRemoveKeyword(index)} />
-                    </li>
-                  ))}
-              </div>
-            </Col>
-          </Row>
-          {progress > 0 && (
-            <Row className="align-items-center">
-              <Col sm={12} md={3}>
-                <Form.Label></Form.Label>
-              </Col>
-
-              <Col sm={12} md={8}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "10px",
-                    width: "100%",
-                  }}
-                >
-                  <progress
-                    style={{ width: "100%" }}
-                    max="100"
-                    value={progress}
-                  />
-                  <Button style={{ width: "100%" }} variant="success">
-                    {progress > 99
-                      ? "Processing..."
-                      : `Uploading - ${progress}%`}
-                  </Button>
-                </div>
-              </Col>
-            </Row>
-          )}
-
-          {progress === 0 && (
-            <Row className="align-items-center">
-              <Col sm={12} md={3}>
-                <Form.Label></Form.Label>
-              </Col>
-
-              <Col sm={12} md={8}>
-                <Button onClick={submitHandler} className="pt-2 pb-2">
-                  {loading ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Upload Video"
-                  )}
-                </Button>
-              </Col>
-            </Row>
-          )}
-        </Container>
-      </Form>
-    </div>
+              <FaSearch />
+            </InputGroup.Text>
+          </InputGroup>
+          <div className="button">
+            <Link to={"/admin/add-video"}>
+              <HiPlus /> Add Video
+            </Link>
+          </div>
+        </Card.Header>
+        <Card.Body className="user-body">
+          <Table responsive striped bordered hover>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Poster</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {videos.map((data, index) => {
+                return (
+                  <tr key={index}>
+                    <td>{data.title}</td>
+                    <td>{data.description}</td>
+                    <td>
+                      <img className="poster" src={data.thumbnail_url} />
+                    </td>
+                    <td className="action-link">
+                      <Link
+                        style={{ backgroundColor: "#10c469", border: "none" }}
+                        to={`/admin/edit-video/${data._id}`}
+                        className="btn btn-success"
+                      >
+                        <FaEdit />
+                      </Link>
+                      <Link
+                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
+                        onClick={() => deleteHandler(data._id)}
+                        className="btn btn-danger"
+                      >
+                        <IoClose />
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
+    </>
   );
-}
+};
 
 export default Video;

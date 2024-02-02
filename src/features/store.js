@@ -7,6 +7,7 @@ import planSlice from "./planSlice";
 import languageSlice from "./languageSlice";
 import genreSlice from "./genreSlice";
 import getURLSlice from "./getURLSlice";
+import videoSlice from "./videoSlice";
 
 export default configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export default configureStore({
     language: languageSlice,
     genre: genreSlice,
     url: getURLSlice,
+    video: videoSlice
   },
 });

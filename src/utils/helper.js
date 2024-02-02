@@ -4,12 +4,18 @@ import { IoLanguage, IoGiftSharp } from "react-icons/io5";
 import { HiMiniCreditCard } from "react-icons/hi2";
 import { FaUser } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
+import { TfiVideoClapper } from "react-icons/tfi";
 
 export const firstArray = [
   {
     icon: <AiFillDashboard className="mx-2" size={18} />,
     content: "Dashboard",
     link:"/"
+  },
+  {
+    icon: <TfiVideoClapper className="mx-2" size={18} />,
+    content: "Videos",
+    link:"/admin/videos"
   },
   {
     icon: <FaVideo className="mx-2" size={18} />,

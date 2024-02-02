@@ -7,6 +7,7 @@ import { setUser, setUsers } from "./userSlice";
 import { setLanguage, setLanguages } from "./languageSlice";
 import { setGenre, setGenres } from "./genreSlice";
 import { setURL } from "./getURLSlice";
+import { setVideo, setVideos } from "./videoSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -192,14 +193,20 @@ export const getGenre = async (dispatch, token, id) => {
 
 export const getURL = async (dispatch, token) => {
   try {
-    const { data } = await axios.post(`/api/admin/get-url`,{}, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
-    console.log(data)
+    const { data } = await axios.post(
+      `/api/admin/get-url`,
+      {},
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(data);
     if (data.success) {
-      dispatch(setURL({ url: data.data.uploadURL,imageName:data.data.imageName }));
+      dispatch(
+        setURL({ url: data.data.uploadURL, imageName: data.data.imageName })
+      );
     }
   } catch (error) {
     toast.error(error.message);
@@ -226,6 +233,48 @@ export const downloadAsCsv = async (Model, Filename = "data") => {
     console.log(blob);
   } catch (error) {
     toast.error(error.response.data.message);
+    console.log(error);
+  }
+};
+
+export const getAllVideos = async (
+  dispatch,
+  token,
+  language,
+  category,
+  query
+) => {
+  try {
+    const { data } = await axios.get(
+      `/api/video/get-videos?language=${language}&category=${category}&keyword=${query}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      // console.log(data)
+      dispatch(setVideos({ videos: data.videos }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getVideo = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/video/get-video/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setVideo({ video: data.video }));
+    }
+  } catch (error) {
+    toast.error(error.message);
     console.log(error);
   }
 };

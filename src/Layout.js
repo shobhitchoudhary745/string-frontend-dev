@@ -21,6 +21,8 @@ import Genre from "./Pages/Genre/Genre.jsx";
 import AddGenre from "./Pages/Genre/AddGenre.jsx";
 import EditGenre from "./Pages/Genre/EditGenre.jsx";
 import Video from "./Pages/Video/Video.jsx";
+import AddVideo from "./Pages/Video/AddVideo.jsx";
+import EditVideo from "./Pages/Video/EditVideo.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -149,10 +151,26 @@ export default function Layout() {
               }
             />
             <Route
-              path="/admin/add-video"
+              path="/admin/videos"
               element={
                 <ProtectedRoute>
                   <Video />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-video"
+              element={
+                <ProtectedRoute>
+                  <AddVideo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-video/:id"
+              element={
+                <ProtectedRoute>
+                  <EditVideo />
                 </ProtectedRoute>
               }
             />
