@@ -57,10 +57,12 @@ export const secondArray = [
   {
     icon: <FaUser size={18} className="mx-2" />,
     content: "Actors",
+    link:"/admin/actors"
   },
   {
     icon: <FaUser size={18} className="mx-2" />,
     content: "Directors",
+    link:"/admin/directors"
   },
   {
     icon: <HiMiniCreditCard size={18} className="mx-2" />,

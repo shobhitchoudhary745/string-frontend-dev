@@ -8,6 +8,8 @@ import languageSlice from "./languageSlice";
 import genreSlice from "./genreSlice";
 import getURLSlice from "./getURLSlice";
 import videoSlice from "./videoSlice";
+import actorSlice from "./actorSlice";
+import directorSlice from "./directorSlice";
 
 export default configureStore({
   reducer: {
@@ -19,6 +21,8 @@ export default configureStore({
     language: languageSlice,
     genre: genreSlice,
     url: getURLSlice,
-    video: videoSlice
+    video: videoSlice,
+    actor: actorSlice,
+    director: directorSlice,
   },
 });

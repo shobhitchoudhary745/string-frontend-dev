@@ -8,6 +8,8 @@ import { setLanguage, setLanguages } from "./languageSlice";
 import { setGenre, setGenres } from "./genreSlice";
 import { setURL } from "./getURLSlice";
 import { setVideo, setVideos } from "./videoSlice";
+import { setActor, setActors } from "./actorSlice";
+import { setDirector, setDirectors } from "./directorSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -272,6 +274,73 @@ export const getVideo = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setVideo({ video: data.video }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+
+export const getAllActors = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/actor/get-actors`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      // console.log(data)
+      dispatch(setActors({ actors: data.actors }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getActor = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/actor/get-actor/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setActor({ actor: data.actor }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllDirectors = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/director/get-directors`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      // console.log(data)
+      dispatch(setDirectors({ directors: data.directors }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getDirector = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/director/get-director/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setDirector({ director: data.director }));
     }
   } catch (error) {
     toast.error(error.message);

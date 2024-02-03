@@ -23,6 +23,12 @@ import EditGenre from "./Pages/Genre/EditGenre.jsx";
 import Video from "./Pages/Video/Video.jsx";
 import AddVideo from "./Pages/Video/AddVideo.jsx";
 import EditVideo from "./Pages/Video/EditVideo.jsx";
+import Actor from "./Pages/Actor/Actor.jsx";
+import AddActor from "./Pages/Actor/AddActor.jsx";
+import EditActor from "./Pages/Actor/EditActor.jsx";
+import Director from "./Pages/Director/Director.jsx";
+import AddDirector from "./Pages/Director/AddDirector.jsx";
+import EditDirector from "./Pages/Director/EditDirector.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -171,6 +177,54 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditVideo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/actors"
+              element={
+                <ProtectedRoute>
+                  <Actor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-actor"
+              element={
+                <ProtectedRoute>
+                  <AddActor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-actor/:id"
+              element={
+                <ProtectedRoute>
+                  <EditActor />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/directors"
+              element={
+                <ProtectedRoute>
+                  <Director />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-director"
+              element={
+                <ProtectedRoute>
+                  <AddDirector />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-director/:id"
+              element={
+                <ProtectedRoute>
+                  <EditDirector />
                 </ProtectedRoute>
               }
             />
