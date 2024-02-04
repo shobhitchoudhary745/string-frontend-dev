@@ -61,12 +61,6 @@ function EditVideo() {
     }
   }, [video1]);
 
-  useEffect(() => {
-    if (token) {
-      getAllGenres(dispatch, token);
-      getAllLanguages(dispatch, token);
-    }
-  }, [token]);
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];

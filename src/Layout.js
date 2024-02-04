@@ -38,7 +38,7 @@ export default function Layout() {
   return (
     <div
       onClick={() => {
-        if (!isOpen&&window.screen.width<767) {
+        if (!isOpen&&window.screen.width<=767) {
           dispatch(toggle());
         }
       }}
