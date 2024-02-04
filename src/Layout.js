@@ -4,7 +4,7 @@ import Header from "./components/Header/Header";
 import Sidebar from "./components/Sidebar/Sidebar";
 import Login from "./Pages/Auth/Login.jsx";
 import Home from "./Pages/Home/Home.jsx";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProtectedRoute from "./components/ProtectedRoutes/ProtectedRoute.js";
 import User from "./Pages/Users/User.jsx";
 import Transaction from "./Pages/Transactions/Transaction.jsx";
@@ -29,12 +29,21 @@ import EditActor from "./Pages/Actor/EditActor.jsx";
 import Director from "./Pages/Director/Director.jsx";
 import AddDirector from "./Pages/Director/AddDirector.jsx";
 import EditDirector from "./Pages/Director/EditDirector.jsx";
+import { toggle } from "./features/generalSlice.js";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
-
+  const { isOpen } = useSelector((state) => state.general);
+  const dispatch = useDispatch();
   return (
-    <div className={`${token ? "App" : ""}`}>
+    <div
+      onClick={() => {
+        if (!isOpen&&window.screen.width<767) {
+          dispatch(toggle());
+        }
+      }}
+      className={`${token ? "App" : ""}`}
+    >
       {token && <Header />}
       <div style={{ overflowY: "hidden" }} className="d-flex  my-2">
         {token && <Sidebar />}

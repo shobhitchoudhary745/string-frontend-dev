@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { currentPage, isOpen } = useSelector((state) => state.general);
+  const { currentPage } = useSelector((state) => state.general);
 
   const logout = (e) => {
     e.preventDefault();
@@ -40,7 +40,8 @@ export default function Header() {
             <div className={`d-flex sub_child align-items-center`}>
               <div >
                 <FiMenu
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     dispatch(toggle());
                   }} 
                   cursor={"pointer"}
