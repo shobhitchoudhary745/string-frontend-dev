@@ -21,6 +21,7 @@ function AddVideo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("");
+  const [access, setAccess] = useState("");
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
   const [thumbnail, setThumbnail] = useState("");
@@ -40,7 +41,7 @@ function AddVideo() {
       getAllGenres(dispatch, token);
       getAllLanguages(dispatch, token);
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
@@ -88,6 +89,7 @@ function AddVideo() {
     setTitle("");
     setDescription("");
     setLanguage("");
+    setAccess("");
     setCategory("");
     setThumbnail("");
     setVideo("");
@@ -105,6 +107,7 @@ function AddVideo() {
       !video ||
       !thumbnail ||
       !title ||
+      !access ||
       !description ||
       !categories ||
       !language ||
@@ -160,6 +163,7 @@ function AddVideo() {
           formData.append("language", language);
           formData.append("image", thumbnail);
           formData.append("video_url", data.data.imageName);
+          formData.append("access", access);
 
           const data3 = await axiosInstance.post(
             "/api/video/create-video",
@@ -183,12 +187,9 @@ function AddVideo() {
     } catch (error) {
       console.log(error);
       dispatch(setLoading());
-      toast.error(error.response.data.message || error.message);
+      toast.error(error.message);
     }
   };
-
-  // const lang = ["Hindi", "English", "Tamil", "Telugu", "Malayalam"];
-  // const cat = ["Big Expose", "Small Expose", "Dramas", "Comedy"];
 
   const handleCateoryChange = (e) => {
     const selectedCategory = e.target.value;
@@ -257,6 +258,23 @@ function AddVideo() {
                     {language.name}
                   </option>
                 ))}
+              </select>
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Video Access</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <select
+                value={access}
+                className="rounded"
+                onChange={(e) => setAccess(e.target.value)}
+              >
+                <option value="">Select Access</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
               </select>
             </Col>
           </Row>

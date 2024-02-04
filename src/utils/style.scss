@@ -146,10 +146,12 @@
           }
           .action-link {
             display: flex;
-            // align-items: center;
+            align-items: center;
+            flex-direction: column;
             gap: 10px;
 
             a {
+              // width: fit-content;
               padding: 5px 8px;
               color: #f9f9f9;
               font-weight: bold;
@@ -232,5 +234,18 @@ textarea {
         border-radius: 50%;
       }
     }
+  }
+}
+
+.cat-item{
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+
+  span{
+    background-color: #313133;
+    padding: 1px 5px;
+    border-radius: 3px;
   }
 }

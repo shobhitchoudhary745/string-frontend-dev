@@ -32,6 +32,7 @@ function EditVideo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("");
+  const [access, setAccess] = useState("");
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
   const [thumbnail, setThumbnail] = useState("");
@@ -47,7 +48,7 @@ function EditVideo() {
       getAllGenres(dispatch, token);
       getAllLanguages(dispatch, token);
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   useEffect(() => {
     if (video1.description) {
@@ -60,7 +61,6 @@ function EditVideo() {
       setVideoPreview(video1.video_url);
     }
   }, [video1]);
-
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
@@ -107,6 +107,7 @@ function EditVideo() {
     setTitle("");
     setDescription("");
     setLanguage("");
+    setAccess("");
     setCategory("");
     setThumbnail("");
     setVideo("");
@@ -120,12 +121,12 @@ function EditVideo() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(video, thumbnail, keywords, categories);
-    // return ;
+
     if (
       !video &&
       !thumbnail &&
       !title &&
+      !access &&
       !description &&
       !categories.length &&
       !language &&
@@ -173,6 +174,7 @@ function EditVideo() {
           formData.append("language", language);
           thumbnail && formData.append("image", thumbnail);
           video && formData.append("video_url", data.data.imageName);
+          formData.append("access", access);
 
           const data3 = await axiosInstance.patch(
             `/api/video/update-video/${id}`,
@@ -196,7 +198,7 @@ function EditVideo() {
     } catch (error) {
       console.log(error);
       dispatch(setLoading());
-      toast.error(error.response.data.message || error.message);
+      toast.error(error.message);
     }
   };
 
@@ -267,6 +269,23 @@ function EditVideo() {
                     {language.name}
                   </option>
                 ))}
+              </select>
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Video Access</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <select
+                value={access}
+                className="rounded"
+                onChange={(e) => setAccess(e.target.value)}
+              >
+                <option value="">Select Access</option>
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
               </select>
             </Col>
           </Row>

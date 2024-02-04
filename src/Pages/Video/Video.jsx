@@ -133,6 +133,8 @@ const Video = () => {
                 <th>Title</th>
                 <th>Description</th>
                 <th>Language</th>
+                <th>Access</th>
+                {/* <th>Category</th> */}
                 <th>Poster</th>
                 <th>Actions</th>
               </tr>
@@ -142,26 +144,46 @@ const Video = () => {
                 return (
                   <tr key={index}>
                     <td>{data.title}</td>
+                    {/* <td>
+                      {data.description.length > 100
+                        ? data.description.slice(0, 100) + "..."
+                        : data.description}
+                    </td> */}
                     <td>{data.description}</td>
-                    <td>{data.language}</td>
-                    <td>
-                      <img className="poster" src={data.thumbnail_url} />
+                    <td className="lang">
+                      <span>{data.language}</span>
                     </td>
-                    <td className="action-link">
-                      <Link
-                        style={{ backgroundColor: "#10c469", border: "none" }}
-                        to={`/admin/edit-video/${data._id}`}
-                        className="btn btn-success"
-                      >
-                        <FaEdit />
-                      </Link>
-                      <Link
-                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                        onClick={() => deleteHandler(data._id)}
-                        className="btn btn-danger"
-                      >
-                        <IoClose />
-                      </Link>
+                    <td className="lang">
+                      <span>{data?.access}</span>
+                    </td>
+                    {/* <td>
+                      <div className="cat-item">
+                        {data.categories &&
+                          data.categories.map((category) => {
+                            return <span key={category._id}>{category}</span>;
+                          })}
+                      </div>
+                    </td> */}
+                    <td>
+                      <img className="poster" src={data.thumbnail_url} alt="" />
+                    </td>
+                    <td>
+                      <div className="action-link">
+                        <Link
+                          style={{ backgroundColor: "#10c469", border: "none" }}
+                          to={`/admin/edit-video/${data._id}`}
+                          className="btn btn-success"
+                        >
+                          <FaEdit />
+                        </Link>
+                        <Link
+                          style={{ backgroundColor: "#ff5b5b", border: "none" }}
+                          onClick={() => deleteHandler(data._id)}
+                          className="btn btn-danger"
+                        >
+                          <IoClose />
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 );
