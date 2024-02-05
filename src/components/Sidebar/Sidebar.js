@@ -54,13 +54,14 @@ export default function Sidebar() {
       </ul>
       <ul>
         <li
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
             dispatch(setCurrentPage({ currentPage: "Series" }));
             setCurrent((p) => (p === "Series" ? "" : "Series"));
           }}
           className={`my-0 ${currentPage === "Series" ? "active" : ""}`}
         >
-          <div className="d-flex justify-content-between">
+          <div  className="d-flex justify-content-between">
             <div>
               <FiFilm size={18} className="mx-2" /> Series
             </div>
@@ -91,13 +92,14 @@ export default function Sidebar() {
       </div>
       <ul>
         <li
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
             dispatch(setCurrentPage({ currentPage: "Homes" }));
             setCurrent((p) => (p === "Home" ? "" : "Home"));
           }}
           className={`${currentPage === "Homes" ? "active" : ""}`}
         >
-          <div className="d-flex justify-content-between">
+          <div  className="d-flex justify-content-between">
             <div>
               <FaSliders size={18} className="mx-2" /> Home
             </div>
@@ -131,7 +133,8 @@ export default function Sidebar() {
       </div>
       <ul>
         <li
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             dispatch(setCurrentPage({ currentPage: "Users" }));
             setCurrent((p) => (p === "Users" ? "" : "Users"));
           }}
@@ -181,7 +184,8 @@ export default function Sidebar() {
       </ul>
       <ul>
         <li
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
             dispatch(setCurrentPage({ currentPage: "Transactions" }));
             setCurrent((p) => (p === "Transactions" ? "" : "Transactions"));
           }}
@@ -218,7 +222,8 @@ export default function Sidebar() {
       </div>
       <ul>
         <li
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
             dispatch(setCurrentPage({ currentPage: "Pages" }));
             setCurrent((p) => (p === "Pages" ? "" : "Pages"));
           }}
