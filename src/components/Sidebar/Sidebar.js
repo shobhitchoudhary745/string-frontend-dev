@@ -275,7 +275,7 @@ export default function Sidebar() {
       <ul>
         <li
           onClick={(e) => {
-            e.preventDefault();
+            e.stopPropagation();
             dispatch(setCurrentPage({ currentPage: "Settings" }));
             setCurrent((p) => (p === "Settings" ? "" : "Settings"));
           }}
