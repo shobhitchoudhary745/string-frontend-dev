@@ -80,6 +80,17 @@
   color: #caa257;
 }
 
+.sidebar-overlay {
+  background-color: rgba(0, 0, 0, 0.2);
+  bottom: 0;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 999999;
+}
+
 @media only screen and (max-width: 767px) {
   .nav-bar {
     overflow-x: hidden;
@@ -95,6 +106,9 @@
     opacity: 0.4;
     border-radius: 7px;
     visibility: visible;
+  }
+  .sidebar-overlay {
+    display: block;
   }
 }
 

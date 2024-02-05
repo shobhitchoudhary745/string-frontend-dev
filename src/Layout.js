@@ -38,12 +38,14 @@ export default function Layout() {
   return (
     <div
       onClick={() => {
-        if (!isOpen&&window.screen.width<=767) {
+        if (!isOpen && window.screen.width <= 767) {
           dispatch(toggle());
         }
       }}
       className={`${token ? "App" : ""}`}
     >
+      {" "}
+      {!isOpen && token && <div className="sidebar-overlay"></div>}
       {token && <Header />}
       <div style={{ overflowY: "hidden" }} className="d-flex  my-2">
         {token && <Sidebar />}
