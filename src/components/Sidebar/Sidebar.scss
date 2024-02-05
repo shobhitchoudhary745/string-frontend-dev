@@ -2,7 +2,7 @@
   min-width: 259px !important;
   overflow-y: auto;
   overflow-x: hidden;
-  z-index: 9999;
+  z-index: 99999;
   transition: all 0.5s ease-in-out;
 
   &::-webkit-scrollbar {
@@ -88,7 +88,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 999999;
+  z-index: 9999;
 }
 
 @media only screen and (max-width: 767px) {
