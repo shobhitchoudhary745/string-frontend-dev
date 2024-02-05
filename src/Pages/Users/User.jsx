@@ -75,7 +75,7 @@ export default function User() {
         plan_type
       );
   }, [
-    dispatch,
+    
     token,
     curPage,
     resultPerPage,

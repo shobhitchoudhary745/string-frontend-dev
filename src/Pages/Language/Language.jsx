@@ -17,7 +17,7 @@ const Language = () => {
 
   useEffect(() => {
     if (token) getAllLanguages(dispatch, token);
-  }, [dispatch, token]);
+  }, [token]);
 
   const deleteHandler = async (id) => {
     if (

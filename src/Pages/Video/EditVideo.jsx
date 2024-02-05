@@ -42,6 +42,10 @@ function EditVideo() {
   const [videoPreview, setVideoPreview] = useState("");
   const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [progress, setProgress] = useState(0);
+  const [estimatedSecond, setEstimatedSecond] = useState(0);
+  const [estimatedMinute, setEstimatedMinute] = useState(0);
+  const [estimateHour, setEstimatedHour] = useState(0);
+  const [fileSize, setFileSize] = useState(0);
 
   useEffect(() => {
     if (token) {
@@ -64,7 +68,7 @@ function EditVideo() {
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
-
+    setFileSize(file.size);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -158,8 +162,19 @@ function EditVideo() {
                 "Content-Type": "multipart/form-data",
               },
               onUploadProgress: (progressEvent) => {
+                const connection = navigator.connection;
+                const speed = (connection.downlink * 1024 * 1024) / 8;
                 const { loaded, total } = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
+                let remainingBytes = fileSize - (percent * fileSize) / 100;
+                const hours = Math.floor(remainingBytes / speed / 3600);
+                const minutes = Math.floor(((remainingBytes / speed) % 3600) / 60);
+                const seconds = Math.floor((remainingBytes / speed) % 60);
+                
+                setEstimatedSecond(Math.round(seconds));
+                setEstimatedMinute(Math.round(minutes));
+                setEstimatedHour(Math.round(hours));
+
                 setProgress(percent);
               },
             });
@@ -454,6 +469,14 @@ function EditVideo() {
                       ? "Processing..."
                       : `Uploading - ${progress}%`}
                   </Button>
+                  <p>
+                    Estimated Time to Upload Video:{" "}
+                    {estimateHour !== 0 ? `${estimateHour} hours, ` : ""}
+                    {estimatedMinute !== 0
+                      ? `${estimatedMinute} minutes`
+                      : ""}{" "}
+                    {estimatedSecond} seconds
+                  </p>
                 </div>
               </Col>
             </Row>
