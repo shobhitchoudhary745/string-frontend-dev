@@ -17,7 +17,6 @@ import axios from "../../utils/axiosUtil";
 
 export default function User() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
   const { users, filteredUsers } = useSelector((state) => state.user);
 
@@ -74,16 +73,7 @@ export default function User() {
         plan_name,
         plan_type
       );
-  }, [
-    
-    token,
-    curPage,
-    resultPerPage,
-    query,
-    plan_name,
-    plan_type,
-    
-  ]);
+  }, [token, curPage, resultPerPage, query, plan_name, plan_type, dispatch]);
 
   const numOfPages = Math.ceil(filteredUsers / resultPerPage);
   return (
@@ -165,9 +155,6 @@ export default function User() {
                 <th>Actions</th>
               </tr>
             </thead>
-            {/* {loading ? (
-              <div className="loader">Loading...</div>
-            ) : ( */}
             <tbody>
               {users.map((user, index) => {
                 return (

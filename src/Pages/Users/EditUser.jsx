@@ -86,7 +86,7 @@ export default function EditUser() {
     } catch (error) {
       dispatch(setLoading());
       console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
   };
 

@@ -17,7 +17,7 @@ const Language = () => {
 
   useEffect(() => {
     if (token) getAllLanguages(dispatch, token);
-  }, [token]);
+  }, [token, dispatch]);
 
   const deleteHandler = async (id) => {
     if (
@@ -27,11 +27,14 @@ const Language = () => {
     ) {
       try {
         dispatch(setLoading());
-        const { data } = await axios.delete(`/api/language/delete-language/${id}`, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
+        const { data } = await axios.delete(
+          `/api/language/delete-language/${id}`,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (data.success) {
           getAllLanguages(dispatch, token);
           dispatch(setLoading());
@@ -69,8 +72,19 @@ const Language = () => {
                 return (
                   <tr key={index}>
                     <td>{data.name}</td>
-                    <td><span className="rounded px-2 py-1" style={{backgroundColor:"#10c469"}}>{data.status}</span></td>
-                    <td className="action-link">
+                    <td>
+                      <span
+                        className="rounded px-2 py-1"
+                        style={{
+                          backgroundColor: `${
+                            data.status === "Active" ? "#10c469" : "#ff5b5b"
+                          }`,
+                        }}
+                      >
+                        {data.status}
+                      </span>
+                    </td>
+                    <td className="action-link-1">
                       <Link
                         style={{ backgroundColor: "#10c469", border: "none" }}
                         to={`/admin/edit-language/${data._id}`}

@@ -29,9 +29,8 @@ export default function Sidebar() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [current, setCurrent] = useState("");
-  const screenWidth = window.screen.width;
+  // const screenWidth = window.screen.width;
   const { isOpen, currentPage } = useSelector((state) => state.general);
- 
   
   return (true) ? (
     <nav className={`sidebar ${isOpen ? "nav-bar open" : "nav-bar"}`}>

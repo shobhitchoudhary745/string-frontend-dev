@@ -5,7 +5,7 @@ import { Card, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllActors, getAllLanguages } from "../../features/apiCall";
+import { getAllActors } from "../../features/apiCall";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
@@ -17,7 +17,7 @@ const Actor = () => {
 
   useEffect(() => {
     if (token) getAllActors(dispatch, token);
-  }, [token]);
+  }, [token, dispatch]);
 
   const deleteHandler = async (id) => {
     if (
@@ -69,7 +69,13 @@ const Actor = () => {
                 return (
                   <tr key={index}>
                     <td>{data.name}</td>
-                    <td><img className="poster" src={data.profile_url}/></td>
+                    <td>
+                      <img
+                        className="poster"
+                        src={data.profile_url}
+                        alt="profile"
+                      />
+                    </td>
                     <td className="action-link">
                       <Link
                         style={{ backgroundColor: "#10c469", border: "none" }}

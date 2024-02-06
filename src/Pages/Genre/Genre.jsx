@@ -17,7 +17,7 @@ const Genre = () => {
 
   useEffect(() => {
     if (token) getAllGenres(dispatch, token);
-  }, [token]);
+  }, [token, dispatch]);
 
   const deleteHandler = async (id) => {
     if (
@@ -69,8 +69,19 @@ const Genre = () => {
                 return (
                   <tr key={index}>
                     <td>{data.name}</td>
-                    <td><span className="rounded px-2 py-1" style={{backgroundColor:"#10c469"}}>{data.status}</span></td>
-                    <td className="action-link">
+                    <td>
+                      <span
+                        className="rounded px-2 py-1"
+                        style={{
+                          backgroundColor: `${
+                            data.status === "Active" ? "#10c469" : "#ff5b5b"
+                          }`,
+                        }}
+                      >
+                        {data.status}
+                      </span>
+                    </td>
+                    <td className="action-link-1">
                       <Link
                         style={{ backgroundColor: "#10c469", border: "none" }}
                         to={`/admin/edit-genre/${data._id}`}

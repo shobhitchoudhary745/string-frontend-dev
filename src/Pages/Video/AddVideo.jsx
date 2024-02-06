@@ -41,7 +41,7 @@ function AddVideo() {
       getAllGenres(dispatch, token);
       getAllLanguages(dispatch, token);
     }
-  }, [token]);
+  }, [token, dispatch]);
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];

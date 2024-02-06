@@ -8,18 +8,17 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import "./Genre.scss";
+import "./Category.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
 import { setLoading } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 
-export default function AddGenre() {
+export default function AddCategory() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
-
   const { loading } = useSelector((state) => state.general);
 
   const [name, setName] = useState("");
@@ -28,29 +27,26 @@ export default function AddGenre() {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (!name) {
-      toast.warning("Please Enter Genre Name");
+      toast.warning("Please Enter Category Name");
       return;
     }
     try {
       dispatch(setLoading());
       const { data } = await axios.post(
-        "/api/genre/create-genre",
-        {
-          name,
-          status,
-        },
+        "/api/category/create-category",
+        { name, status },
         { headers: { authorization: `Bearer ${token}` } }
       );
       if (data.success) {
         dispatch(setLoading());
-        toast.success("Genre created Successfully.    Redirecting...");
+        toast.success("Category created Successfully.    Redirecting...");
         setTimeout(() => {
-          navigate("/admin/genres");
+          navigate("/admin/categories");
         }, 1200);
       }
     } catch (error) {
       dispatch(setLoading());
-      toast.error(error.response.data.message || error.message);
+      toast.error(error.message);
     }
   };
 
@@ -60,7 +56,7 @@ export default function AddGenre() {
         <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
-              <Form.Label>Genre Title</Form.Label>
+              <Form.Label>Category Title</Form.Label>
             </Col>
             <Col sm={12} md={8}>
               <Form.Control

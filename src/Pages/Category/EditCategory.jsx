@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -8,49 +8,63 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-import "./Genre.scss";
+import "./Category.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
 import { setLoading } from "../../features/generalSlice";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getCategory } from "../../features/apiCall";
 
-export default function AddGenre() {
+export default function EditCategory() {
+  const { id } = useParams();
+  const { token } = useSelector((state) => state.auth);
+  const { category } = useSelector((state) => state.category);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { token } = useSelector((state) => state.auth);
 
   const { loading } = useSelector((state) => state.general);
 
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("Active");
+  const [status, setStatus] = useState("");
+
+  useEffect(() => {
+    getCategory(dispatch, token, id);
+  }, [dispatch, token, id]);
+
+  useEffect(() => {
+    if (category.name) {
+      setName(category.name);
+      setStatus(category.status);
+    }
+  }, [category]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!name) {
-      toast.warning("Please Enter Genre Name");
+    if (!name && !status) {
+      toast.warning("Please Fill Atleast One Fieled");
       return;
     }
     try {
       dispatch(setLoading());
-      const { data } = await axios.post(
-        "/api/genre/create-genre",
+      const { data } = await axios.patch(
+        `/api/category/update-category/${id}`,
+        { name, status },
         {
-          name,
-          status,
-        },
-        { headers: { authorization: `Bearer ${token}` } }
+          headers: { authorization: `Bearer ${token}` },
+        }
       );
       if (data.success) {
         dispatch(setLoading());
-        toast.success("Genre created Successfully.    Redirecting...");
+        toast.success("Category Updated Successfully.  Redirecting...");
         setTimeout(() => {
-          navigate("/admin/genres");
+          navigate("/admin/categories");
         }, 1200);
       }
     } catch (error) {
       dispatch(setLoading());
-      toast.error(error.response.data.message || error.message);
+      console.log(error);
+      toast.error(error.message);
     }
   };
 
@@ -60,7 +74,7 @@ export default function AddGenre() {
         <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
-              <Form.Label>Genre Title</Form.Label>
+              <Form.Label>Category Title</Form.Label>
             </Col>
             <Col sm={12} md={8}>
               <Form.Control
@@ -96,7 +110,7 @@ export default function AddGenre() {
             </Col>
             <Col sm={12} md={8}>
               <Button onClick={submitHandler}>
-                {loading ? <Spinner /> : "Save"}
+                {loading ? <Spinner /> : "Update"}
               </Button>
             </Col>
           </Row>

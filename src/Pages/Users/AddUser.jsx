@@ -62,7 +62,7 @@ export default function AddUser() {
       }
     } catch (error) {
       dispatch(setLoading());
-      toast.error(error.response.data.message);
+      toast.error(error.message);
     }
   };
 

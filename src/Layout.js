@@ -30,6 +30,9 @@ import Director from "./Pages/Director/Director.jsx";
 import AddDirector from "./Pages/Director/AddDirector.jsx";
 import EditDirector from "./Pages/Director/EditDirector.jsx";
 import { toggle } from "./features/generalSlice.js";
+import Category from "./Pages/Category/Category.jsx";
+import AddCategory from "./Pages/Category/AddCategory.jsx";
+import EditCategory from "./Pages/Category/EditCategory.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -142,7 +145,6 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
-
             <Route
               path="/admin/genres"
               element={
@@ -236,6 +238,30 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditDirector />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/categories"
+              element={
+                <ProtectedRoute>
+                  <Category />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-category"
+              element={
+                <ProtectedRoute>
+                  <AddCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-category/:id"
+              element={
+                <ProtectedRoute>
+                  <EditCategory />
                 </ProtectedRoute>
               }
             />

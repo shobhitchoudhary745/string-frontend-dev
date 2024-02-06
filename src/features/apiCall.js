@@ -10,6 +10,7 @@ import { setURL } from "./getURLSlice";
 import { setVideo, setVideos } from "./videoSlice";
 import { setActor, setActors } from "./actorSlice";
 import { setDirector, setDirectors } from "./directorSlice";
+import { setCategories, setCategory } from "./categorySlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -281,7 +282,6 @@ export const getVideo = async (dispatch, token, id) => {
   }
 };
 
-
 export const getAllActors = async (dispatch, token) => {
   try {
     const { data } = await axios.get(`/api/actor/get-actors`, {
@@ -341,6 +341,38 @@ export const getDirector = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setDirector({ director: data.director }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getCategories = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/category/get-categories`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setCategories({ categories: data.categories }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getCategory = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/category/get-category/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setCategory({ category: data.category }));
     }
   } catch (error) {
     toast.error(error.message);
