@@ -14,7 +14,7 @@ function AddVideo() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
-  const { genres } = useSelector((state) => state.genre);
+  const { genres: gen } = useSelector((state) => state.genre);
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
 
@@ -22,8 +22,8 @@ function AddVideo() {
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState("");
+  const [genres, setGenres] = useState([]);
+  const [genre, setGenre] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
   const [keywords, setKeywords] = useState([]);
@@ -90,14 +90,14 @@ function AddVideo() {
     setDescription("");
     setLanguage("");
     setAccess("");
-    setCategory("");
+    setGenre("");
     setThumbnail("");
     setVideo("");
     setKeywords("");
     setVideoPreview("");
     setThumbnailPreview("");
     setCurrentKeyword("");
-    setCategories([]);
+    setGenres([]);
     setProgress(0);
   };
 
@@ -109,7 +109,7 @@ function AddVideo() {
       !title ||
       !access ||
       !description ||
-      !categories ||
+      !genres ||
       !language ||
       !keywords
     ) {
@@ -159,7 +159,7 @@ function AddVideo() {
           formData.append("title", title);
           formData.append("description", description);
           formData.append("keywords", keywords);
-          formData.append("categories", categories);
+          formData.append("genres", genres);
           formData.append("language", language);
           formData.append("image", thumbnail);
           formData.append("video_url", data.data.imageName);
@@ -194,19 +194,19 @@ function AddVideo() {
   const handleCateoryChange = (e) => {
     const selectedCategory = e.target.value;
 
-    if (!categories.includes(selectedCategory)) {
-      setCategories([...categories, selectedCategory]);
-      setCategory("");
+    if (!genres.includes(selectedCategory)) {
+      setGenres([...genres, selectedCategory]);
+      setGenre("");
     }
   };
 
   const handleRemoveCategory = (selectedCategory) => {
-    const newCategories = categories.filter((c) => c !== selectedCategory);
-    setCategories(newCategories);
+    const newCategories = genres.filter((c) => c !== selectedCategory);
+    setGenres(newCategories);
   };
 
-  const availableCategories = genres.filter(
-    (genre) => !categories.includes(genre.name)
+  const availableCategories = gen.filter(
+    (genre) => !genres.includes(genre.name)
   );
 
   return (
@@ -281,7 +281,7 @@ function AddVideo() {
 
           <Row
             className={`align-items-center ${
-              categories && categories.length > 0 ? "mb-5" : "mb-4"
+              genres && genres.length > 0 ? "mb-5" : "mb-4"
             }`}
           >
             <Col className="mb-2" sm={12} md={3}>
@@ -289,7 +289,7 @@ function AddVideo() {
             </Col>
             <Col style={{ position: "relative" }} sm={12} md={8}>
               <select
-                value={category}
+                value={genre}
                 className="rounded"
                 onChange={handleCateoryChange}
               >
@@ -301,8 +301,8 @@ function AddVideo() {
                 ))}
               </select>
               <div className="video_keywords">
-                {categories &&
-                  categories.map((c, i) => (
+                {genres &&
+                  genres.map((c, i) => (
                     <li key={i}>
                       <span>{c}</span>
                       <MdClose onClick={() => handleRemoveCategory(c)} />
