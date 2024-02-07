@@ -215,15 +215,15 @@ function AddVideo() {
   return (
     <div>
       <ReactInternetSpeedMeter
-        // txtSubHeading="Internet is too slow"
-        // outputType="alert"
+        txtSubHeading=""
+        outputType="alert"
         customClassName={null}
-        // txtMainHeading="Opps..."
-        pingInterval={4000} // milliseconds
+        txtMainHeading=""
+        pingInterval={5000} // milliseconds
         thresholdUnit="megabyte" // "byte" , "kilobyte", "megabyte"
-        threshold={100}
+        threshold={1}
         imageUrl="https://www.sammobile.com/wp-content/uploads/2019/03/keyguard_default_wallpaper_silver.png"
-        downloadSize="1781287" //bytes
+        downloadSize="3020575" //bytes
         callbackFunctionOnNetworkDown={(speed) => {}}
         callbackFunctionOnNetworkTest={(speed) => setUploadspeed(speed)}
       />
