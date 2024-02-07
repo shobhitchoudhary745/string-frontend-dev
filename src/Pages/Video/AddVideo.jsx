@@ -9,7 +9,7 @@ import { setLoading } from "../../features/generalSlice";
 import { MdClose } from "react-icons/md";
 import { getAllGenres, getAllLanguages } from "../../features/apiCall";
 import { useNavigate } from "react-router-dom";
-import { ReactInternetSpeedMeter } from "react-internet-meter";
+
 
 function AddVideo() {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ function AddVideo() {
   const [estimatedMinute, setEstimatedMinute] = useState(0);
   const [estimateHour, setEstimatedHour] = useState(0);
   const [fileSize, setFileSize] = useState(0);
-  const [uploadSpeed,setUploadspeed] = useState(0);
+  
 
   // console.log(uploadSpeed);
 
@@ -141,14 +141,14 @@ function AddVideo() {
           onUploadProgress: (progressEvent) => {
             // const connection = navigator.connection;
             // console.log(uploadSpeed);
-            const speed = (uploadSpeed * 1024 * 1024) / 8;
+            // const speed = (uploadSpeed * 1024 * 1024) / 8;
 
-            const { loaded, total } = progressEvent;
+            const { loaded, total, estimated } = progressEvent;
             let percent = Math.floor((loaded * 100) / total);
-            let remainingBytes = fileSize - (percent * fileSize) / 100;
-            const hours = Math.floor(remainingBytes / speed / 3600);
-            const minutes = Math.floor(((remainingBytes / speed) % 3600) / 60);
-            const seconds = Math.floor((remainingBytes / speed) % 60);
+            // let remainingBytes = fileSize - (percent * fileSize) / 100;
+            const hours = Math.floor(estimated / 3600);
+            const minutes = Math.floor(((estimated) % 3600) / 60);
+            const seconds = Math.floor((estimated) % 60);
 
             setEstimatedSecond(Math.round(seconds));
             setEstimatedMinute(Math.round(minutes));
@@ -214,19 +214,7 @@ function AddVideo() {
 
   return (
     <div>
-      <ReactInternetSpeedMeter
-        txtSubHeading=""
-        outputType="alert"
-        customClassName={null}
-        txtMainHeading=""
-        pingInterval={15000} // milliseconds
-        thresholdUnit="megabyte" // "byte" , "kilobyte", "megabyte"
-        threshold={1}
-        imageUrl="https://www.sammobile.com/wp-content/uploads/2019/03/keyguard_default_wallpaper_silver.png"
-        downloadSize="3020575" //bytes
-        callbackFunctionOnNetworkDown={(speed) => {}}
-        callbackFunctionOnNetworkTest={(speed) => setUploadspeed(speed)}
-      />
+     
       <Form className="user-table">
         <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
