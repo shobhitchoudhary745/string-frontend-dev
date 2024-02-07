@@ -19,7 +19,7 @@ function EditVideo() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
-  const { genres } = useSelector((state) => state.genre);
+  const { genres: gen } = useSelector((state) => state.genre);
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
   const { video: video1 } = useSelector((state) => state.video);
@@ -33,8 +33,8 @@ function EditVideo() {
   const [description, setDescription] = useState("");
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [category, setCategory] = useState("");
+  const [genres, setGenres] = useState([]);
+  const [genre, setGenre] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
   const [keywords, setKeywords] = useState([]);
@@ -60,7 +60,7 @@ function EditVideo() {
       setTitle(video1.title);
       setLanguage(video1.language);
       setKeywords(video1.keywords);
-      setCategories(video1.categories);
+      setGenres(video1.genres);
       setThumbnailPreview(video1.thumbnail_url);
       setVideoPreview(video1.video_url);
     }
@@ -112,14 +112,14 @@ function EditVideo() {
     setDescription("");
     setLanguage("");
     setAccess("");
-    setCategory("");
+    setGenre("");
     setThumbnail("");
     setVideo("");
     setKeywords("");
     setVideoPreview("");
     setThumbnailPreview("");
     setCurrentKeyword("");
-    setCategories([]);
+    setGenres([]);
     setProgress(0);
   };
 
@@ -132,7 +132,7 @@ function EditVideo() {
       !title &&
       !access &&
       !description &&
-      !categories.length &&
+      !genres.length &&
       !language &&
       !keywords.length
     ) {
@@ -168,9 +168,11 @@ function EditVideo() {
                 let percent = Math.floor((loaded * 100) / total);
                 let remainingBytes = fileSize - (percent * fileSize) / 100;
                 const hours = Math.floor(remainingBytes / speed / 3600);
-                const minutes = Math.floor(((remainingBytes / speed) % 3600) / 60);
+                const minutes = Math.floor(
+                  ((remainingBytes / speed) % 3600) / 60
+                );
                 const seconds = Math.floor((remainingBytes / speed) % 60);
-                
+
                 setEstimatedSecond(Math.round(seconds));
                 setEstimatedMinute(Math.round(minutes));
                 setEstimatedHour(Math.round(hours));
@@ -185,7 +187,7 @@ function EditVideo() {
           formData.append("title", title);
           formData.append("description", description);
           formData.append("keywords", keywords);
-          formData.append("categories", categories);
+          formData.append("genres", genres);
           formData.append("language", language);
           thumbnail && formData.append("image", thumbnail);
           video && formData.append("video_url", data.data.imageName);
@@ -217,23 +219,21 @@ function EditVideo() {
     }
   };
 
-  const handleCateoryChange = (e) => {
-    const selectedCategory = e.target.value;
+  const handleGenreChange = (e) => {
+    const selectedGenre = e.target.value;
 
-    if (!categories.includes(selectedCategory)) {
-      setCategories([...categories, selectedCategory]);
-      setCategory("");
+    if (!genres.includes(selectedGenre)) {
+      setGenres([...genres, selectedGenre]);
+      setGenre("");
     }
   };
 
-  const handleRemoveCategory = (selectedCategory) => {
-    const newCategories = categories.filter((c) => c !== selectedCategory);
-    setCategories(newCategories);
+  const handleRemoveGenre = (selectedGenre) => {
+    const newGenres = genres.filter((c) => c !== selectedGenre);
+    setGenres(newGenres);
   };
 
-  const availableCategories = genres.filter(
-    (genre) => !categories.includes(genre.name)
-  );
+  const availableGenres = gen.filter((genre) => !genres.includes(genre.name));
 
   return (
     <div>
@@ -307,31 +307,31 @@ function EditVideo() {
 
           <Row
             className={`align-items-center ${
-              categories && categories.length > 0 ? "mb-5" : "mb-4"
+              genres && genres.length > 0 ? "mb-5" : "mb-4"
             }`}
           >
             <Col className="mb-2" sm={12} md={3}>
-              <label>Video Category</label>
+              <label>Video Genres</label>
             </Col>
             <Col style={{ position: "relative" }} sm={12} md={8}>
               <select
-                value={category}
+                value={genre}
                 className="rounded"
-                onChange={handleCateoryChange}
+                onChange={handleGenreChange}
               >
-                <option value="">Select Category</option>
-                {availableCategories.map((genre) => (
+                <option value="">Select Genre</option>
+                {availableGenres.map((genre) => (
                   <option key={genre._id} value={genre.name}>
                     {genre.name}
                   </option>
                 ))}
               </select>
               <div className="video_keywords">
-                {categories &&
-                  categories.map((c, i) => (
+                {genres &&
+                  genres.map((c, i) => (
                     <li key={i}>
                       <span>{c}</span>
-                      <MdClose onClick={() => handleRemoveCategory(c)} />
+                      <MdClose onClick={() => handleRemoveGenre(c)} />
                     </li>
                   ))}
               </div>

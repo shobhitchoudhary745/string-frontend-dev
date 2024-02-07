@@ -191,23 +191,21 @@ function AddVideo() {
     }
   };
 
-  const handleCateoryChange = (e) => {
-    const selectedCategory = e.target.value;
+  const handleGenreChange = (e) => {
+    const selectedGenre = e.target.value;
 
-    if (!genres.includes(selectedCategory)) {
-      setGenres([...genres, selectedCategory]);
+    if (!genres.includes(selectedGenre)) {
+      setGenres([...genres, selectedGenre]);
       setGenre("");
     }
   };
 
-  const handleRemoveCategory = (selectedCategory) => {
-    const newCategories = genres.filter((c) => c !== selectedCategory);
-    setGenres(newCategories);
+  const handleRemoveGenre = (selectedGenre) => {
+    const newGenres = genres.filter((c) => c !== selectedGenre);
+    setGenres(newGenres);
   };
 
-  const availableCategories = gen.filter(
-    (genre) => !genres.includes(genre.name)
-  );
+  const availableGenres = gen.filter((genre) => !genres.includes(genre.name));
 
   return (
     <div>
@@ -285,16 +283,16 @@ function AddVideo() {
             }`}
           >
             <Col className="mb-2" sm={12} md={3}>
-              <label>Video Category</label>
+              <label>Video Genres</label>
             </Col>
             <Col style={{ position: "relative" }} sm={12} md={8}>
               <select
                 value={genre}
                 className="rounded"
-                onChange={handleCateoryChange}
+                onChange={handleGenreChange}
               >
-                <option value="">Select Category</option>
-                {availableCategories.map((genre) => (
+                <option value="">Select Genre</option>
+                {availableGenres.map((genre) => (
                   <option key={genre._id} value={genre.name}>
                     {genre.name}
                   </option>
@@ -305,7 +303,7 @@ function AddVideo() {
                   genres.map((c, i) => (
                     <li key={i}>
                       <span>{c}</span>
-                      <MdClose onClick={() => handleRemoveCategory(c)} />
+                      <MdClose onClick={() => handleRemoveGenre(c)} />
                     </li>
                   ))}
               </div>
