@@ -244,12 +244,12 @@ export const getAllVideos = async (
   dispatch,
   token,
   language,
-  category,
+  genres,
   query
 ) => {
   try {
     const { data } = await axios.get(
-      `/api/video/get-videos?language=${language}&category=${category}&keyword=${query}`,
+      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}`,
       {
         headers: {
           authorization: `Bearer ${token}`,

@@ -20,16 +20,17 @@ const Video = () => {
   const { token } = useSelector((state) => state.auth);
   const { videos } = useSelector((state) => state.video);
   const { languages } = useSelector((state) => state.language);
-  const { genres } = useSelector((state) => state.genre);
+  const { genres: gen } = useSelector((state) => state.genre);
   const [language, setLanguage] = useState("");
-  const [category, setCategory] = useState("");
+  const [genres, setGenres] = useState("");
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
+  
   useEffect(() => {
     if (token) {
-      getAllVideos(dispatch, token, language, category, query);
+      getAllVideos(dispatch, token, language, genres, query);
     }
-  }, [dispatch, token, language, category, query]);
+  }, [dispatch, token, language, genres, query]);
 
   useEffect(() => {
     getAllLanguages(dispatch, token);
@@ -86,14 +87,14 @@ const Video = () => {
           </Form.Group>
           <Form.Group>
             <Form.Select
-              value={category}
+              value={genres}
               onChange={(e) => {
-                setCategory(e.target.value);
+                setGenres(e.target.value);
                 // setCurPage(1);
               }}
             >
-              <option value="all">Filter By Category</option>
-              {genres.map((genre) => {
+              <option value="all">Filter By Genres</option>
+              {gen.map((genre) => {
                 return (
                   <option value={genre.name} key={genre._id}>
                     {genre.name}
@@ -134,7 +135,7 @@ const Video = () => {
                 <th>Description</th>
                 <th>Language</th>
                 <th>Access</th>
-                {/* <th>Category</th> */}
+                <th>Genres</th>
                 <th>Poster</th>
                 <th>Actions</th>
               </tr>
@@ -156,14 +157,14 @@ const Video = () => {
                     <td className="lang">
                       <span>{data?.access}</span>
                     </td>
-                    {/* <td>
+                    <td>
                       <div className="cat-item">
-                        {data.categories &&
-                          data.categories.map((category) => {
-                            return <span key={category._id}>{category}</span>;
+                        {data.genres &&
+                          data.genres.map((genre) => {
+                            return <span key={genre._id}>{genre}</span>;
                           })}
                       </div>
-                    </td> */}
+                    </td>
                     <td>
                       <img className="poster" src={data.thumbnail_url} alt="" />
                     </td>
