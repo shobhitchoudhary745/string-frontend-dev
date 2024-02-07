@@ -61,6 +61,7 @@ function EditVideo() {
       setLanguage(video1.language);
       setKeywords(video1.keywords);
       setGenres(video1.genres);
+      setAccess(video1.access);
       setThumbnailPreview(video1.thumbnail_url);
       setVideoPreview(video1.video_url);
     }
