@@ -219,7 +219,7 @@ function AddVideo() {
         outputType="alert"
         customClassName={null}
         txtMainHeading=""
-        pingInterval={5000} // milliseconds
+        pingInterval={15000} // milliseconds
         thresholdUnit="megabyte" // "byte" , "kilobyte", "megabyte"
         threshold={1}
         imageUrl="https://www.sammobile.com/wp-content/uploads/2019/03/keyguard_default_wallpaper_silver.png"
