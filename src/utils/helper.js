@@ -6,6 +6,7 @@ import { FaUser } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { BiCategory } from "react-icons/bi";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 
 export const firstArray = [
   {
@@ -55,6 +56,11 @@ export const secondArray = [
     icon: <BiCategory size={18} className="mx-2" />,
     content: "Categories",
     link: "/admin/categories",
+  },
+  {
+    icon: <AiOutlineQuestionCircle size={18} className="mx-2" />,
+    content: "Queries",
+    link: "/admin/queries",
   },
   {
     icon: <IoGiftSharp size={18} className="mx-2" />,

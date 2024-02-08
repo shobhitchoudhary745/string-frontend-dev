@@ -33,6 +33,7 @@ import { toggle } from "./features/generalSlice.js";
 import Category from "./Pages/Category/Category.jsx";
 import AddCategory from "./Pages/Category/AddCategory.jsx";
 import EditCategory from "./Pages/Category/EditCategory.jsx";
+import Query from "./Pages/Query/Query.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -262,6 +263,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/queries"
+              element={
+                <ProtectedRoute>
+                  <Query />
                 </ProtectedRoute>
               }
             />

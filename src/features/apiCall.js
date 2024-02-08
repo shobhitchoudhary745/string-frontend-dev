@@ -11,6 +11,7 @@ import { setVideo, setVideos } from "./videoSlice";
 import { setActor, setActors } from "./actorSlice";
 import { setDirector, setDirectors } from "./directorSlice";
 import { setCategories, setCategory } from "./categorySlice";
+import { setQueries, setQuery } from "./querySlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -245,11 +246,13 @@ export const getAllVideos = async (
   token,
   language,
   genres,
-  query
+  query,
+  curPage,
+  resultPerPage
 ) => {
   try {
     const { data } = await axios.get(
-      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}`,
+      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -257,8 +260,12 @@ export const getAllVideos = async (
       }
     );
     if (data.success) {
-      // console.log(data)
-      dispatch(setVideos({ videos: data.videos }));
+      dispatch(
+        setVideos({
+          videos: data.videos,
+          totalVideoCount: data.totalVideoCount,
+        })
+      );
     }
   } catch (error) {
     toast.error(error.message);
@@ -373,6 +380,52 @@ export const getCategory = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setCategory({ category: data.category }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getQueries = async (
+  dispatch,
+  token,
+  curPage,
+  resultPerPage,
+  query
+) => {
+  try {
+    const { data } = await axios.get(
+      `/api/query/get-queries?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      dispatch(
+        setQueries({
+          queries: data.queries,
+          totalQueryCount: data.totalQueryCount,
+        })
+      );
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getQuery = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/query/get-query/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setQuery({ query: data.query }));
     }
   } catch (error) {
     toast.error(error.message);

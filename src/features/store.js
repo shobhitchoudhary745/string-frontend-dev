@@ -11,6 +11,7 @@ import videoSlice from "./videoSlice";
 import actorSlice from "./actorSlice";
 import directorSlice from "./directorSlice";
 import categorySlice from "./categorySlice";
+import querySlice from "./querySlice";
 
 export default configureStore({
   reducer: {
@@ -26,5 +27,6 @@ export default configureStore({
     actor: actorSlice,
     director: directorSlice,
     category: categorySlice,
+    query: querySlice,
   },
 });

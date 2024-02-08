@@ -14,23 +14,37 @@ import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 import "./Video.scss";
+import CustomPagination from "../../utils/CustomPagination";
 
 const Video = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { videos } = useSelector((state) => state.video);
+  const { videos, totalVideoCount } = useSelector((state) => state.video);
   const { languages } = useSelector((state) => state.language);
   const { genres: gen } = useSelector((state) => state.genre);
+
+  const [curPage, setCurPage] = useState(1);
   const [language, setLanguage] = useState("");
   const [genres, setGenres] = useState("");
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
-  
+
+  const resultPerPage = 10;
+  const curPageHandler = (p) => setCurPage(p);
+
   useEffect(() => {
     if (token) {
-      getAllVideos(dispatch, token, language, genres, query);
+      getAllVideos(
+        dispatch,
+        token,
+        language,
+        genres,
+        query,
+        curPage,
+        resultPerPage
+      );
     }
-  }, [dispatch, token, language, genres, query]);
+  }, [dispatch, token, language, genres, query, curPage, resultPerPage]);
 
   useEffect(() => {
     getAllLanguages(dispatch, token);
@@ -63,6 +77,7 @@ const Video = () => {
     }
   };
 
+  const numOfPages = Math.ceil(totalVideoCount / resultPerPage);
   return (
     <>
       <Card className="user-table">
@@ -72,7 +87,6 @@ const Video = () => {
               value={language}
               onChange={(e) => {
                 setLanguage(e.target.value);
-                // setCurPage(1);
               }}
             >
               <option value="all">Filter By Language</option>
@@ -90,7 +104,6 @@ const Video = () => {
               value={genres}
               onChange={(e) => {
                 setGenres(e.target.value);
-                // setCurPage(1);
               }}
             >
               <option value="all">Filter By Genres</option>
@@ -115,7 +128,6 @@ const Video = () => {
               style={{ cursor: "pointer" }}
               onClick={() => {
                 setQuery(search);
-                // setCurPage(1);
               }}
             >
               <FaSearch />
@@ -145,11 +157,6 @@ const Video = () => {
                 return (
                   <tr key={index}>
                     <td>{data.title}</td>
-                    {/* <td>
-                      {data.description.length > 100
-                        ? data.description.slice(0, 100) + "..."
-                        : data.description}
-                    </td> */}
                     <td>{data.description}</td>
                     <td className="lang">
                       <span>{data.language}</span>
@@ -160,8 +167,8 @@ const Video = () => {
                     <td>
                       <div className="cat-item">
                         {data.genres &&
-                          data.genres.map((genre) => {
-                            return <span key={genre._id}>{genre}</span>;
+                          data.genres.map((genre, i) => {
+                            return <span key={i}>{genre}</span>;
                           })}
                       </div>
                     </td>
@@ -192,6 +199,15 @@ const Video = () => {
             </tbody>
           </Table>
         </Card.Body>
+        <Card.Footer>
+          {resultPerPage < totalVideoCount && (
+            <CustomPagination
+              pages={numOfPages}
+              pageHandler={curPageHandler}
+              curPage={curPage}
+            />
+          )}
+        </Card.Footer>
       </Card>
     </>
   );
