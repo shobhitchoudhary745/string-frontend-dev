@@ -163,16 +163,16 @@ function EditVideo() {
                 "Content-Type": "multipart/form-data",
               },
               onUploadProgress: (progressEvent) => {
-                const connection = navigator.connection;
-                const speed = (connection.downlink * 1024 * 1024) / 8;
-                const { loaded, total } = progressEvent;
+                // const connection = navigator.connection;
+                // const speed = (connection.downlink * 1024 * 1024) / 8;
+                const { loaded, total,estimated } = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
-                let remainingBytes = fileSize - (percent * fileSize) / 100;
-                const hours = Math.floor(remainingBytes / speed / 3600);
+                // let remainingBytes = fileSize - (percent * fileSize) / 100;
+                const hours = Math.floor(estimated / 3600);
                 const minutes = Math.floor(
-                  ((remainingBytes / speed) % 3600) / 60
+                  ((estimated) % 3600) / 60
                 );
-                const seconds = Math.floor((remainingBytes / speed) % 60);
+                const seconds = Math.floor((estimated) % 60);
 
                 setEstimatedSecond(Math.round(seconds));
                 setEstimatedMinute(Math.round(minutes));
