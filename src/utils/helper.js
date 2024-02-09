@@ -90,7 +90,7 @@ export const dashBoardArray = [
     path: "/admin/languages",
     content: "",
   },
-  { key: "Genres", value: 5, color: "#ff8acc", path: "/", content: "" },
+  { key: "Genres", value: 5, color: "#ff8acc", path: "/admin/genres", content: "" },
   { key: "Movies", value: 1, color: "#f9c851", path: "/", content: "" },
   { key: "Shows", value: 7, color: "#797979", path: "/", content: "" },
   {
