@@ -159,7 +159,7 @@ const Video = () => {
                     <td>{data.title}</td>
                     <td>{data.description}</td>
                     <td className="lang">
-                      <span>{data.language}</span>
+                      <span>{data.language?.name}</span>
                     </td>
                     <td className="lang">
                       <span>{data?.access}</span>
@@ -168,7 +168,7 @@ const Video = () => {
                       <div className="cat-item">
                         {data.genres &&
                           data.genres.map((genre, i) => {
-                            return <span key={i}>{genre}</span>;
+                            return <span key={i}>{genre?.name}</span>;
                           })}
                       </div>
                     </td>

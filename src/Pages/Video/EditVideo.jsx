@@ -35,8 +35,10 @@ function EditVideo() {
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
+  const [genres_id, setGenres_id] = useState([]);
   const [genre, setGenre] = useState("");
   const [categories, setCategories] = useState([]);
+  const [categories_id, setCategories_id] = useState([]);
   const [category, setCategory] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
@@ -62,10 +64,20 @@ function EditVideo() {
     if (video1.description) {
       setDescription(video1.description);
       setTitle(video1.title);
-      setLanguage(video1.language);
+      setLanguage(video1.language?._id);
       setKeywords(video1.keywords);
-      setGenres(video1.genres);
-      setCategories(video1.category);
+      if (video1.genres.length > 0) {
+        const gen_name = video1.genres.map((gen) => gen.name);
+        const gen_id = video1.genres.map((gen) => gen._id);
+        setGenres(gen_name);
+        setGenres_id(gen_id);
+      }
+      if (video1.category.length > 0) {
+        const cat_name = video1.category.map((cat) => cat.name);
+        const cat_id = video1.category.map((cat) => cat._id);
+        setCategories(cat_name);
+        setCategories_id(cat_id);
+      }
       setAccess(video1.access);
       setThumbnailPreview(video1.thumbnail_url);
       setVideoPreview(video1.video_url);
@@ -128,7 +140,9 @@ function EditVideo() {
     setThumbnailPreview("");
     setCurrentKeyword("");
     setGenres([]);
+    setGenres_id([]);
     setCategories([]);
+    setCategories_id([]);
     setProgress(0);
   };
 
@@ -172,11 +186,9 @@ function EditVideo() {
                 "Content-Type": "multipart/form-data",
               },
               onUploadProgress: (progressEvent) => {
-                // const connection = navigator.connection;
-                // const speed = (connection.downlink * 1024 * 1024) / 8;
                 const { loaded, total, estimated } = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
-                // let remainingBytes = fileSize - (percent * fileSize) / 100;
+
                 const hours = Math.floor(estimated / 3600);
                 const minutes = Math.floor((estimated % 3600) / 60);
                 const seconds = Math.floor(estimated % 60);
@@ -195,12 +207,12 @@ function EditVideo() {
           formData.append("title", title);
           formData.append("description", description);
           formData.append("keywords", keywords);
-          formData.append("genres", genres);
+          formData.append("genres", genres_id);
           formData.append("language", language);
           thumbnail && formData.append("image", thumbnail);
           video && formData.append("video_url", data.data.imageName);
           formData.append("access", access);
-          formData.append("categories", categories);
+          formData.append("categories", categories_id);
 
           const data3 = await axiosInstance.patch(
             `/api/video/update-video/${id}`,
@@ -230,35 +242,57 @@ function EditVideo() {
 
   const handleCategoryChange = (e) => {
     const selectedCategory = e.target.value;
+    const selectedCategory_id = cat.find(
+      (category) => category.name === selectedCategory
+    );
 
     if (!categories.includes(selectedCategory)) {
       setCategories([...categories, selectedCategory]);
       setCategory("");
     }
+    if (!categories_id.includes(selectedCategory_id._id)) {
+      setCategories_id([...categories_id, selectedCategory_id._id]);
+    }
   };
 
   const handleRemoveCategory = (selectedCategory) => {
     const newCategories = categories.filter((c) => c !== selectedCategory);
+    const selectedCategory_id = cat.find(
+      (category) => category.name === selectedCategory
+    );
+
+    setCategories_id(
+      categories_id.filter((c) => c !== selectedCategory_id._id)
+    );
     setCategories(newCategories);
   };
 
   const handleGenreChange = (e) => {
     const selectedGenre = e.target.value;
+    const selectedGenre_id = gen.find((genre) => genre.name === selectedGenre);
 
     if (!genres.includes(selectedGenre)) {
       setGenres([...genres, selectedGenre]);
       setGenre("");
     }
+    if (!genres_id.includes(selectedGenre_id._id)) {
+      setGenres_id([...genres_id, selectedGenre_id._id]);
+    }
   };
 
   const handleRemoveGenre = (selectedGenre) => {
     const newGenres = genres.filter((c) => c !== selectedGenre);
+    const selectedGenre_id = gen.find((genre) => genre.name === selectedGenre);
+
+    setGenres_id(genres_id.filter((c) => c !== selectedGenre_id._id));
     setGenres(newGenres);
   };
 
-  const availableGenres = gen.filter((genre) => !genres.includes(genre.name));
+  const availableGenres = gen.filter(
+    (genre) => genres && !genres.includes(genre.name)
+  );
   const availableCategories = cat.filter(
-    (category) => !categories.includes(category.name)
+    (category) => categories && !categories.includes(category.name)
   );
 
   return (
@@ -306,7 +340,7 @@ function EditVideo() {
               >
                 <option value="">Select Language</option>
                 {languages.map((language) => (
-                  <option key={language._id} value={language.name}>
+                  <option key={language._id} value={language._id}>
                     {language.name}
                   </option>
                 ))}

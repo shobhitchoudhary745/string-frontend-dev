@@ -28,9 +28,11 @@ function AddVideo() {
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
+  const [genres_id, setGenres_id] = useState([]);
   const [genre, setGenre] = useState("");
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState("");
+  const [categories_id, setCategories_id] = useState([]);
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
   const [keywords, setKeywords] = useState([]);
@@ -101,6 +103,7 @@ function AddVideo() {
     setGenre("");
     setCategory("");
     setCategories([]);
+    setCategories_id([]);
     setThumbnail("");
     setVideo("");
     setKeywords("");
@@ -108,8 +111,11 @@ function AddVideo() {
     setThumbnailPreview("");
     setCurrentKeyword("");
     setGenres([]);
+    setGenres_id([]);
     setProgress(0);
   };
+
+  console.log(language)
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -146,13 +152,9 @@ function AddVideo() {
             "Content-Type": "multipart/form-data",
           },
           onUploadProgress: (progressEvent) => {
-            // const connection = navigator.connection;
-            // console.log(uploadSpeed);
-            // const speed = (uploadSpeed * 1024 * 1024) / 8;
-
             const { loaded, total, estimated } = progressEvent;
             let percent = Math.floor((loaded * 100) / total);
-            // let remainingBytes = fileSize - (percent * fileSize) / 100;
+
             const hours = Math.floor(estimated / 3600);
             const minutes = Math.floor((estimated % 3600) / 60);
             const seconds = Math.floor(estimated % 60);
@@ -171,12 +173,12 @@ function AddVideo() {
           formData.append("title", title);
           formData.append("description", description);
           formData.append("keywords", keywords);
-          formData.append("genres", genres);
+          formData.append("genres", genres_id);
           formData.append("language", language);
           formData.append("image", thumbnail);
           formData.append("video_url", data.data.imageName);
           formData.append("access", access);
-          formData.append("categories", categories);
+          formData.append("categories", categories_id);
 
           const data3 = await axiosInstance.post(
             "/api/video/create-video",
@@ -206,29 +208,48 @@ function AddVideo() {
 
   const handleCategoryChange = (e) => {
     const selectedCategory = e.target.value;
+    const selectedCategory_id = cat.find(
+      (category) => category.name === selectedCategory
+    );
 
     if (!categories.includes(selectedCategory)) {
       setCategories([...categories, selectedCategory]);
       setCategory("");
     }
+    if (!categories_id.includes(selectedCategory_id._id)) {
+      setCategories_id([...categories_id, selectedCategory_id._id]);
+    }
   };
 
   const handleRemoveCategory = (selectedCategory) => {
     const newCategories = categories.filter((c) => c !== selectedCategory);
+    const selectedCategory_id = cat.find(
+      (category) => category.name === selectedCategory
+    );
+    setCategories_id(
+      categories_id.filter((c) => c !== selectedCategory_id._id)
+    );
     setCategories(newCategories);
   };
 
   const handleGenreChange = (e) => {
     const selectedGenre = e.target.value;
+    const selectedGenre_id = gen.find((genre) => genre.name === selectedGenre);
 
     if (!genres.includes(selectedGenre)) {
       setGenres([...genres, selectedGenre]);
       setGenre("");
     }
+    if (!genres_id.includes(selectedGenre_id._id)) {
+      setGenres_id([...genres_id, selectedGenre_id._id]);
+    }
   };
 
   const handleRemoveGenre = (selectedGenre) => {
     const newGenres = genres.filter((c) => c !== selectedGenre);
+    const selectedGenre_id = gen.find((genre) => genre.name === selectedGenre);
+
+    setGenres_id(genres_id.filter((c) => c !== selectedGenre_id._id));
     setGenres(newGenres);
   };
 
@@ -282,7 +303,7 @@ function AddVideo() {
               >
                 <option value="">Select Language</option>
                 {languages.map((language) => (
-                  <option key={language._id} value={language.name}>
+                  <option key={language._id} value={language._id}>
                     {language.name}
                   </option>
                 ))}
