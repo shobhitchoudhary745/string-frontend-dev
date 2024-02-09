@@ -7,15 +7,19 @@ import axiosInstance from "../../utils/axiosUtil";
 import axios from "axios";
 import { setLoading } from "../../features/generalSlice";
 import { MdClose } from "react-icons/md";
-import { getAllGenres, getAllLanguages } from "../../features/apiCall";
+import {
+  getAllGenres,
+  getAllLanguages,
+  getCategories,
+} from "../../features/apiCall";
 import { useNavigate } from "react-router-dom";
-
 
 function AddVideo() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
   const { genres: gen } = useSelector((state) => state.genre);
+  const { categories: cat } = useSelector((state) => state.category);
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
 
@@ -25,6 +29,8 @@ function AddVideo() {
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
   const [genre, setGenre] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
   const [keywords, setKeywords] = useState([]);
@@ -35,21 +41,19 @@ function AddVideo() {
   const [estimatedSecond, setEstimatedSecond] = useState(0);
   const [estimatedMinute, setEstimatedMinute] = useState(0);
   const [estimateHour, setEstimatedHour] = useState(0);
-  const [fileSize, setFileSize] = useState(0);
-  
-
-  // console.log(uploadSpeed);
+  // const [fileSize, setFileSize] = useState(0);
 
   useEffect(() => {
     if (token) {
       getAllGenres(dispatch, token);
+      getCategories(dispatch, token);
       getAllLanguages(dispatch, token);
     }
   }, [token, dispatch]);
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
-    setFileSize(file.size);
+    // setFileSize(file.size);
     // console.log(file.size);
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -95,6 +99,8 @@ function AddVideo() {
     setLanguage("");
     setAccess("");
     setGenre("");
+    setCategory("");
+    setCategories([]);
     setThumbnail("");
     setVideo("");
     setKeywords("");
@@ -113,6 +119,7 @@ function AddVideo() {
       !title ||
       !access ||
       !description ||
+      !categories ||
       !genres ||
       !language ||
       !keywords
@@ -147,8 +154,8 @@ function AddVideo() {
             let percent = Math.floor((loaded * 100) / total);
             // let remainingBytes = fileSize - (percent * fileSize) / 100;
             const hours = Math.floor(estimated / 3600);
-            const minutes = Math.floor(((estimated) % 3600) / 60);
-            const seconds = Math.floor((estimated) % 60);
+            const minutes = Math.floor((estimated % 3600) / 60);
+            const seconds = Math.floor(estimated % 60);
 
             setEstimatedSecond(Math.round(seconds));
             setEstimatedMinute(Math.round(minutes));
@@ -169,6 +176,7 @@ function AddVideo() {
           formData.append("image", thumbnail);
           formData.append("video_url", data.data.imageName);
           formData.append("access", access);
+          formData.append("categories", categories);
 
           const data3 = await axiosInstance.post(
             "/api/video/create-video",
@@ -196,6 +204,20 @@ function AddVideo() {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
+
+    if (!categories.includes(selectedCategory)) {
+      setCategories([...categories, selectedCategory]);
+      setCategory("");
+    }
+  };
+
+  const handleRemoveCategory = (selectedCategory) => {
+    const newCategories = categories.filter((c) => c !== selectedCategory);
+    setCategories(newCategories);
+  };
+
   const handleGenreChange = (e) => {
     const selectedGenre = e.target.value;
 
@@ -211,10 +233,12 @@ function AddVideo() {
   };
 
   const availableGenres = gen.filter((genre) => !genres.includes(genre.name));
+  const availableCategories = cat.filter(
+    (category) => !categories.includes(category.name)
+  );
 
   return (
     <div>
-     
       <Form className="user-table">
         <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
@@ -310,6 +334,39 @@ function AddVideo() {
                     <li key={i}>
                       <span>{c}</span>
                       <MdClose onClick={() => handleRemoveGenre(c)} />
+                    </li>
+                  ))}
+              </div>
+            </Col>
+          </Row>
+
+          <Row
+            className={`align-items-center ${
+              categories && categories.length > 0 ? "mb-5" : "mb-4"
+            }`}
+          >
+            <Col className="mb-2" sm={12} md={3}>
+              <label>Video Categories</label>
+            </Col>
+            <Col style={{ position: "relative" }} sm={12} md={8}>
+              <select
+                value={category}
+                className="rounded"
+                onChange={handleCategoryChange}
+              >
+                <option value="">Select Category</option>
+                {availableCategories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <div className="video_keywords">
+                {categories &&
+                  categories.map((c, i) => (
+                    <li key={i}>
+                      <span>{c}</span>
+                      <MdClose onClick={() => handleRemoveCategory(c)} />
                     </li>
                   ))}
               </div>

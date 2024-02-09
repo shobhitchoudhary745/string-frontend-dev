@@ -10,6 +10,7 @@ import { MdClose } from "react-icons/md";
 import {
   getAllGenres,
   getAllLanguages,
+  getCategories,
   getVideo,
 } from "../../features/apiCall";
 import { useNavigate, useParams } from "react-router-dom";
@@ -20,10 +21,10 @@ function EditVideo() {
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
   const { genres: gen } = useSelector((state) => state.genre);
+  const { categories: cat } = useSelector((state) => state.category);
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
   const { video: video1 } = useSelector((state) => state.video);
-  //   console.log(video1);
 
   useEffect(() => {
     getVideo(dispatch, token, id);
@@ -35,6 +36,8 @@ function EditVideo() {
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
   const [genre, setGenre] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [video, setVideo] = useState("");
   const [keywords, setKeywords] = useState([]);
@@ -45,12 +48,13 @@ function EditVideo() {
   const [estimatedSecond, setEstimatedSecond] = useState(0);
   const [estimatedMinute, setEstimatedMinute] = useState(0);
   const [estimateHour, setEstimatedHour] = useState(0);
-  const [fileSize, setFileSize] = useState(0);
+  // const [fileSize, setFileSize] = useState(0);
 
   useEffect(() => {
     if (token) {
       getAllGenres(dispatch, token);
       getAllLanguages(dispatch, token);
+      getCategories(dispatch, token);
     }
   }, [token, dispatch]);
 
@@ -61,6 +65,7 @@ function EditVideo() {
       setLanguage(video1.language);
       setKeywords(video1.keywords);
       setGenres(video1.genres);
+      setCategories(video1.category);
       setAccess(video1.access);
       setThumbnailPreview(video1.thumbnail_url);
       setVideoPreview(video1.video_url);
@@ -69,7 +74,8 @@ function EditVideo() {
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
-    setFileSize(file.size);
+    // setFileSize(file.size);
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -114,6 +120,7 @@ function EditVideo() {
     setLanguage("");
     setAccess("");
     setGenre("");
+    setCategory("");
     setThumbnail("");
     setVideo("");
     setKeywords("");
@@ -121,6 +128,7 @@ function EditVideo() {
     setThumbnailPreview("");
     setCurrentKeyword("");
     setGenres([]);
+    setCategories([]);
     setProgress(0);
   };
 
@@ -135,7 +143,8 @@ function EditVideo() {
       !description &&
       !genres.length &&
       !language &&
-      !keywords.length
+      !keywords.length &&
+      !categories.length
     ) {
       toast.warning("Please fill Atleast one fieled");
       return;
@@ -165,14 +174,12 @@ function EditVideo() {
               onUploadProgress: (progressEvent) => {
                 // const connection = navigator.connection;
                 // const speed = (connection.downlink * 1024 * 1024) / 8;
-                const { loaded, total,estimated } = progressEvent;
+                const { loaded, total, estimated } = progressEvent;
                 let percent = Math.floor((loaded * 100) / total);
                 // let remainingBytes = fileSize - (percent * fileSize) / 100;
                 const hours = Math.floor(estimated / 3600);
-                const minutes = Math.floor(
-                  ((estimated) % 3600) / 60
-                );
-                const seconds = Math.floor((estimated) % 60);
+                const minutes = Math.floor((estimated % 3600) / 60);
+                const seconds = Math.floor(estimated % 60);
 
                 setEstimatedSecond(Math.round(seconds));
                 setEstimatedMinute(Math.round(minutes));
@@ -193,6 +200,7 @@ function EditVideo() {
           thumbnail && formData.append("image", thumbnail);
           video && formData.append("video_url", data.data.imageName);
           formData.append("access", access);
+          formData.append("categories", categories);
 
           const data3 = await axiosInstance.patch(
             `/api/video/update-video/${id}`,
@@ -220,6 +228,20 @@ function EditVideo() {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    const selectedCategory = e.target.value;
+
+    if (!categories.includes(selectedCategory)) {
+      setCategories([...categories, selectedCategory]);
+      setCategory("");
+    }
+  };
+
+  const handleRemoveCategory = (selectedCategory) => {
+    const newCategories = categories.filter((c) => c !== selectedCategory);
+    setCategories(newCategories);
+  };
+
   const handleGenreChange = (e) => {
     const selectedGenre = e.target.value;
 
@@ -235,6 +257,9 @@ function EditVideo() {
   };
 
   const availableGenres = gen.filter((genre) => !genres.includes(genre.name));
+  const availableCategories = cat.filter(
+    (category) => !categories.includes(category.name)
+  );
 
   return (
     <div>
@@ -333,6 +358,39 @@ function EditVideo() {
                     <li key={i}>
                       <span>{c}</span>
                       <MdClose onClick={() => handleRemoveGenre(c)} />
+                    </li>
+                  ))}
+              </div>
+            </Col>
+          </Row>
+
+          <Row
+            className={`align-items-center ${
+              categories && categories.length > 0 ? "mb-5" : "mb-4"
+            }`}
+          >
+            <Col className="mb-2" sm={12} md={3}>
+              <label>Video Categories</label>
+            </Col>
+            <Col style={{ position: "relative" }} sm={12} md={8}>
+              <select
+                value={category}
+                className="rounded"
+                onChange={handleCategoryChange}
+              >
+                <option value="">Select Category</option>
+                {availableCategories.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+              <div className="video_keywords">
+                {categories &&
+                  categories.map((c, i) => (
+                    <li key={i}>
+                      <span>{c}</span>
+                      <MdClose onClick={() => handleRemoveCategory(c)} />
                     </li>
                   ))}
               </div>
