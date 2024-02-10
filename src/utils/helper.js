@@ -65,6 +65,7 @@ export const secondArray = [
   {
     icon: <IoGiftSharp size={18} className="mx-2" />,
     content: "Coupons",
+    link: "/admin/coupons"
   },
   {
     icon: <FaUser size={18} className="mx-2" />,

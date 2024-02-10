@@ -35,6 +35,9 @@ import AddCategory from "./Pages/Category/AddCategory.jsx";
 import EditCategory from "./Pages/Category/EditCategory.jsx";
 import Query from "./Pages/Query/Query.jsx";
 import Profile from "./Pages/Profile/Profile.jsx";
+import Coupon from "./Pages/Coupon/Coupon.jsx";
+import AddCoupon from "./Pages/Coupon/AddCoupon.jsx";
+import EditCoupon from "./Pages/Coupon/EditCoupon.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -152,6 +155,30 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditLanguage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/coupons"
+              element={
+                <ProtectedRoute>
+                  <Coupon />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-coupon"
+              element={
+                <ProtectedRoute>
+                  <AddCoupon />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-coupon/:id"
+              element={
+                <ProtectedRoute>
+                  <EditCoupon />
                 </ProtectedRoute>
               }
             />

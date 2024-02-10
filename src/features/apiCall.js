@@ -12,6 +12,7 @@ import { setActor, setActors } from "./actorSlice";
 import { setDirector, setDirectors } from "./directorSlice";
 import { setCategories, setCategory } from "./categorySlice";
 import { setQueries, setQuery } from "./querySlice";
+import { setCoupon, setCoupons } from "./couponSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -426,6 +427,40 @@ export const getQuery = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setQuery({ query: data.query }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllCoupons = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/coupon/get-coupons`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      // console.log(data)
+      dispatch(setCoupons({ coupons: data.coupons }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getCoupon = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/coupon/get-coupon/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log(data.coupon)
+    if (data.success) {
+      dispatch(setCoupon({ coupon: data.coupon }));
     }
   } catch (error) {
     toast.error(error.message);

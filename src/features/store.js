@@ -12,6 +12,7 @@ import actorSlice from "./actorSlice";
 import directorSlice from "./directorSlice";
 import categorySlice from "./categorySlice";
 import querySlice from "./querySlice";
+import couponSlice from "./couponSlice";
 
 export default configureStore({
   reducer: {
@@ -28,5 +29,6 @@ export default configureStore({
     director: directorSlice,
     category: categorySlice,
     query: querySlice,
+    coupon: couponSlice,
   },
 });
