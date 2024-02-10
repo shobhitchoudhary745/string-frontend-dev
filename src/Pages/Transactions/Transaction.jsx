@@ -132,7 +132,7 @@ export default function Transaction() {
                           className="p-2 rounded"
                           style={{
                             color: "#f9f9f9",
-                            backgroundColor: "#35b8e0",
+                            backgroundColor: "#ff5b5b",
                           }}
                           href={transaction?.invoice_url}
                         >

@@ -81,7 +81,7 @@ const Coupon = () => {
                     <td>{data.coupon_code}</td>
                     <td>{data.allow}</td>
                     <td>{data.uses}</td>
-                    <td>{data.expiry}</td>
+                    <td>{data.expiry.toString().slice(0,10)}</td>
                     <td>
                       <span
                         className="rounded px-2 py-1"
