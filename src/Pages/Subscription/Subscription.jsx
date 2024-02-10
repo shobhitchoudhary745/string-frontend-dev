@@ -7,7 +7,7 @@ import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllPlans } from "../../features/apiCall";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 
@@ -15,6 +15,10 @@ const Subscription = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { plans } = useSelector((state) => state.plan);
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Subscription Plans" }));
+  },[])
 
   useEffect(() => {
     if (token) getAllPlans(dispatch, token);

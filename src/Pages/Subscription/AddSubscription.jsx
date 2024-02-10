@@ -9,9 +9,10 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
+import { useEffect } from "react";
 
 const AddSubscription = () => {
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ const AddSubscription = () => {
   const [yearly_price, setYearly_price] = useState(0);
   const [usd_price_monthly, setUsd_Monthly_price] = useState(0);
   const [usd_price_yearly, setUsd_Yearly_price] = useState(0);
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Add Subscription" }));
+  },[])
 
   const resetForm = () => {
     setName("");

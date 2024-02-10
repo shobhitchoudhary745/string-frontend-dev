@@ -6,7 +6,7 @@ import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllDirectors } from "../../features/apiCall";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 
@@ -14,6 +14,9 @@ const Director = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { directors } = useSelector((state) => state.director);
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Directors" }));
+  },[])
 
   useEffect(() => {
     if (token) getAllDirectors(dispatch, token);

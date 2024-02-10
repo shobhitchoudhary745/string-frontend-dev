@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -13,7 +13,7 @@ import "./Actor.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function AddActor() {
@@ -25,6 +25,10 @@ export default function AddActor() {
 
   const [name, setName] = useState("");
   const [profile, setProfile] = useState();
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Add Actor" }));
+  },[])
 
   const submitHandler = async (e) => {
     e.preventDefault();

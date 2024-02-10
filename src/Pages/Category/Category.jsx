@@ -6,7 +6,7 @@ import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../features/apiCall";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 
@@ -14,6 +14,10 @@ const Category = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Categories" }));
+  },[])
 
   useEffect(() => {
     if (token) getCategories(dispatch, token);

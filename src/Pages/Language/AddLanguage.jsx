@@ -13,8 +13,9 @@ import "./Language.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function AddLanguage() {
   const dispatch = useDispatch();
@@ -25,6 +26,10 @@ export default function AddLanguage() {
 
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Active");
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Add Language" }));
+  },[])
 
   const submitHandler = async (e) => {
     e.preventDefault();

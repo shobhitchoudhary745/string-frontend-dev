@@ -12,7 +12,7 @@ import "./Category.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCategory } from "../../features/apiCall";
 
@@ -27,6 +27,10 @@ export default function EditCategory() {
 
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Edit Category" }));
+  },[])
 
   useEffect(() => {
     getCategory(dispatch, token, id);

@@ -10,7 +10,7 @@ import {
   getAllLanguages,
   getAllVideos,
 } from "../../features/apiCall";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 import "./Video.scss";
@@ -31,6 +31,10 @@ const Video = () => {
 
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Videos" }));
+  },[])
 
   useEffect(() => {
     if (token) {

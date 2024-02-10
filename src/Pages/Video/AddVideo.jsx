@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axiosInstance from "../../utils/axiosUtil";
 import axios from "axios";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { MdClose } from "react-icons/md";
 import {
   getAllGenres,
@@ -52,6 +52,10 @@ function AddVideo() {
       getAllLanguages(dispatch, token);
     }
   }, [token, dispatch]);
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Add Video" }));
+  },[])
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -13,7 +13,7 @@ import "./Coupon.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function AddCoupon() {
@@ -36,6 +36,10 @@ export default function AddCoupon() {
   month = month < 10 ? "0" + month : month;
   day = day < 10 ? "0" + day : day;
   const minDateString = `${year}-${month}-${day}`;
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Add Coupon" }));
+  },[])
 
   const generateCoupon = (e) => {
     e.preventDefault();

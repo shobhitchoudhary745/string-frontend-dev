@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Home.scss";
 import CountUp from "react-countup";
 import { dashBoardArray } from "../../utils/helper";
@@ -11,6 +11,10 @@ const Home = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Dashboard" }));
+  },[])
 
   return (
     <div className="d-flex w-100 align-items-center text-center justify-content-center">

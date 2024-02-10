@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -12,7 +12,7 @@ import "./Category.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function AddCategory() {
@@ -23,6 +23,10 @@ export default function AddCategory() {
 
   const [name, setName] = useState("");
   const [status, setStatus] = useState("Active");
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Add Category" }));
+  },[])
 
   const submitHandler = async (e) => {
     e.preventDefault();

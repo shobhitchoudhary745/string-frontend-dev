@@ -13,7 +13,7 @@ import "./User.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUser } from "../../features/apiCall";
 
@@ -38,6 +38,10 @@ export default function EditUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Edit User" }));
+  },[])
 
   useEffect(() => {
     getUser(dispatch, token, id);

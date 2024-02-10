@@ -12,7 +12,7 @@ import "./Coupon.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { getCoupon } from "../../features/apiCall";
 
@@ -51,6 +51,10 @@ export default function EditCoupon() {
     }
     setCoupon(result);
   };
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Edit Coupon" }));
+  },[])
 
   useEffect(() => {
     getCoupon(dispatch, token, id);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -13,7 +13,7 @@ import "./User.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function AddUser() {
@@ -34,6 +34,10 @@ export default function AddUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Add User" }));
+  },[])
 
   const submitHandler = async (e) => {
     e.preventDefault();

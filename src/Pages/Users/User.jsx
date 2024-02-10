@@ -62,6 +62,10 @@ export default function User() {
     }
   };
 
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Users" }));
+  },[])
+
   useEffect(() => {
     if (token)
       getAllUsers(

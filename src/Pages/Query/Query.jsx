@@ -9,7 +9,7 @@ import { IoClose } from "react-icons/io5";
 import "../../utils/style.scss";
 import CustomPagination from "../../utils/CustomPagination";
 import { toast } from "react-toastify";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 
 export default function Query() {
@@ -47,6 +47,10 @@ export default function Query() {
       }
     }
   };
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Queries" }));
+  },[])
 
   useEffect(() => {
     if (token) getQueries(dispatch, token, curPage, resultPerPage, query);

@@ -6,6 +6,7 @@ import CustomPagination from "../../utils/CustomPagination";
 import { FaRegFileExcel, FaSearch } from "react-icons/fa";
 import { LiaFileDownloadSolid } from "react-icons/lia";
 import "./Transaction.scss";
+import { setCurrentPage } from "../../features/generalSlice";
 
 export default function Transaction() {
   const dispatch = useDispatch();
@@ -22,6 +23,10 @@ export default function Transaction() {
 
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Transactions" }));
+  },[])
 
   useEffect(() => {
     if (token)

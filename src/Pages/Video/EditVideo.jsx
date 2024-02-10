@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axiosInstance from "../../utils/axiosUtil";
 import axios from "axios";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { MdClose } from "react-icons/md";
 import {
   getAllGenres,
@@ -25,6 +25,10 @@ function EditVideo() {
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
   const { video: video1 } = useSelector((state) => state.video);
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Edit Video" }));
+  },[])
 
   useEffect(() => {
     getVideo(dispatch, token, id);

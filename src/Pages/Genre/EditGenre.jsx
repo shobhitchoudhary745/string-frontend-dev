@@ -12,7 +12,7 @@ import "./Genre.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
-import { setLoading } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate, useParams } from "react-router-dom";
 import { getGenre } from "../../features/apiCall";
 
@@ -27,6 +27,10 @@ export default function EditGenre() {
 
   const [name, setName] = useState("");
   const [status, setStatus] = useState("");
+
+  useEffect(()=>{
+    dispatch(setCurrentPage({ currentPage: "Edit Genre" }));
+  },[])
 
   useEffect(() => {
     getGenre(dispatch, token, id);
