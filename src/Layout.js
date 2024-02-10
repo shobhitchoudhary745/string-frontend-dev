@@ -34,6 +34,7 @@ import Category from "./Pages/Category/Category.jsx";
 import AddCategory from "./Pages/Category/AddCategory.jsx";
 import EditCategory from "./Pages/Category/EditCategory.jsx";
 import Query from "./Pages/Query/Query.jsx";
+import Profile from "./Pages/Profile/Profile.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -63,6 +64,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               }
             />

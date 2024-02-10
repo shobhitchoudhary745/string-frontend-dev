@@ -19,7 +19,7 @@ export default function Header() {
   const logout = (e) => {
     e.preventDefault();
     dispatch(removeToken());
-    localStorage.removeItem("token");
+    localStorage.clear();
     navigate("/login");
     toast.success("Logout Successfully");
     dispatch(setCurrentPage({ currentPage: "Dashboard" }));
@@ -38,12 +38,12 @@ export default function Header() {
         <div className="header_second_child mx-3">
           <div className="d-flex align-items-center h-100 justify-content-between">
             <div className={`d-flex sub_child align-items-center`}>
-              <div >
+              <div>
                 <FiMenu
                   onClick={(e) => {
                     e.stopPropagation();
                     dispatch(toggle());
-                  }} 
+                  }}
                   cursor={"pointer"}
                   className="menu_icon"
                   size={25}
@@ -66,7 +66,12 @@ export default function Header() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item className="d-flex gap-2 align-items-center">
+                  <Dropdown.Item
+                    onClick={() => {
+                      navigate("/admin/profile");
+                    }}
+                    className="d-flex gap-2 align-items-center"
+                  >
                     <TfiUser size={17} /> Profile
                   </Dropdown.Item>
                   <Dropdown.Item

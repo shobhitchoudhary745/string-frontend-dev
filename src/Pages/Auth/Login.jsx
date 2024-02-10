@@ -26,16 +26,29 @@ const Login = () => {
       });
 
       if (data.success) {
+        // console.log(data);
         setLoading(false);
-        toast.success(data.message)
+        toast.success(data.message);
         localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("email", data.user.email);
+        localStorage.setItem("mobile", data.user.mobile);
+        localStorage.setItem("profile", data.user.avatar);
+        localStorage.setItem("name", data.user.name);
         // localStorage.setItem("refreshToken", data.refreshToken);
-        dispatch(setToken({ token: data.accessToken }));
+        dispatch(
+          setToken({
+            token: data.accessToken,
+            email: data.user.email,
+            mobile: data.user.mobile,
+            profile: data.user.avatar,
+            name: data.user.name,
+          })
+        );
         navigate("/");
       }
     } catch (error) {
       setLoading(false);
-      toast.error(error.response?.data?.message||error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
