@@ -38,6 +38,7 @@ import Profile from "./Pages/Profile/Profile.jsx";
 import Coupon from "./Pages/Coupon/Coupon.jsx";
 import AddCoupon from "./Pages/Coupon/AddCoupon.jsx";
 import EditCoupon from "./Pages/Coupon/EditCoupon.jsx";
+import ViewCategory from "./Pages/Category/ViewCategory.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -283,6 +284,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <Category />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/view-category/:id"
+              element={
+                <ProtectedRoute>
+                  <ViewCategory />
                 </ProtectedRoute>
               }
             />

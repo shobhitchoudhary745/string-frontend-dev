@@ -6,6 +6,7 @@ const videoSlice = createSlice({
     videos: [],
     totalVideoCount: 0,
     video: {},
+    videos_category: [],
   },
   reducers: {
     setVideos: (state, action) => {
@@ -15,8 +16,11 @@ const videoSlice = createSlice({
     setVideo: (state, action) => {
       state.video = action.payload.video;
     },
+    setCategoryVideos: (state, action) => {
+      state.videos_category = action.payload.videos_category;
+    },
   },
 });
 
-export const { setVideos, setVideo } = videoSlice.actions;
+export const { setVideos, setVideo, setCategoryVideos } = videoSlice.actions;
 export default videoSlice.reducer;

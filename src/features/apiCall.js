@@ -7,10 +7,14 @@ import { setUser, setUsers } from "./userSlice";
 import { setLanguage, setLanguages } from "./languageSlice";
 import { setGenre, setGenres } from "./genreSlice";
 import { setURL } from "./getURLSlice";
-import { setVideo, setVideos } from "./videoSlice";
+import { setCategoryVideos, setVideo, setVideos } from "./videoSlice";
 import { setActor, setActors } from "./actorSlice";
 import { setDirector, setDirectors } from "./directorSlice";
-import { setCategories, setCategory } from "./categorySlice";
+import {
+  setCategories,
+  setCategory,
+  setCategory_videos,
+} from "./categorySlice";
 import { setQueries, setQuery } from "./querySlice";
 import { setCoupon, setCoupons } from "./couponSlice";
 
@@ -290,6 +294,22 @@ export const getVideo = async (dispatch, token, id) => {
   }
 };
 
+export const getCategoryVideo = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/video/get-video-category/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setCategoryVideos({ videos_category: data.videos_category }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
 export const getAllActors = async (dispatch, token) => {
   try {
     const { data } = await axios.get(`/api/actor/get-actors`, {
@@ -381,6 +401,25 @@ export const getCategory = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setCategory({ category: data.category }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getCategory_Video = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(
+      `/api/category/get-category-videos/${id}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      dispatch(setCategory_videos({ category_videos: data.category_videos }));
     }
   } catch (error) {
     toast.error(error.message);

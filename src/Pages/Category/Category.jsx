@@ -3,7 +3,7 @@ import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Card, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../features/apiCall";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
@@ -15,9 +15,9 @@ const Category = () => {
   const { token } = useSelector((state) => state.auth);
   const { categories } = useSelector((state) => state.category);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Categories" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) getCategories(dispatch, token);
@@ -95,6 +95,13 @@ const Category = () => {
                         className="btn btn-success"
                       >
                         <FaEdit />
+                      </Link>
+                      <Link
+                        to={`/admin/view-category/${data._id}`}
+                        style={{ backgroundColor: "#caa257", border: "none" }}
+                        className="btn btn-primary"
+                      >
+                        <FaEye />
                       </Link>
                       <Link
                         style={{ backgroundColor: "#ff5b5b", border: "none" }}

@@ -24,9 +24,9 @@ export default function Transaction() {
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Transactions" }));
-  },[])
+  }, [dispatch]);
 
   useEffect(() => {
     if (token)
