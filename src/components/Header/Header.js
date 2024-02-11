@@ -52,7 +52,7 @@ export default function Header() {
               <div className="dashboard mt-1">{currentPage.toUpperCase()}</div>
             </div>
             <div className="d-flex gap-3  align-items-center">
-              <FaDesktop size={25} style={{ cursor: "pointer" }} />
+              <a target="_blank" style={{color:"#f9f9f9"}} href={"https://string-geo.vercel.app"}><FaDesktop size={25} style={{ cursor: "pointer" }} /></a>
               <Dropdown>
                 <Dropdown.Toggle
                   className="dropdown-toggle p-0"
