@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
-import { Card, Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Spinner, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getCategory, getCategoryVideo } from "../../features/apiCall";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 import { MdRemoveCircleOutline } from "react-icons/md";
+import { HiPlus } from "react-icons/hi";
 
 const ViewCategory = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.general);
   const { token } = useSelector((state) => state.auth);
   const { category } = useSelector((state) => state.category);
   const { videos_category } = useSelector((state) => state.video);
+  const [current, setCurrent] = useState(-1);
 
   console.log(category);
   console.log(videos_category);
@@ -72,8 +75,15 @@ const ViewCategory = () => {
 
   return (
     <Card className="user-table ">
-      <Card.Header>
-        <span style={{ color: "#f9f9f9" }}>{category?.name}</span>
+      <Card.Header >
+        <div className="d-flex justify-content-between">
+          <span style={{ color: "#f9f9f9" }}>{category?.name}</span>
+          <Button  style={{backgroundColor:"#10c469",border:"none"}}>
+            <Link style={{color:"#f9f9f9"}} to={`/admin/edit-sequence/${id}`}>
+              <FaEdit style={{color:"#f9f9f9"}} /> <span >Edit Sequence</span>
+            </Link>
+          </Button>
+        </div>
       </Card.Header>
       <Card.Body className="user-body">
         <Table responsive striped bordered hover>
@@ -97,7 +107,7 @@ const ViewCategory = () => {
                   <td>
                     <div className="action-link">
                       {category.video_array
-                        .map((video) => {
+                        .map((video, index) => {
                           return video.video;
                         })
                         .includes(data._id) ? (
@@ -108,19 +118,37 @@ const ViewCategory = () => {
                             alignItems: "center",
                             gap: "5px",
                           }}
-                          onClick={() => removeVideo(data._id)}
+                          onClick={() => {
+                            setCurrent(index);
+                            removeVideo(data._id);
+                          }}
                           className="btn btn-danger"
                         >
-                          <MdRemoveCircleOutline />
-                          Remove
+                          {loading && current === index ? (
+                            <Spinner />
+                          ) : (
+                            <>
+                              <MdRemoveCircleOutline />
+                              Remove
+                            </>
+                          )}
                         </Link>
                       ) : (
                         <Link
                           style={{ backgroundColor: "#10c469", border: "none" }}
-                          onClick={() => addVideo(data._id)}
+                          onClick={() => {
+                            setCurrent(index);
+                            addVideo(data._id);
+                          }}
                           className="btn btn-success"
                         >
-                          <FaPlus /> Add
+                          {loading && current === index ? (
+                            <Spinner />
+                          ) : (
+                            <>
+                              <HiPlus /> Add
+                            </>
+                          )}
                         </Link>
                       )}
                     </div>

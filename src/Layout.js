@@ -39,6 +39,7 @@ import Coupon from "./Pages/Coupon/Coupon.jsx";
 import AddCoupon from "./Pages/Coupon/AddCoupon.jsx";
 import EditCoupon from "./Pages/Coupon/EditCoupon.jsx";
 import ViewCategory from "./Pages/Category/ViewCategory.jsx";
+import EditSequence from "./Pages/Category/EditSequence.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -292,6 +293,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <ViewCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-sequence/:id"
+              element={
+                <ProtectedRoute>
+                  <EditSequence />
                 </ProtectedRoute>
               }
             />
