@@ -79,7 +79,7 @@ export default function EditUser() {
         states: state,
         city,
         mobile,
-      });
+      },{headers:{authorization:`Bearer ${token}`}});
       if (data.success) {
         dispatch(setLoading());
         toast.success("User Updated Successfully.  Redirecting...");

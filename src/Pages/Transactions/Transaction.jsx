@@ -101,7 +101,7 @@ export default function Transaction() {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Email</th>
+                {/* <th>Email</th> */}
                 <th>Plan</th>
                 <th>Amount</th>
                 <th>Payment Gateway</th>
@@ -116,8 +116,8 @@ export default function Transaction() {
                 transactions.map((transaction, index) => {
                   return (
                     <tr key={index}>
-                      <td>{transaction?.user?.name}</td>
-                      <td>{transaction?.user?.email}</td>
+                      <td>{transaction?.user?.name.slice(0,50)}</td>
+                      {/* <td>{transaction?.user?.email}</td> */}
                       <td>{transaction?.order?.plan_type}</td>
                       <td>
                         {transaction?.gateway === "Razorpay"
@@ -126,7 +126,7 @@ export default function Transaction() {
                       </td>
                       <td>{transaction?.gateway}</td>
                       <td>{transaction?.razorpay_payment_id}</td>
-                      <td>{transaction?.createdAt}</td>
+                      <td>{transaction?.createdAt.slice(0,10)}</td>
                       <td>
                         <a
                           className="p-2 rounded"
