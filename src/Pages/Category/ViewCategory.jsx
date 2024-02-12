@@ -19,8 +19,7 @@ const ViewCategory = () => {
   const { videos_category } = useSelector((state) => state.video);
   const [current, setCurrent] = useState(-1);
 
-  console.log(category);
-  console.log(videos_category);
+  
 
   useEffect(() => {
     if (token) {
@@ -108,7 +107,7 @@ const ViewCategory = () => {
                     <div className="action-link">
                       {category.video_array
                         .map((video, index) => {
-                          return video.video;
+                          return video.video._id;
                         })
                         .includes(data._id) ? (
                         <Link
