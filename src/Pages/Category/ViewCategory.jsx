@@ -3,7 +3,7 @@ import { Button, Card, Spinner, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getCategory, getCategoryVideo } from "../../features/apiCall";
-import { FaEdit, FaPlus } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 import { setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
@@ -18,8 +18,6 @@ const ViewCategory = () => {
   const { category } = useSelector((state) => state.category);
   const { videos_category } = useSelector((state) => state.video);
   const [current, setCurrent] = useState(-1);
-
-  
 
   useEffect(() => {
     if (token) {
@@ -74,12 +72,15 @@ const ViewCategory = () => {
 
   return (
     <Card className="user-table ">
-      <Card.Header >
+      <Card.Header>
         <div className="d-flex justify-content-between">
           <span style={{ color: "#f9f9f9" }}>{category?.name}</span>
-          <Button  style={{backgroundColor:"#10c469",border:"none"}}>
-            <Link style={{color:"#f9f9f9"}} to={`/admin/edit-sequence/${id}`}>
-              <FaEdit style={{color:"#f9f9f9"}} /> <span >Edit Sequence</span>
+          <Button style={{ backgroundColor: "#10c469", border: "none" }}>
+            <Link
+              style={{ color: "#f9f9f9" }}
+              to={`/admin/edit-sequence/${id}`}
+            >
+              <FaEdit style={{ color: "#f9f9f9" }} /> <span>Edit Sequence</span>
             </Link>
           </Button>
         </div>
@@ -105,7 +106,8 @@ const ViewCategory = () => {
                   </td>
                   <td>
                     <div className="action-link">
-                      {category.video_array
+                      {category.video_array &&
+                      category.video_array
                         .map((video, index) => {
                           return video.video._id;
                         })

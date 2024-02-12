@@ -96,7 +96,7 @@ const Video = () => {
               <option value="all">Filter By Language</option>
               {languages.map((language) => {
                 return (
-                  <option value={language.name} key={language._id}>
+                  <option value={language._id} key={language._id}>
                     {language.name}
                   </option>
                 );
@@ -113,7 +113,7 @@ const Video = () => {
               <option value="all">Filter By Genres</option>
               {gen.map((genre) => {
                 return (
-                  <option value={genre.name} key={genre._id}>
+                  <option value={genre._id} key={genre._id}>
                     {genre.name}
                   </option>
                 );
