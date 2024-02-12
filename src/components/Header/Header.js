@@ -7,7 +7,7 @@ import { CiPower } from "react-icons/ci";
 import { FiMenu } from "react-icons/fi";
 import "./Header.scss";
 import { setCurrentPage, toggle } from "../../features/generalSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { removeToken } from "../../features/authSlice";
 import { toast } from "react-toastify";
 
@@ -29,11 +29,13 @@ export default function Header() {
     <div className="Header">
       <div className="d-flex parent">
         <div className="d-flex header_first_child ">
-          <img
-            className="string-geo-logo"
-            src="https://stringgeo.com/upload/NewFolder/String%20Geo%20logo%20Icon.png"
-            alt="logoimage"
-          />
+          <Link to="/">
+            <img
+              className="string-geo-logo"
+              src="https://stringgeo.com/upload/NewFolder/String%20Geo%20logo%20Icon.png"
+              alt="logoimage"
+            />
+          </Link>
         </div>
         <div className="header_second_child mx-3">
           <div className="d-flex align-items-center h-100 justify-content-between">
@@ -52,7 +54,13 @@ export default function Header() {
               <div className="dashboard mt-1">{currentPage.toUpperCase()}</div>
             </div>
             <div className="d-flex gap-3  align-items-center">
-              <a target="_blank" style={{color:"#f9f9f9"}} href={"https://string-geo.vercel.app"}><FaDesktop size={25} style={{ cursor: "pointer" }} /></a>
+              <a
+                target="_blank"
+                style={{ color: "#f9f9f9" }}
+                href={"https://string-geo.vercel.app"}
+              >
+                <FaDesktop size={25} style={{ cursor: "pointer" }} />
+              </a>
               <Dropdown>
                 <Dropdown.Toggle
                   className="dropdown-toggle p-0"

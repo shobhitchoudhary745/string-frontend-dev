@@ -110,7 +110,7 @@ export default function EditCoupon() {
     <div>
       <Card className="user-table ">
         <Container className="input-fieleds p-4">
-          <Row className="align-items-center mb-4">
+          <Row className="align-items-center mb-2">
             <Col sm={12} md={3}>
               <Form.Label>Coupon Code</Form.Label>
             </Col>
