@@ -26,6 +26,7 @@ export default function AddCoupon() {
   const [coupon, setCoupon] = useState("");
   const [allow, setAllow] = useState(0);
   const [status, setStatus] = useState("Active");
+  const [discount, setDiscount] = useState("");
   const [expiry, setExpiry] = useState("");
 
   const today = new Date();
@@ -37,9 +38,9 @@ export default function AddCoupon() {
   day = day < 10 ? "0" + day : day;
   const minDateString = `${year}-${month}-${day}`;
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Add Coupon" }));
-  },[])
+  }, []);
 
   const generateCoupon = (e) => {
     e.preventDefault();
@@ -56,7 +57,7 @@ export default function AddCoupon() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!coupon||!expiry||!status||!allow) {
+    if (!coupon || !expiry || !status || !allow || !discount) {
       toast.warning("Please Enter All Fieleds");
       return;
     }
@@ -65,10 +66,11 @@ export default function AddCoupon() {
       const { data } = await axios.post(
         "/api/coupon/create-coupon",
         {
-          coupon_code:coupon,
+          coupon_code: coupon,
           status,
           expiry,
-          allow
+          allow,
+          discount,
         },
         { headers: { authorization: `Bearer ${token}` } }
       );
@@ -80,7 +82,7 @@ export default function AddCoupon() {
         }, 1200);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       dispatch(setLoading());
       toast.error(error.response.data.message || error.message);
     }
@@ -90,7 +92,7 @@ export default function AddCoupon() {
     <div>
       <Card className="user-table ">
         <Container className="input-fieleds p-4">
-          <Row className="align-items-center mb-4">
+          <Row className="align-items-center mb-2">
             <Col sm={12} md={3}>
               <Form.Label>Coupon Code</Form.Label>
             </Col>
@@ -132,6 +134,20 @@ export default function AddCoupon() {
                 onChange={(e) => setAllow(e.target.value)}
                 type="number"
                 minLength={1}
+              />
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Discount %</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <Form.Control
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+                type="number"
+                // minLength={1}
               />
             </Col>
           </Row>

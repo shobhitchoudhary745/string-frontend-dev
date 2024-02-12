@@ -69,6 +69,7 @@ const Coupon = () => {
                 <th>Coupon Code</th>
                 <th>Number of Users Allow</th>
                 <th>Coupon Used</th>
+                <th>Discount %</th>
                 <th>Expiry Date</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -81,6 +82,7 @@ const Coupon = () => {
                     <td>{data.coupon_code}</td>
                     <td>{data.allow}</td>
                     <td>{data.uses}</td>
+                    <td>{data.discount}</td>
                     <td>{data.expiry.toString().slice(0,10)}</td>
                     <td>
                       <span

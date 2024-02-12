@@ -28,6 +28,7 @@ export default function EditCoupon() {
   const [coupons, setCoupon] = useState("");
   const [allow, setAllow] = useState(0);
   const [status, setStatus] = useState("Active");
+  const [discount, setDiscount] = useState("");
   const [expiry, setExpiry] = useState("");
 
   const today = new Date();
@@ -52,9 +53,9 @@ export default function EditCoupon() {
     setCoupon(result);
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit Coupon" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     getCoupon(dispatch, token, id);
@@ -65,13 +66,14 @@ export default function EditCoupon() {
       setCoupon(coupon.coupon_code);
       setStatus(coupon.status);
       setAllow(coupon.allow);
-      setExpiry(coupon.expiry.toString().slice(0,10));
+      setDiscount(coupon.discount);
+      setExpiry(coupon.expiry.toString().slice(0, 10));
     }
   }, [coupon]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!coupon && !status && !expiry && !allow) {
+    if (!coupon && !status && !expiry && !allow && !discount) {
       toast.warning("Please Fill Atleast One Fieled");
       return;
     }
@@ -84,6 +86,7 @@ export default function EditCoupon() {
           status,
           expiry,
           allow,
+          discount,
         },
         {
           headers: { authorization: `Bearer ${token}` },
@@ -149,6 +152,20 @@ export default function EditCoupon() {
                 onChange={(e) => setAllow(e.target.value)}
                 type="number"
                 minLength={1}
+              />
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Discount %</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <Form.Control
+                value={discount}
+                onChange={(e) => setDiscount(e.target.value)}
+                type="number"
+                // minLength={1}
               />
             </Col>
           </Row>
