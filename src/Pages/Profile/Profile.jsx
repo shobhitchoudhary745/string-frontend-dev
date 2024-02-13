@@ -20,7 +20,7 @@ import { setToken } from "../../features/authSlice";
 export default function Profile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { token, email, profile, mobile, name } = useSelector(
+  const { token, email, profile, mobile, name, id } = useSelector(
     (state) => state.auth
   );
 
@@ -55,9 +55,13 @@ export default function Profile() {
     formData.append("password", password);
     try {
       dispatch(setLoading());
-      const { data } = await axios.patch("/api/admin/update-user", formData, {
-        headers: { authorization: `Bearer ${token}` },
-      });
+      const { data } = await axios.patch(
+        `/api/admin/update-user/${id}`,
+        formData,
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
       if (data.success) {
         dispatch(setLoading());
         localStorage.setItem("email", data.user.email);

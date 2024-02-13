@@ -5,6 +5,7 @@ const email = localStorage.getItem("email");
 const mobile = localStorage.getItem("mobile");
 const profile = localStorage.getItem("profile");
 const name = localStorage.getItem("name");
+const id = localStorage.getItem("id");
 
 const authSlice = createSlice({
   name: "auth",
@@ -15,6 +16,7 @@ const authSlice = createSlice({
     email: email,
     mobile: mobile,
     profile: profile,
+    id : id
   },
   reducers: {
     setToken: (state, action) => {
@@ -23,6 +25,7 @@ const authSlice = createSlice({
       state.name = action.payload.name;
       state.mobile = action.payload.mobile;
       state.profile = action.payload.profile;
+      state.id = action.payload.id
       // state.refreshToken = action.payload.refreshToken
     },
     removeToken: (state, action) => {
@@ -31,6 +34,7 @@ const authSlice = createSlice({
       state.name = null;
       state.mobile = null;
       state.profile = null;
+      state.id = null;
       // state.refreshToken = null;
     },
   },

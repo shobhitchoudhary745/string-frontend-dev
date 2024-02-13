@@ -34,6 +34,7 @@ const Login = () => {
         localStorage.setItem("mobile", data.user.mobile);
         localStorage.setItem("profile", data.user.avatar);
         localStorage.setItem("name", data.user.name);
+        localStorage.setItem("id", data.user._id);
         // localStorage.setItem("refreshToken", data.refreshToken);
         dispatch(
           setToken({
@@ -42,6 +43,7 @@ const Login = () => {
             mobile: data.user.mobile,
             profile: data.user.avatar,
             name: data.user.name,
+            id: data.user._id
           })
         );
         navigate("/");
