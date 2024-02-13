@@ -29,7 +29,7 @@ export default function Header() {
     <div className="Header">
       <div className="d-flex parent">
         <div className="d-flex header_first_child ">
-          <Link to="/">
+          <Link className="text-center"  to="/">
             <img
               className="string-geo-logo"
               src="https://stringgeo.com/upload/NewFolder/String%20Geo%20logo%20Icon.png"
