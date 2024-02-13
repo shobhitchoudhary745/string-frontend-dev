@@ -13,12 +13,13 @@ import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
 import { getPlan } from "../../features/apiCall";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditSubscription = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { plan } = useSelector((state) => state.plan);
+  const navigate = useNavigate();
 
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
@@ -71,7 +72,7 @@ const EditSubscription = () => {
       );
       if (data.success) {
         dispatch(setLoading());
-        toast.success("Plan Edit Successfully.");
+        toast.success("Plan Edit Successfully.     ...Redirecting");
         resetForm();
         setTimeout(() => {
           navigate("/admin/subscription");

@@ -70,7 +70,7 @@ const AddSubscription = () => {
       if (data.success) {
         dispatch(setLoading());
         resetForm();
-        toast.success(data.message);
+        toast.success("Plan Created Successfully    ...Redirecting");
         setTimeout(() => {
           navigate("/admin/subscription");
         }, 1200);
