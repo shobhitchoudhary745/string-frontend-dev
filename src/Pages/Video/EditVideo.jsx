@@ -590,7 +590,7 @@ function EditVideo() {
                   {loading ? (
                     <Spinner animation="border" size="sm" />
                   ) : (
-                    "Update Video"
+                    "Update"
                   )}
                 </Button>
               </Col>

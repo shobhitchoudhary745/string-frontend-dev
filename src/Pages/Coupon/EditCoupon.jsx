@@ -210,7 +210,7 @@ export default function EditCoupon() {
             </Col>
             <Col sm={12} md={8}>
               <Button onClick={submitHandler}>
-                {loading ? <Spinner /> : "Save"}
+                {loading ? <Spinner /> : "Update"}
               </Button>
             </Col>
           </Row>

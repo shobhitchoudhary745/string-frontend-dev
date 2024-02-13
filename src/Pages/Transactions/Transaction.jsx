@@ -101,13 +101,13 @@ export default function Transaction() {
             <thead>
               <tr>
                 <th>Name</th>
-                {/* <th>Email</th> */}
+                <th>Email</th>
                 <th>Plan</th>
                 <th>Amount</th>
                 <th>Payment Gateway</th>
                 <th>Payment ID</th>
                 <th>Payment Date</th>
-                <th>Download Invoice</th>
+                <th>Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -117,7 +117,7 @@ export default function Transaction() {
                   return (
                     <tr key={index}>
                       <td>{transaction?.user?.name.slice(0,50)}</td>
-                      {/* <td>{transaction?.user?.email}</td> */}
+                      <td>{transaction?.user?.email}</td>
                       <td>{transaction?.order?.plan_type}</td>
                       <td>
                         {transaction?.gateway === "Razorpay"

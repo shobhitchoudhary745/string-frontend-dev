@@ -160,7 +160,7 @@ const EditSubscription = () => {
           </Col>
           <Col sm={12} md={8}>
             <Button onClick={submitHandler}>
-              {loading ? <Spinner /> : "Edit Subscription"}
+              {loading ? <Spinner /> : "Update"}
             </Button>
           </Col>
         </Row>
