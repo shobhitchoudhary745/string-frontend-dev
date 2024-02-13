@@ -13,12 +13,13 @@ import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AddSubscription = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
-
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [allow_devices, setAllow_devices] = useState(0);
   const [monthly_price, setMonthly_price] = useState(0);
@@ -70,6 +71,9 @@ const AddSubscription = () => {
         dispatch(setLoading());
         resetForm();
         toast.success(data.message);
+        setTimeout(() => {
+          navigate("/admin/subscription");
+        }, 1200);
       }
     } catch (err) {
       dispatch(setLoading());

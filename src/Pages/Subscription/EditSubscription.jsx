@@ -28,9 +28,9 @@ const EditSubscription = () => {
   const [usd_price_monthly, setUsd_Monthly_price] = useState(0);
   const [usd_price_yearly, setUsd_Yearly_price] = useState(0);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit Subscription" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     getPlan(dispatch, token, id);
@@ -73,6 +73,9 @@ const EditSubscription = () => {
         dispatch(setLoading());
         toast.success("Plan Edit Successfully.");
         resetForm();
+        setTimeout(() => {
+          navigate("/admin/subscription");
+        }, 1200);
       }
     } catch (err) {
       dispatch(setLoading());
