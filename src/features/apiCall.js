@@ -17,6 +17,7 @@ import {
 } from "./categorySlice";
 import { setQueries, setQuery } from "./querySlice";
 import { setCoupon, setCoupons } from "./couponSlice";
+import { setPage, setPages } from "./pageSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -500,6 +501,40 @@ export const getCoupon = async (dispatch, token, id) => {
     // console.log(data.coupon)
     if (data.success) {
       dispatch(setCoupon({ coupon: data.coupon }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllPages = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/page/get-pages`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      // console.log(data)
+      dispatch(setPages({ pages: data.pages }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getPage = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/page/get-page/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log(data.coupon)
+    if (data.success) {
+      dispatch(setPage({ page: data.page }));
     }
   } catch (error) {
     toast.error(error.message);

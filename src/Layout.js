@@ -40,6 +40,10 @@ import AddCoupon from "./Pages/Coupon/AddCoupon.jsx";
 import EditCoupon from "./Pages/Coupon/EditCoupon.jsx";
 import ViewCategory from "./Pages/Category/ViewCategory.jsx";
 import EditSequence from "./Pages/Category/EditSequence.jsx";
+import Page from "./Pages/Page/Page.jsx";
+import AddPage from "./Pages/Page/AddPage.jsx";
+import EditPage from "./Pages/Page/EditPage.jsx";
+import Gateway from "./Pages/Gateway/Gateway.js";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -317,6 +321,38 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/pages"
+              element={
+                <ProtectedRoute>
+                  <Page />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-page"
+              element={
+                <ProtectedRoute>
+                  <AddPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-page/:id"
+              element={
+                <ProtectedRoute>
+                  <EditPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/gateways"
+              element={
+                <ProtectedRoute>
+                  <Gateway />
                 </ProtectedRoute>
               }
             />

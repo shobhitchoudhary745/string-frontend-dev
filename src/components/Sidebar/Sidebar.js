@@ -31,8 +31,8 @@ export default function Sidebar() {
   const [current, setCurrent] = useState("");
   // const screenWidth = window.screen.width;
   const { isOpen, currentPage } = useSelector((state) => state.general);
-  
-  return (true) ? (
+
+  return true ? (
     <nav className={`sidebar ${isOpen ? "nav-bar open" : "nav-bar"}`}>
       <ul>
         {firstArray.map((data, index) => {
@@ -54,13 +54,13 @@ export default function Sidebar() {
       <ul>
         <li
           onClick={(e) => {
-            e.stopPropagation()
+            e.stopPropagation();
             dispatch(setCurrentPage({ currentPage: "Series" }));
             setCurrent((p) => (p === "Series" ? "" : "Series"));
           }}
           className={`my-0 ${currentPage === "Series" ? "active" : ""}`}
         >
-          <div  className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between">
             <div>
               <FiFilm size={18} className="mx-2" /> Series
             </div>
@@ -92,13 +92,13 @@ export default function Sidebar() {
       <ul>
         <li
           onClick={(e) => {
-            e.stopPropagation()
+            e.stopPropagation();
             dispatch(setCurrentPage({ currentPage: "Homes" }));
             setCurrent((p) => (p === "Home" ? "" : "Home"));
           }}
           className={`${currentPage === "Homes" ? "active" : ""}`}
         >
-          <div  className="d-flex justify-content-between">
+          <div className="d-flex justify-content-between">
             <div>
               <FaSliders size={18} className="mx-2" /> Home
             </div>
@@ -184,7 +184,7 @@ export default function Sidebar() {
       <ul>
         <li
           onClick={(e) => {
-            e.stopPropagation()
+            e.stopPropagation();
             dispatch(setCurrentPage({ currentPage: "Transactions" }));
             setCurrent((p) => (p === "Transactions" ? "" : "Transactions"));
           }}
@@ -222,7 +222,7 @@ export default function Sidebar() {
       <ul>
         <li
           onClick={(e) => {
-            e.stopPropagation()
+            e.stopPropagation();
             dispatch(setCurrentPage({ currentPage: "Pages" }));
             setCurrent((p) => (p === "Pages" ? "" : "Pages"));
           }}
@@ -247,10 +247,20 @@ export default function Sidebar() {
           current === "Pages" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
       >
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        <div
+          onClick={() => {
+            navigate("/admin/pages");
+          }}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
           <FaFile size={18} /> Pages
         </div>
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        <div
+          onClick={() => {
+            navigate("/admin/add-page");
+          }}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
           <LuPlus size={18} /> Add Page
         </div>
       </div>
@@ -262,7 +272,7 @@ export default function Sidebar() {
               onClick={() => {
                 dispatch(setCurrentPage({ currentPage: data.content }));
                 setCurrent("");
-                navigate(data.link)
+                navigate(data.link);
               }}
               className={`${currentPage === data.content ? "active" : ""}`}
             >
