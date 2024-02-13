@@ -44,6 +44,7 @@ import Page from "./Pages/Page/Page.jsx";
 import AddPage from "./Pages/Page/AddPage.jsx";
 import EditPage from "./Pages/Page/EditPage.jsx";
 import Gateway from "./Pages/Gateway/Gateway.js";
+import ViewQuery from "./Pages/Query/ViewQuery.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -361,6 +362,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <Query />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/query/:id"
+              element={
+                <ProtectedRoute>
+                  <ViewQuery />
                 </ProtectedRoute>
               }
             />

@@ -8,7 +8,6 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-
 import "./Profile.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";

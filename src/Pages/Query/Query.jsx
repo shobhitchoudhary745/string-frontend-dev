@@ -48,9 +48,9 @@ export default function Query() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Queries" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) getQueries(dispatch, token, curPage, resultPerPage, query);
@@ -103,6 +103,7 @@ export default function Query() {
                       <td>{query.address}</td>
                       <td className="action-link-1">
                         <Link
+                          to={`/admin/query/${query._id}`}
                           style={{ backgroundColor: "#caa257", border: "none" }}
                           className="btn btn-primary"
                         >
