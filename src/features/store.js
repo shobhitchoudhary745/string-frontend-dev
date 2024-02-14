@@ -15,6 +15,7 @@ import querySlice from "./querySlice";
 import couponSlice from "./couponSlice";
 import pageSlice from "./pageSlice";
 import homeSlice from "./homeSlice";
+import faqSlice from "./faqSlice";
 
 export default configureStore({
   reducer: {
@@ -34,5 +35,6 @@ export default configureStore({
     coupon: couponSlice,
     page: pageSlice,
     home: homeSlice,
+    faq: faqSlice
   },
 });

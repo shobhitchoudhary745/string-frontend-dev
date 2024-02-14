@@ -45,6 +45,9 @@ import AddPage from "./Pages/Page/AddPage.jsx";
 import EditPage from "./Pages/Page/EditPage.jsx";
 import Gateway from "./Pages/Gateway/Gateway.js";
 import ViewQuery from "./Pages/Query/ViewQuery.jsx";
+import Faq from "./Pages/Faq/Faq.jsx";
+import AddFaq from "./Pages/Faq/AddFaq.jsx";
+import EditFaq from "./Pages/Faq/EditFaq.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -346,6 +349,30 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/faqs"
+              element={
+                <ProtectedRoute>
+                  <Faq />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-faq"
+              element={
+                <ProtectedRoute>
+                  <AddFaq />
+                </ProtectedRoute>
+              }
+            />
+             <Route
+              path="/admin/edit-faq/:id"
+              element={
+                <ProtectedRoute>
+                  <EditFaq />
                 </ProtectedRoute>
               }
             />

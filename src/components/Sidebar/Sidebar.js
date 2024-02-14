@@ -126,7 +126,7 @@ export default function Sidebar() {
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiListBulletsFill size={18} /> Home Section
         </div>
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        <div onClick={()=>navigate("/admin/faqs")} className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiListBulletsFill size={18} /> FAQ
         </div>
       </div>

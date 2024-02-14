@@ -19,6 +19,7 @@ import { setQueries, setQuery } from "./querySlice";
 import { setCoupon, setCoupons } from "./couponSlice";
 import { setPage, setPages } from "./pageSlice";
 import { setHomeData } from "./homeSlice";
+import { setFaq, setFaqs } from "./faqSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -565,6 +566,40 @@ export const getHomeData = async (dispatch, token) => {
           },
         })
       );
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllFaqs = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/faq/get-faqs`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      // console.log(data)
+      dispatch(setFaqs({ faqs: data.faqs }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getFaq = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/faq/get-faq/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log(data.coupon)
+    if (data.success) {
+      dispatch(setFaq({ faq: data.faq }));
     }
   } catch (error) {
     toast.error(error.message);
