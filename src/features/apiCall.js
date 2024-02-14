@@ -18,6 +18,7 @@ import {
 import { setQueries, setQuery } from "./querySlice";
 import { setCoupon, setCoupons } from "./couponSlice";
 import { setPage, setPages } from "./pageSlice";
+import { setHomeData } from "./homeSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -535,6 +536,35 @@ export const getPage = async (dispatch, token, id) => {
     // console.log(data.coupon)
     if (data.success) {
       dispatch(setPage({ page: data.page }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getHomeData = async (dispatch, token) => {
+  try {
+    const { data } = await axios.get(`/api/admin/get-home-data`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    // console.log(data.coupon)
+    if (data.success) {
+      
+      dispatch(
+        setHomeData({
+          homeData: {
+            Users: data.data.users,
+            Transaction: data.data.transactions,
+            Genres: data.data.genres,
+            Language: data.data.languages,
+            Category: data.data.categories,
+            Videos: data.data.videos,
+          },
+        })
+      );
     }
   } catch (error) {
     toast.error(error.message);

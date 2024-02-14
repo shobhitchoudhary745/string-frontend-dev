@@ -7,6 +7,9 @@ import { VscListUnordered } from "react-icons/vsc";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { BiCategory } from "react-icons/bi";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 
 export const firstArray = [
   {
@@ -65,7 +68,7 @@ export const secondArray = [
   {
     icon: <IoGiftSharp size={18} className="mx-2" />,
     content: "Coupons",
-    link: "/admin/coupons"
+    link: "/admin/coupons",
   },
   {
     icon: <FaUser size={18} className="mx-2" />,
@@ -80,7 +83,7 @@ export const secondArray = [
   {
     icon: <HiMiniCreditCard size={18} className="mx-2" />,
     content: "Payment Gateways",
-    link:"/admin/gateways"
+    link: "/admin/gateways",
   },
 ];
 
@@ -92,9 +95,27 @@ export const dashBoardArray = [
     path: "/admin/languages",
     content: "",
   },
-  { key: "Genres", value: 5, color: "#ff8acc", path: "/admin/genres", content: "" },
-  { key: "Movies", value: 1, color: "#f9c851", path: "/", content: "" },
-  { key: "Shows", value: 7, color: "#797979", path: "/", content: "" },
+  {
+    key: "Genres",
+    value: 5,
+    color: "#ff8acc",
+    path: "/admin/genres",
+    content: "",
+  },
+  {
+    key: "Videos",
+    value: 1,
+    color: "#f9c851",
+    path: "/admin/videos",
+    content: "",
+  },
+  {
+    key: "Category",
+    value: 7,
+    color: "#797979",
+    path: "/admin/categories",
+    content: "",
+  },
   {
     key: "Users",
     value: 15965,
@@ -103,7 +124,7 @@ export const dashBoardArray = [
     content: "Users",
   },
   {
-    key: "Transactions",
+    key: "Transaction",
     value: 2873,
     color: "#caa257",
     path: "/admin/transactions",
@@ -138,7 +159,6 @@ export const dashBoardArray = [
     content: "",
   },
 ];
-
 
 export const modules = {
   toolbar: [
