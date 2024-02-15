@@ -16,9 +16,11 @@ const Subscription = () => {
   const { token } = useSelector((state) => state.auth);
   const { plans } = useSelector((state) => state.plan);
 
-  useEffect(()=>{
+  console.log(plans);
+
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Subscription Plans" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) getAllPlans(dispatch, token);
@@ -76,21 +78,21 @@ const Subscription = () => {
                 return (
                   <tr key={index}>
                     <td>{data.name}</td>
-                    <td>₹ {data.prices[0].price}</td>
-                    <td>₹ {data.prices[1].price}</td>
+                    <td>₹ {data.prices[0]?.inr_price}</td>
+                    <td>₹ {data.prices[1]?.inr_price}</td>
                     <td>
                       <span className="active">Active</span>
                     </td>
                     <td className="action-link">
                       <Link
-                        style={{backgroundColor:"#10c469",border:"none"}}
+                        style={{ backgroundColor: "#10c469", border: "none" }}
                         to={`/admin/edit-subscription/${data._id}`}
                         className="btn btn-success"
                       >
                         <FaEdit />
                       </Link>
                       <Link
-                        style={{backgroundColor:"#ff5b5b",border:"none"}}
+                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
                         onClick={() => deleteHandler(data._id)}
                         className="btn btn-danger"
                       >

@@ -48,8 +48,8 @@ const EditSubscription = () => {
   useEffect(() => {
     if (plan.name) {
       setName(plan.name);
-      setMonthly_price(plan.prices[0].price);
-      setYearly_price(plan.prices[1].price);
+      setMonthly_price(plan.prices[0].inr_price);
+      setYearly_price(plan.prices[1].inr_price);
       setUsd_Monthly_price(plan.prices[0].usd_price);
       setUsd_Yearly_price(plan.prices[1].usd_price);
     }
