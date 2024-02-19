@@ -125,7 +125,7 @@ export default function Transaction() {
                           : `₹0`}
                       </td>
                       <td>{transaction?.gateway}</td>
-                      <td>{transaction?.razorpay_payment_id}</td>
+                      <td>{transaction?.payment_id?transaction.payment_id:transaction.razorpay_payment_id}</td>
                       <td>{transaction?.createdAt.slice(0,10)}</td>
                       <td>
                         <a
