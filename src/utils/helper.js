@@ -7,6 +7,7 @@ import { VscListUnordered } from "react-icons/vsc";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { BiCategory } from "react-icons/bi";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
+import { MdEmail } from "react-icons/md";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -22,10 +23,11 @@ export const firstArray = [
     content: "Videos",
     link: "/admin/videos",
   },
-  // {
-  //   icon: <FaVideo className="mx-2" size={18} />,
-  //   content: "Big Expose",
-  // },
+  {
+    icon: <MdEmail className="mx-2" size={18} />,
+    content: "Send Email",
+    link: "/admin/emails"
+  },
   // {
   //   icon: <FaVideo className="mx-2" size={18} />,
   //   content: "Truth",

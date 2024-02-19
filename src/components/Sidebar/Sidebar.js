@@ -51,7 +51,7 @@ export default function Sidebar() {
           );
         })}
       </ul>
-      <ul>
+      {/* <ul>
         <li
           onClick={(e) => {
             e.stopPropagation();
@@ -73,8 +73,8 @@ export default function Sidebar() {
             </div>
           </div>
         </li>
-      </ul>
-      <div
+      </ul> */}
+      {/* <div
         className={`${
           current === "Series" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
@@ -88,7 +88,7 @@ export default function Sidebar() {
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <VscListUnordered size={18} /> Episodes
         </div>
-      </div>
+      </div> */}
       <ul>
         <li
           onClick={(e) => {

@@ -48,6 +48,7 @@ import ViewQuery from "./Pages/Query/ViewQuery.jsx";
 import Faq from "./Pages/Faq/Faq.jsx";
 import AddFaq from "./Pages/Faq/AddFaq.jsx";
 import EditFaq from "./Pages/Faq/EditFaq.jsx";
+import Email from "./Pages/Email/Email.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -368,7 +369,7 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
-             <Route
+            <Route
               path="/admin/edit-faq/:id"
               element={
                 <ProtectedRoute>
@@ -381,6 +382,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <Gateway />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/emails"
+              element={
+                <ProtectedRoute>
+                  <Email />
                 </ProtectedRoute>
               }
             />
