@@ -122,6 +122,7 @@
             background-color: #1c1c1e;
             font-weight: 500;
             vertical-align: middle;
+            font-weight: bold;
           }
         }
       }
@@ -147,7 +148,7 @@
           .action-link {
             display: flex;
             align-items: center;
-            flex-direction: column;
+            flex-direction: row;
             gap: 10px;
 
             a {
@@ -191,6 +192,20 @@
 
     div {
       margin-top: 0 !important;
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .user-body {
+    table {
+      tbody {
+        tr {
+          .action-link {
+            flex-direction: column;
+          }
+        }
+      }
     }
   }
 }
@@ -272,6 +287,6 @@ textarea {
   background: #1c1c1e !important;
   border-color: #313133 !important;
 }
-.card{
+.card {
   background: #1c1c1e !important;
 }

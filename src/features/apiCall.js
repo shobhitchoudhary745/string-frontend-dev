@@ -1,7 +1,6 @@
 import { toast } from "react-toastify";
 import axios from "../utils/axiosUtil";
 import { setPlan, setPlans } from "./planSlice";
-// import { setLoading } from "./generalSlice";
 import { setTransactions } from "./transactionSlice";
 import { setUser, setUsers } from "./userSlice";
 import { setLanguage, setLanguages } from "./languageSlice";
@@ -147,7 +146,9 @@ export const getUser = async (dispatch, token, id) => {
       },
     });
     if (data.success) {
-      dispatch(setUser({ user: data.user }));
+      dispatch(
+        setUser({ user: data.user, user_transactions: data.user_transactions })
+      );
     }
   } catch (error) {
     toast.error(error.message);

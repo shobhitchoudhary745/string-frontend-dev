@@ -10,10 +10,10 @@
   background-color: black;
 }
 
-.parent{
-  min-height:70px;
+.parent {
+  min-height: 70px;
 }
- 
+
 .header_first_child {
   border-right: 1px solid #caa257;
   align-items: center;
@@ -60,7 +60,7 @@
   }
 }
 
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 1000px) {
   .menu_icon {
     display: inline;
   }
@@ -70,8 +70,8 @@
     border: none;
     width: 0px;
   }
-  .parent{
-    height:100%;
+  .parent {
+    height: 100%;
   }
   .menu_icon {
     width: 22px;
@@ -84,10 +84,10 @@
     border: none;
     height: 75px;
   }
-  .sub_child{
-    gap:1rem;
+  .sub_child {
+    gap: 1rem;
   }
-  .header_second_child{
+  .header_second_child {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
   }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { downloadAsCsv, getAllTransactions } from "../../features/apiCall";
@@ -7,6 +8,7 @@ import { FaRegFileExcel, FaSearch } from "react-icons/fa";
 import { LiaFileDownloadSolid } from "react-icons/lia";
 import "./Transaction.scss";
 import { setCurrentPage } from "../../features/generalSlice";
+import { Link } from "react-router-dom";
 
 export default function Transaction() {
   const dispatch = useDispatch();
@@ -42,6 +44,20 @@ export default function Transaction() {
   }, [curPage, resultPerPage, gateway, query, date]);
 
   const numOfPages = Math.ceil(filteredTransactions / resultPerPage);
+
+  const formatDateTime = (dateTimeString) => {
+    const dateTime = new Date(dateTimeString);
+    const month = dateTime.toLocaleString("default", { month: "short" });
+    const day = dateTime.getDate();
+    const year = dateTime.getFullYear();
+    const time = dateTime.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+    return `${day} ${month}, ${year} ${time}`;
+  };
+
   return (
     <div>
       <Card className="user-table">
@@ -89,7 +105,7 @@ export default function Transaction() {
             <Button
               style={{ backgroundColor: "#35b8e0", border: "none" }}
               onClick={() => {
-                downloadAsCsv("Transaction", "transactions",token);
+                downloadAsCsv("Transaction", "transactions", token);
               }}
             >
               <FaRegFileExcel /> Export Transactions
@@ -116,7 +132,11 @@ export default function Transaction() {
                 transactions.map((transaction, index) => {
                   return (
                     <tr key={index}>
-                      <td>{transaction?.user?.name.slice(0,50)}</td>
+                      <td>
+                        <Link to={`/admin/user/${transaction?.user?._id}`}>
+                          {transaction?.user?.name}
+                        </Link>
+                      </td>
                       <td>{transaction?.user?.email}</td>
                       <td>{transaction?.order?.plan_type}</td>
                       <td>
@@ -125,8 +145,14 @@ export default function Transaction() {
                           : `₹0`}
                       </td>
                       <td>{transaction?.gateway}</td>
-                      <td>{transaction?.payment_id?transaction.payment_id:transaction.razorpay_payment_id}</td>
-                      <td>{transaction?.createdAt.slice(0,10)}</td>
+                      <td>
+                        {transaction?.payment_id
+                          ? transaction.payment_id
+                          : transaction.razorpay_payment_id}
+                      </td>
+                      <td style={{ whiteSpace: "nowrap" }}>
+                        {formatDateTime(transaction?.createdAt)}
+                      </td>
                       <td>
                         <a
                           className="p-2 rounded"

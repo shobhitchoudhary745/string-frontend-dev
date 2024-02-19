@@ -7,6 +7,7 @@ const userSlice = createSlice({
     userCount: 0,
     filteredUsers: 0,
     user: {},
+    user_transactions: [],
   },
   reducers: {
     setUsers: (state, action) => {
@@ -16,6 +17,7 @@ const userSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload.user;
+      state.user_transactions = action.payload.user_transactions;
     },
   },
 });

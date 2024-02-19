@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { downloadAsCsv, getAllUsers } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,7 +7,7 @@ import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
 import { FaRegFileExcel, FaEye, FaEdit } from "react-icons/fa";
-import { VscListUnordered } from "react-icons/vsc";
+// import { VscListUnordered } from "react-icons/vsc";
 import { IoClose } from "react-icons/io5";
 import "../../utils/style.scss";
 import "./User.scss";
@@ -175,14 +176,15 @@ export default function User() {
                       <span className="active">Active</span>
                     </td>
                     <td className="action-link">
-                      <Link
+                      {/* <Link
                         style={{ backgroundColor: "#35b8e0", border: "none" }}
                         className="btn btn-info"
                       >
                         <VscListUnordered />
-                      </Link>
+                      </Link> */}
                       <Link
                         style={{ backgroundColor: "#caa257", border: "none" }}
+                        to={`/admin/user/${user?._id}`}
                         className="btn btn-primary"
                       >
                         <FaEye />

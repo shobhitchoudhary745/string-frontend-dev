@@ -49,6 +49,7 @@ import Faq from "./Pages/Faq/Faq.jsx";
 import AddFaq from "./Pages/Faq/AddFaq.jsx";
 import EditFaq from "./Pages/Faq/EditFaq.jsx";
 import Email from "./Pages/Email/Email.jsx";
+import ViewUser from "./Pages/Users/ViewUser.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -94,6 +95,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <User />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/user/:id"
+              element={
+                <ProtectedRoute>
+                  <ViewUser />
                 </ProtectedRoute>
               }
             />

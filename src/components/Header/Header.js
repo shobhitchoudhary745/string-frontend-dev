@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "react-bootstrap";
 import { FaDesktop } from "react-icons/fa6";
@@ -29,7 +29,7 @@ export default function Header() {
     <div className="Header">
       <div className="d-flex parent">
         <div className="d-flex header_first_child ">
-          <Link className="text-center"  to="/">
+          <Link className="text-center" to="/">
             <img
               className="string-geo-logo"
               src="https://stringgeo.com/upload/NewFolder/String%20Geo%20logo%20Icon.png"
@@ -56,6 +56,7 @@ export default function Header() {
             <div className="d-flex gap-3  align-items-center">
               <a
                 target="_blank"
+                rel="noreferrer"
                 style={{ color: "#f9f9f9" }}
                 href={"https://string-geo.vercel.app"}
               >
