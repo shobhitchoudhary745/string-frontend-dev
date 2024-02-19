@@ -62,9 +62,9 @@ export default function User() {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Users" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token)
@@ -140,7 +140,7 @@ export default function User() {
             <Button
               style={{ backgroundColor: "#35b8e0", border: "none" }}
               onClick={() => {
-                downloadAsCsv("User", "users");
+                downloadAsCsv("User", "users", token);
               }}
             >
               <FaRegFileExcel /> Export Users

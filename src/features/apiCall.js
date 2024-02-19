@@ -226,10 +226,15 @@ export const getURL = async (dispatch, token) => {
   }
 };
 
-export const downloadAsCsv = async (Model, Filename = "data") => {
+export const downloadAsCsv = async (Model, Filename = "data", token) => {
   try {
     const { data } = await axios.get(
-      `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`
+      `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
     );
     const blob = new Blob([data], { type: "text/csv" });
     const link = document.createElement("a");
@@ -553,7 +558,6 @@ export const getHomeData = async (dispatch, token) => {
     });
     // console.log(data.coupon)
     if (data.success) {
-      
       dispatch(
         setHomeData({
           homeData: {

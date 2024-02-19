@@ -89,7 +89,7 @@ export default function Transaction() {
             <Button
               style={{ backgroundColor: "#35b8e0", border: "none" }}
               onClick={() => {
-                downloadAsCsv("Transaction", "transactions");
+                downloadAsCsv("Transaction", "transactions",token);
               }}
             >
               <FaRegFileExcel /> Export Transactions
