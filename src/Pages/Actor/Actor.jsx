@@ -21,7 +21,7 @@ const Actor = () => {
 
   useEffect(() => {
     if (token) getAllActors(dispatch, token);
-  }, [token, dispatch]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (

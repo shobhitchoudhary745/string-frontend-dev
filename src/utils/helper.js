@@ -22,26 +22,26 @@ export const firstArray = [
     content: "Videos",
     link: "/admin/videos",
   },
-  {
-    icon: <FaVideo className="mx-2" size={18} />,
-    content: "Big Expose",
-  },
-  {
-    icon: <FaVideo className="mx-2" size={18} />,
-    content: "Truth",
-  },
-  {
-    icon: <FaVideo className="mx-2" size={18} />,
-    content: "Sanatan Dharma",
-  },
-  {
-    icon: <FaVideo className="mx-2" size={18} />,
-    content: "Podcasts",
-  },
-  {
-    icon: <FaVideo className="mx-2" size={18} />,
-    content: "Movies",
-  },
+  // {
+  //   icon: <FaVideo className="mx-2" size={18} />,
+  //   content: "Big Expose",
+  // },
+  // {
+  //   icon: <FaVideo className="mx-2" size={18} />,
+  //   content: "Truth",
+  // },
+  // {
+  //   icon: <FaVideo className="mx-2" size={18} />,
+  //   content: "Sanatan Dharma",
+  // },
+  // {
+  //   icon: <FaVideo className="mx-2" size={18} />,
+  //   content: "Podcasts",
+  // },
+  // {
+  //   icon: <FaVideo className="mx-2" size={18} />,
+  //   content: "Movies",
+  // },
 ];
 
 export const secondArray = [

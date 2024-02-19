@@ -117,7 +117,7 @@ export default function Sidebar() {
           current === "Home" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
       >
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        {/* <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiListBulletsFill size={18} /> Home Video
         </div>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
@@ -125,7 +125,7 @@ export default function Sidebar() {
         </div>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiListBulletsFill size={18} /> Home Section
-        </div>
+        </div> */}
         <div onClick={()=>navigate("/admin/faqs")} className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiListBulletsFill size={18} /> FAQ
         </div>

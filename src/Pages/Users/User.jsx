@@ -77,7 +77,7 @@ export default function User() {
         plan_name,
         plan_type
       );
-  }, [token, curPage, resultPerPage, query, plan_name, plan_type, dispatch]);
+  }, [curPage, resultPerPage, query, plan_name, plan_type]);
 
   const numOfPages = Math.ceil(filteredUsers / resultPerPage);
   return (

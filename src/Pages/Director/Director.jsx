@@ -20,7 +20,7 @@ const Director = () => {
 
   useEffect(() => {
     if (token) getAllDirectors(dispatch, token);
-  }, [token, dispatch]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (

@@ -20,7 +20,7 @@ const Home = () => {
   }, []);
   useEffect(() => {
     if (token) getHomeData(dispatch, token);
-  }, [token]);
+  }, []);
 
   return (
     <div className="d-flex w-100 align-items-center text-center justify-content-center">

@@ -54,7 +54,7 @@ export default function Query() {
 
   useEffect(() => {
     if (token) getQueries(dispatch, token, curPage, resultPerPage, query);
-  }, [token, curPage, resultPerPage, query, dispatch]);
+  }, [curPage, resultPerPage, query]);
 
   const numOfPages = Math.ceil(totalQueryCount / resultPerPage);
   return (

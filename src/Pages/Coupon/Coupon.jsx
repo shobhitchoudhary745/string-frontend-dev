@@ -21,7 +21,7 @@ const Coupon = () => {
 
   useEffect(() => {
     if (token) getAllCoupons(dispatch, token);
-  }, [token, dispatch]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (

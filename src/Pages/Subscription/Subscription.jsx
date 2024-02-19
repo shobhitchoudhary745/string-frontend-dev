@@ -24,7 +24,7 @@ const Subscription = () => {
 
   useEffect(() => {
     if (token) getAllPlans(dispatch, token);
-  }, [dispatch, token]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (

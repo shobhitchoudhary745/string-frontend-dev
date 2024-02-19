@@ -39,7 +39,7 @@ export default function Transaction() {
         date,
         query
       );
-  }, [token, curPage, resultPerPage, gateway, query, date, dispatch]);
+  }, [curPage, resultPerPage, gateway, query, date]);
 
   const numOfPages = Math.ceil(filteredTransactions / resultPerPage);
   return (

@@ -21,7 +21,7 @@ const Category = () => {
 
   useEffect(() => {
     if (token) getCategories(dispatch, token);
-  }, [token, dispatch]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (

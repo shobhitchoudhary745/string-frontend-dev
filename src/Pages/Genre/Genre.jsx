@@ -21,7 +21,7 @@ const Genre = () => {
 
   useEffect(() => {
     if (token) getAllGenres(dispatch, token);
-  }, [token, dispatch]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (

@@ -48,7 +48,7 @@ const Video = () => {
         resultPerPage
       );
     }
-  }, [dispatch, token, language, genres, query, curPage, resultPerPage]);
+  }, [language, genres, query, curPage, resultPerPage]);
 
   useEffect(() => {
     getAllLanguages(dispatch, token);

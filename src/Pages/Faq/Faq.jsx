@@ -21,7 +21,7 @@ const Faq = () => {
 
   useEffect(() => {
     if (token) getAllFaqs(dispatch, token);
-  }, [token, dispatch]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (
