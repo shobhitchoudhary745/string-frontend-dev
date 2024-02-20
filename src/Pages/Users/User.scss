@@ -69,6 +69,10 @@
       flex-direction: row;
       padding: 1.3rem;
 
+      @media screen and (max-width: 440px) {
+        flex-direction: column;
+      }
+
       img {
         width: 155px;
         height: 155px;
