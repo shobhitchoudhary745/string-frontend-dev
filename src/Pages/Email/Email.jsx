@@ -72,7 +72,7 @@ const Email = () => {
 
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
-              <Form.Label>Description</Form.Label>
+              <Form.Label>Body</Form.Label>
             </Col>
             <Col sm={12} md={8}>
               <Form.Control

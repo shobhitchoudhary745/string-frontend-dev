@@ -35,7 +35,7 @@ export default function EditFaq() {
 
   useEffect(() => {
     getFaq(dispatch, token, id);
-  }, [dispatch, token]);
+  }, [token]);
 
   useEffect(() => {
     if (faq.title) {
@@ -133,7 +133,7 @@ export default function EditFaq() {
             </Col>
             <Col sm={12} md={8}>
               <Button onClick={submitHandler}>
-                {loading ? <Spinner /> : "Save"}
+                {loading ? <Spinner /> : "Update"}
               </Button>
             </Col>
           </Row>

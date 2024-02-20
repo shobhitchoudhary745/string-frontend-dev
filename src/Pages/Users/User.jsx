@@ -64,7 +64,7 @@ export default function User() {
   };
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Users" }));
+    dispatch(setCurrentPage({ currentPage: "User" }));
   }, []);
 
   useEffect(() => {

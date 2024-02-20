@@ -1,20 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./Sidebar.scss";
-import { FiFilm } from "react-icons/fi";
-import {
-  FaSliders,
-  FaDollarSign,
-  FaImage,
-  FaListUl,
-  FaFile,
-} from "react-icons/fa6";
-import { LiaSlidersHSolid } from "react-icons/lia";
+
+import { FaSliders, FaDollarSign, FaListUl, FaFile } from "react-icons/fa6";
 import { PiUsersThreeFill, PiListBulletsFill } from "react-icons/pi";
 import { VscListUnordered } from "react-icons/vsc";
 import { FaRegEdit } from "react-icons/fa";
 import { LuPlus } from "react-icons/lu";
-import { LiaTreeSolid } from "react-icons/lia";
 import { HiMiniCog6Tooth } from "react-icons/hi2";
 import {
   MdKeyboardArrowDown,
@@ -126,7 +118,11 @@ export default function Sidebar() {
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiListBulletsFill size={18} /> Home Section
         </div> */}
-        <div onClick={()=>navigate("/admin/faqs")} className="d-flex hidden-list align-items-center gap-3  my-2">
+        <div
+          style={{ color: currentPage === "Faqs" ? "#caa257" : "#f9f9f9" }}
+          onClick={() => navigate("/admin/faqs")}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
           <PiListBulletsFill size={18} /> FAQ
         </div>
       </div>
@@ -159,10 +155,11 @@ export default function Sidebar() {
         }`}
       >
         <Link
+          style={{ color: currentPage === "User" ? "#caa257" : "#f9f9f9" }}
           to={"/admin/users"}
           className="d-flex hidden-list align-items-center gap-3  my-2"
         >
-          <PiUsersThreeFill size={18} /> Users
+          <PiUsersThreeFill size={18} /> User
         </Link>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiUsersThreeFill size={18} /> Sub Admin
@@ -210,10 +207,13 @@ export default function Sidebar() {
         }`}
       >
         <Link
+          style={{
+            color: currentPage === "Transaction" ? "#caa257" : "#f9f9f9",
+          }}
           to={"/admin/transactions"}
           className="d-flex hidden-list align-items-center gap-3  my-2"
         >
-          <VscListUnordered size={18} /> Transactions
+          <VscListUnordered size={18} /> Transaction
         </Link>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <FaListUl size={18} /> Attempt History
@@ -248,6 +248,7 @@ export default function Sidebar() {
         }`}
       >
         <div
+          style={{ color: currentPage === "Pages" ? "#caa257" : "#f9f9f9" }}
           onClick={() => {
             navigate("/admin/pages");
           }}
@@ -256,6 +257,7 @@ export default function Sidebar() {
           <FaFile size={18} /> Pages
         </div>
         <div
+          style={{ color: currentPage === "Add Page" ? "#caa257" : "#f9f9f9" }}
           onClick={() => {
             navigate("/admin/add-page");
           }}
