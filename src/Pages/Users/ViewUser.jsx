@@ -85,7 +85,10 @@ const ViewUser = () => {
                           <FaCircle />
                         </div>
                         <div className="user_desc">
-                          <span>{transaction.order.plan_name}</span>
+                          <span>
+                            {transaction.order.plan_name} -{" "}
+                            {transaction.order.plan_type}
+                          </span>
                           <span>Current Plan</span>
                         </div>
                       </li>
