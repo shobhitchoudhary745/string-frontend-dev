@@ -56,11 +56,11 @@ const Subscription = () => {
     <>
       <Card className="user-table">
         <Card.Header className="user-header">
-          <div className="button">
+          {/* <div className="button">
             <Link to={"/admin/add-subscription"}>
               <HiPlus /> Add Plan
             </Link>
-          </div>
+          </div> */}
         </Card.Header>
         <Card.Body className="user-body">
           <Table responsive striped bordered hover>
@@ -91,13 +91,13 @@ const Subscription = () => {
                       >
                         <FaEdit />
                       </Link>
-                      <Link
+                      {/* <Link
                         style={{ backgroundColor: "#ff5b5b", border: "none" }}
                         onClick={() => deleteHandler(data._id)}
                         className="btn btn-danger"
                       >
                         <IoClose />
-                      </Link>
+                      </Link> */}
                     </td>
                   </tr>
                 );

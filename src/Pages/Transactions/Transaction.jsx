@@ -78,10 +78,15 @@ export default function Transaction() {
           <InputGroup className="user-search">
             <Form.Control
               aria-label="Search Input"
-              placeholder="Search By PaymentId or email"
+              placeholder="Search By PaymentId"
               type="search"
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+                if(e.target.value===""){
+                  setQuery(e.target.value)
+                }
+              }}
             />
             <InputGroup.Text
               style={{ cursor: "pointer" }}

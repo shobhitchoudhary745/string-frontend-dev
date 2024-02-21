@@ -126,7 +126,12 @@ const Video = () => {
               placeholder="Search By title or description"
               type="search"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                if(e.target.value===""){
+                  setQuery(e.target.value)
+                }
+              }}
             />
             <InputGroup.Text
               style={{ cursor: "pointer" }}

@@ -161,9 +161,9 @@ export default function Sidebar() {
         >
           <PiUsersThreeFill size={18} /> User
         </Link>
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        {/* <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <PiUsersThreeFill size={18} /> Sub Admin
-        </div>
+        </div> */}
       </div>
       <ul>
         <li
@@ -283,7 +283,7 @@ export default function Sidebar() {
           );
         })}
       </ul>
-      <ul>
+      {/* <ul>
         <li
           onClick={(e) => {
             e.stopPropagation();
@@ -305,8 +305,8 @@ export default function Sidebar() {
             </div>
           </div>
         </li>
-      </ul>
-      <div
+      </ul> */}
+      {/* <div
         className={`${
           current === "Settings" ? "sidebar_list_show" : "sidebar_list_hide"
         }`}
@@ -320,8 +320,8 @@ export default function Sidebar() {
         <div className={` d-flex hidden-list align-items-center gap-3  my-2`}>
           <VscListUnordered size={18} /> CDN Settings
         </div>
-        {/* </div> */}
-      </div>
+       
+      </div> */}
     </nav>
   ) : (
     <></>

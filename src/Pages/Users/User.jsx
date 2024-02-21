@@ -117,7 +117,12 @@ export default function User() {
               placeholder="Search By name or email"
               type="search"
               value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
+              onChange={(e) => {
+                setSearchInput(e.target.value);
+                if(e.target.value===""){
+                  setQuery(e.target.value)
+                }
+              }}
             />
             <InputGroup.Text
               style={{ cursor: "pointer" }}

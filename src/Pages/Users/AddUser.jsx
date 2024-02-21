@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function AddUser() {
   const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const countries = Country.getAllCountries();
   const [isoCountry, setIsoCountry] = useState("");
@@ -35,38 +36,49 @@ export default function AddUser() {
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Add User" }));
-  },[])
+  }, []);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!name || !email || !password || !mobile || !country || !city || !state) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !mobile ||
+      !country ||
+      !city ||
+      !state
+    ) {
       toast.warning("Please Fill All Fieleds");
       return;
     }
     try {
       dispatch(setLoading());
-      const { data } = await axios.post("/api/user/register", {
-        name,
-        email,
-        password,
-        country,
-        states: state,
-        city,
-        mobile,
-        confirmPassword: password,
-      });
-      if(data.success){
+      const { data } = await axios.post(
+        "/api/admin/add-user",
+        {
+          name,
+          email,
+          password,
+          country,
+          states: state,
+          city,
+          mobile,
+        },
+        { headers: { authorization: `Bearer ${token}` } }
+      );
+      if (data.success) {
         dispatch(setLoading());
         toast.success("User created Successfully.    Redirecting...");
-        setTimeout(()=>{
+        setTimeout(() => {
           navigate("/admin/users");
-        },1200);
+        }, 1200);
       }
     } catch (error) {
       dispatch(setLoading());
-      toast.error(error.message);
+      toast.error(error.response.data.message);
     }
   };
 
@@ -212,7 +224,9 @@ export default function AddUser() {
               <Form.Label></Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <Button onClick={submitHandler}>{loading ? <Spinner /> : "Save"}</Button>
+              <Button onClick={submitHandler}>
+                {loading ? <Spinner /> : "Save"}
+              </Button>
             </Col>
           </Row>
         </Container>

@@ -67,11 +67,11 @@ export const secondArray = [
     content: "Queries",
     link: "/admin/queries",
   },
-  {
-    icon: <IoGiftSharp size={18} className="mx-2" />,
-    content: "Coupons",
-    link: "/admin/coupons",
-  },
+  // {
+  //   icon: <IoGiftSharp size={18} className="mx-2" />,
+  //   content: "Coupons",
+  //   link: "/admin/coupons",
+  // },
   {
     icon: <FaUser size={18} className="mx-2" />,
     content: "Actors",
