@@ -69,7 +69,7 @@ const Gateway = () => {
                 <th>Gateway Name</th>
                 {/* <th>Page Type</th> */}
                 <th>Status</th>
-                <th>Actions</th>
+                {/* <th>Actions</th> */}
               </tr>
             </thead>
             <tbody>
@@ -85,14 +85,14 @@ const Gateway = () => {
                     Active
                   </span>
                 </td>
-                <td className="action-link-1">
+                {/* <td className="action-link-1">
                   <Link
                     style={{ backgroundColor: "#10c469", border: "none" }}
                     className="btn btn-success"
                   >
                     <FaEdit />
                   </Link>
-                </td>
+                </td> */}
               </tr>
               <tr>
                 <td>Paytm</td>
@@ -106,14 +106,14 @@ const Gateway = () => {
                     Active
                   </span>
                 </td>
-                <td className="action-link-1">
+                {/* <td className="action-link-1">
                   <Link
                     style={{ backgroundColor: "#10c469", border: "none" }}
                     className="btn btn-success"
                   >
                     <FaEdit />
                   </Link>
-                </td>
+                </td> */}
               </tr>
             </tbody>
           </Table>
