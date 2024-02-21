@@ -436,9 +436,7 @@ function EditVideo() {
           </Row>
 
           <Row
-            className={`align-items-center ${
-              thumbnailPreview ? "mb-2" : "mb-4"
-            }`}
+            className={`align-items-center mb-1`}
           >
             <Col sm={12} md={3}>
               <Form.Label>Thumbnail</Form.Label>
@@ -451,6 +449,14 @@ function EditVideo() {
                 accept="image/*"
                 placeholder="Select Thumbnail"
               />
+            </Col>
+          </Row>
+          <Row className={`align-items-center mb-4`}>
+            <Col sm={12} md={3}>
+              <Form.Label></Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <label style={{color:"#6c757d"}}>(Recommend 16 x 9 Resolution Image.)</label>
             </Col>
           </Row>
           {thumbnailPreview && (
