@@ -53,9 +53,9 @@ function AddVideo() {
     }
   }, [token, dispatch]);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Add Video" }));
-  },[])
+  }, []);
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
@@ -119,7 +119,7 @@ function AddVideo() {
     setProgress(0);
   };
 
-  console.log(language)
+  console.log(language);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -399,9 +399,7 @@ function AddVideo() {
           </Row>
 
           <Row
-            className={`align-items-center ${
-              thumbnailPreview ? "mb-2" : "mb-4"
-            }`}
+            className={`align-items-center `}
           >
             <Col sm={12} md={3}>
               <Form.Label>Thumbnail</Form.Label>
@@ -414,6 +412,15 @@ function AddVideo() {
                 accept="image/*"
                 placeholder="Select Thumbnail"
               />
+            </Col>
+          </Row>
+
+          <Row className={`align-items-center mb-4`}>
+            <Col sm={12} md={3}>
+              <Form.Label></Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <label style={{color:"#6c757d"}}>(Recommend 16 x 9 Resolution Image.)</label>
             </Col>
           </Row>
           {thumbnailPreview && (

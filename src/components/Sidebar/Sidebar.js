@@ -215,9 +215,9 @@ export default function Sidebar() {
         >
           <VscListUnordered size={18} /> Transaction
         </Link>
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        {/* <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <FaListUl size={18} /> Attempt History
-        </div>
+        </div> */}
       </div>
       <ul>
         <li
@@ -256,7 +256,7 @@ export default function Sidebar() {
         >
           <FaFile size={18} /> Pages
         </div>
-        <div
+        {/* <div
           style={{ color: currentPage === "Add Page" ? "#caa257" : "#f9f9f9" }}
           onClick={() => {
             navigate("/admin/add-page");
@@ -264,7 +264,7 @@ export default function Sidebar() {
           className="d-flex hidden-list align-items-center gap-3  my-2"
         >
           <LuPlus size={18} /> Add Page
-        </div>
+        </div> */}
       </div>
       <ul>
         {secondArray.map((data, index) => {
