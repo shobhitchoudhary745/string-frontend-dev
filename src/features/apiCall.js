@@ -19,6 +19,7 @@ import { setCoupon, setCoupons } from "./couponSlice";
 import { setPage, setPages } from "./pageSlice";
 import { setHomeData } from "./homeSlice";
 import { setFaq, setFaqs } from "./faqSlice";
+import { setLoading } from "./generalSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -30,6 +31,7 @@ export const getAllUsers = async (
   plan_type
 ) => {
   try {
+    dispatch(setLoading())
     const { data } = await axios.get(
       `/api/admin/get-all-users?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&plan_name=${plan_name}&plan_type=${plan_type}`,
       {
@@ -39,6 +41,7 @@ export const getAllUsers = async (
       }
     );
     if (data.success) {
+      dispatch(setLoading())
       dispatch(
         setUsers({
           users: data.users,
@@ -48,6 +51,7 @@ export const getAllUsers = async (
       );
     }
   } catch (error) {
+    dispatch(setLoading())
     toast.error(error.message);
     console.log(error);
   }

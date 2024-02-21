@@ -2,7 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { downloadAsCsv, getAllUsers } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Form,
+  InputGroup,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { HiPlus } from "react-icons/hi";
@@ -19,6 +26,7 @@ import axios from "../../utils/axiosUtil";
 export default function User() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.general);
   const { users, filteredUsers } = useSelector((state) => state.user);
 
   const [curPage, setCurPage] = useState(1);
@@ -119,8 +127,8 @@ export default function User() {
               value={searchInput}
               onChange={(e) => {
                 setSearchInput(e.target.value);
-                if(e.target.value===""){
-                  setQuery(e.target.value)
+                if (e.target.value === "") {
+                  setQuery(e.target.value);
                 }
               }}
             />
@@ -154,74 +162,95 @@ export default function User() {
           </div>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email address</th>
-                <th>Mobile no</th>
-                <th>Plan</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile}</td>
-                    <td>
-                      {user.subscription_plans?.plan_name
-                        ? user.subscription_plans?.plan_name
-                        : "N/A"}
+          {loading ? (
+            <div className="text-center"><Spinner animation="border" style={{color:"#caa257"}} /></div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email address</th>
+                  <th>Mobile no</th>
+                  <th>Plan</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.length === 0 ? (
+                  <tr>
+                    <td colSpan="8" className="text-center">
+                      No Users Found
                     </td>
-                    <td>
-                      <span className="active">Active</span>
-                    </td>
-                    <td className="action-link">
-                      {/* <Link
+                  </tr>
+                ) : (
+                  users.map((user, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{user.name}</td>
+                        <td>{user.email}</td>
+                        <td>{user.mobile}</td>
+                        <td>
+                          {user.subscription_plans?.plan_name
+                            ? user.subscription_plans?.plan_name
+                            : "N/A"}
+                        </td>
+                        <td>
+                          <span className="active">Active</span>
+                        </td>
+                        <td className="action-link">
+                          {/* <Link
                         style={{ backgroundColor: "#35b8e0", border: "none" }}
                         className="btn btn-info"
                       >
                         <VscListUnordered />
                       </Link> */}
-                      <Link
-                        style={{ backgroundColor: "#caa257", border: "none" }}
-                        to={`/admin/user/${user?._id}`}
-                        className="btn btn-primary"
-                      >
-                        <FaEye />
-                      </Link>
-                      <Link
-                        style={{ backgroundColor: "#10c469", border: "none" }}
-                        to={`/admin/edit-user/${user?._id}`}
-                        className="btn btn-success"
-                        onClick={() => {
-                          dispatch(
-                            setCurrentPage({ currentPage: "Edit User" })
-                          );
-                        }}
-                      >
-                        <FaEdit />
-                      </Link>
-                      <Link
-                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                        onClick={() => deleteUserHandler(user?._id)}
-                        className="btn btn-danger"
-                      >
-                        <IoClose />
-                      </Link>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                          <Link
+                            style={{
+                              backgroundColor: "#caa257",
+                              border: "none",
+                            }}
+                            to={`/admin/user/${user?._id}`}
+                            className="btn btn-primary"
+                          >
+                            <FaEye />
+                          </Link>
+                          <Link
+                            style={{
+                              backgroundColor: "#10c469",
+                              border: "none",
+                            }}
+                            to={`/admin/edit-user/${user?._id}`}
+                            className="btn btn-success"
+                            onClick={() => {
+                              dispatch(
+                                setCurrentPage({ currentPage: "Edit User" })
+                              );
+                            }}
+                          >
+                            <FaEdit />
+                          </Link>
+                          <Link
+                            style={{
+                              backgroundColor: "#ff5b5b",
+                              border: "none",
+                            }}
+                            onClick={() => deleteUserHandler(user?._id)}
+                            className="btn btn-danger"
+                          >
+                            <IoClose />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
         <Card.Footer>
-          {resultPerPage < filteredUsers && (
+          {resultPerPage < filteredUsers && !loading && (
             <CustomPagination
               pages={numOfPages}
               pageHandler={curPageHandler}
