@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { Card, Table } from "react-bootstrap";
+import { Card, Spinner, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,10 +14,11 @@ const Actor = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { actors } = useSelector((state) => state.actor);
+  const { loading } = useSelector((state) => state.general);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Actors" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) getAllActors(dispatch, token);
@@ -60,47 +61,67 @@ const Actor = () => {
           </div>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Actor Name</th>
-                <th>Image</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {actors.map((data, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{data.name}</td>
-                    <td>
-                      <img
-                        className="poster"
-                        src={data.profile_url}
-                        alt="profile"
-                      />
-                    </td>
-                    <td className="action-link">
-                      <Link
-                        style={{ backgroundColor: "#10c469", border: "none" }}
-                        to={`/admin/edit-actor/${data._id}`}
-                        className="btn btn-success"
-                      >
-                        <FaEdit />
-                      </Link>
-                      <Link
-                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                        onClick={() => deleteHandler(data._id)}
-                        className="btn btn-danger"
-                      >
-                        <IoClose />
-                      </Link>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Actor Name</th>
+                  <th>Image</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {actors.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" className="text-center">
+                      No Actors Found
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                ) : (
+                  actors.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{data.name}</td>
+                        <td>
+                          <img
+                            className="poster"
+                            src={data.profile_url}
+                            alt="profile"
+                          />
+                        </td>
+                        <td className="action-link">
+                          <Link
+                            style={{
+                              backgroundColor: "#10c469",
+                              border: "none",
+                            }}
+                            to={`/admin/edit-actor/${data._id}`}
+                            className="btn btn-success"
+                          >
+                            <FaEdit />
+                          </Link>
+                          <Link
+                            style={{
+                              backgroundColor: "#ff5b5b",
+                              border: "none",
+                            }}
+                            onClick={() => deleteHandler(data._id)}
+                            className="btn btn-danger"
+                          >
+                            <IoClose />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
       </Card>
     </>
