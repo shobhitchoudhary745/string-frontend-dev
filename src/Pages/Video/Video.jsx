@@ -32,9 +32,9 @@ const Video = () => {
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Videos" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -69,7 +69,15 @@ const Video = () => {
           },
         });
         if (data.success) {
-          getAllVideos(dispatch, token);
+          getAllVideos(
+            dispatch,
+            token,
+            language,
+            genres,
+            query,
+            curPage,
+            resultPerPage
+          );
           dispatch(setLoading());
           toast.success(data.message);
         }
@@ -128,8 +136,8 @@ const Video = () => {
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
-                if(e.target.value===""){
-                  setQuery(e.target.value)
+                if (e.target.value === "") {
+                  setQuery(e.target.value);
                 }
               }}
             />
