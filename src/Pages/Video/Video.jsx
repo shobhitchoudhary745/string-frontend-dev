@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { Card, Form, InputGroup, Table } from "react-bootstrap";
+import { Card, Form, InputGroup, Spinner, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaEdit, FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import CustomPagination from "../../utils/CustomPagination";
 const Video = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.general);
   const { videos, totalVideoCount } = useSelector((state) => state.video);
   const { languages } = useSelector((state) => state.language);
   const { genres: gen } = useSelector((state) => state.genre);
@@ -157,67 +158,91 @@ const Video = () => {
           </div>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Language</th>
-                <th>Access</th>
-                <th>Genres</th>
-                <th>Poster</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {videos.map((data, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{data.title}</td>
-                    <td>{data.description}</td>
-                    <td className="lang">
-                      <span>{data.language?.name}</span>
-                    </td>
-                    <td className="lang">
-                      <span>{data?.access}</span>
-                    </td>
-                    <td>
-                      <div className="cat-item">
-                        {data.genres &&
-                          data.genres.map((genre, i) => {
-                            return <span key={i}>{genre?.name}</span>;
-                          })}
-                      </div>
-                    </td>
-                    <td>
-                      <img className="poster" src={data.thumbnail_url} alt="" />
-                    </td>
-                    <td>
-                      <div className="action-link">
-                        <Link
-                          style={{ backgroundColor: "#10c469", border: "none" }}
-                          to={`/admin/edit-video/${data._id}`}
-                          className="btn btn-success"
-                        >
-                          <FaEdit />
-                        </Link>
-                        <Link
-                          style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                          onClick={() => deleteHandler(data._id)}
-                          className="btn btn-danger"
-                        >
-                          <IoClose />
-                        </Link>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Language</th>
+                  <th>Access</th>
+                  <th>Genres</th>
+                  <th>Poster</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {videos.length === 0 ? (
+                  <tr>
+                  <td colSpan="7" className="text-center">
+                    No Videos Found
+                  </td>
+                </tr>
+                ) : (
+                  videos.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{data.title}</td>
+                        <td>{data.description}</td>
+                        <td className="lang">
+                          <span>{data.language?.name}</span>
+                        </td>
+                        <td className="lang">
+                          <span>{data?.access}</span>
+                        </td>
+                        <td>
+                          <div className="cat-item">
+                            {data.genres &&
+                              data.genres.map((genre, i) => {
+                                return <span key={i}>{genre?.name}</span>;
+                              })}
+                          </div>
+                        </td>
+                        <td>
+                          <img
+                            className="poster"
+                            src={data.thumbnail_url}
+                            alt=""
+                          />
+                        </td>
+                        <td>
+                          <div className="action-link">
+                            <Link
+                              style={{
+                                backgroundColor: "#10c469",
+                                border: "none",
+                              }}
+                              to={`/admin/edit-video/${data._id}`}
+                              className="btn btn-success"
+                            >
+                              <FaEdit />
+                            </Link>
+                            <Link
+                              style={{
+                                backgroundColor: "#ff5b5b",
+                                border: "none",
+                              }}
+                              onClick={() => deleteHandler(data._id)}
+                              className="btn btn-danger"
+                            >
+                              <IoClose />
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
         <Card.Footer>
-          {resultPerPage < totalVideoCount && (
+          {resultPerPage < totalVideoCount && !loading && (
             <CustomPagination
               pages={numOfPages}
               pageHandler={curPageHandler}

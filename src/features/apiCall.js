@@ -31,7 +31,7 @@ export const getAllUsers = async (
   plan_type
 ) => {
   try {
-    dispatch(setLoading())
+    dispatch(setLoading());
     const { data } = await axios.get(
       `/api/admin/get-all-users?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&plan_name=${plan_name}&plan_type=${plan_type}`,
       {
@@ -41,7 +41,7 @@ export const getAllUsers = async (
       }
     );
     if (data.success) {
-      dispatch(setLoading())
+      dispatch(setLoading());
       dispatch(
         setUsers({
           users: data.users,
@@ -51,7 +51,7 @@ export const getAllUsers = async (
       );
     }
   } catch (error) {
-    dispatch(setLoading())
+    dispatch(setLoading());
     toast.error(error.message);
     console.log(error);
   }
@@ -69,6 +69,7 @@ export const getAllTransactions = async (
   try {
     let input_date = null;
     if (date) input_date = new Date(date);
+    dispatch(setLoading());
     const { data } = await axios.get(
       `/api/transaction/get-all-transaction?gateway=${gateway}&from=${input_date}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
@@ -78,6 +79,7 @@ export const getAllTransactions = async (
       }
     );
     if (data.success) {
+      dispatch(setLoading());
       dispatch(
         setTransactions({
           transactions: data.transactions,
@@ -87,6 +89,7 @@ export const getAllTransactions = async (
       );
     }
   } catch (error) {
+    dispatch(setLoading());
     toast.error(error.message);
     console.log(error);
   }
@@ -94,15 +97,18 @@ export const getAllTransactions = async (
 
 export const getAllPlans = async (dispatch, token) => {
   try {
+    dispatch(setLoading())
     const { data } = await axios.get(`/api/plan/get-plans`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
+      dispatch(setLoading())
       dispatch(setPlans({ plans: data.plans }));
     }
   } catch (error) {
+    dispatch(setLoading())
     toast.error(error.message);
     console.log(error);
   }
@@ -269,6 +275,7 @@ export const getAllVideos = async (
   resultPerPage
 ) => {
   try {
+    dispatch(setLoading());
     const { data } = await axios.get(
       `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
@@ -278,6 +285,7 @@ export const getAllVideos = async (
       }
     );
     if (data.success) {
+      dispatch(setLoading());
       dispatch(
         setVideos({
           videos: data.videos,
@@ -286,6 +294,7 @@ export const getAllVideos = async (
       );
     }
   } catch (error) {
+    dispatch(setLoading());
     toast.error(error.message);
     console.log(error);
   }
@@ -391,15 +400,18 @@ export const getDirector = async (dispatch, token, id) => {
 
 export const getCategories = async (dispatch, token) => {
   try {
+    dispatch(setLoading())
     const { data } = await axios.get(`/api/category/get-categories`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
+      dispatch(setLoading())
       dispatch(setCategories({ categories: data.categories }));
     }
   } catch (error) {
+    dispatch(setLoading())
     toast.error(error.message);
     console.log(error);
   }
@@ -448,6 +460,7 @@ export const getQueries = async (
   query
 ) => {
   try {
+    dispatch(setLoading())
     const { data } = await axios.get(
       `/api/query/get-queries?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
@@ -457,6 +470,7 @@ export const getQueries = async (
       }
     );
     if (data.success) {
+      dispatch(setLoading())
       dispatch(
         setQueries({
           queries: data.queries,
@@ -465,6 +479,7 @@ export const getQueries = async (
       );
     }
   } catch (error) {
+    dispatch(setLoading())
     toast.error(error.message);
     console.log(error);
   }
@@ -522,16 +537,19 @@ export const getCoupon = async (dispatch, token, id) => {
 
 export const getAllPages = async (dispatch, token) => {
   try {
+    dispatch(setLoading())
     const { data } = await axios.get(`/api/page/get-pages`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
+      dispatch(setLoading())
       // console.log(data)
       dispatch(setPages({ pages: data.pages }));
     }
   } catch (error) {
+    dispatch(setLoading())
     toast.error(error.message);
     console.log(error);
   }
@@ -584,16 +602,19 @@ export const getHomeData = async (dispatch, token) => {
 
 export const getAllFaqs = async (dispatch, token) => {
   try {
+    dispatch(setLoading())
     const { data } = await axios.get(`/api/faq/get-faqs`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
+      dispatch(setLoading())
       // console.log(data)
       dispatch(setFaqs({ faqs: data.faqs }));
     }
   } catch (error) {
+    dispatch(setLoading())
     toast.error(error.message);
     console.log(error);
   }

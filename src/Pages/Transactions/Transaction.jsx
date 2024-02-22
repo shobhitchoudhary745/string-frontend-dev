@@ -2,7 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { downloadAsCsv, getAllTransactions } from "../../features/apiCall";
-import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Form,
+  InputGroup,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import CustomPagination from "../../utils/CustomPagination";
 import { FaRegFileExcel, FaSearch } from "react-icons/fa";
 import { LiaFileDownloadSolid } from "react-icons/lia";
@@ -13,6 +20,7 @@ import { Link } from "react-router-dom";
 export default function Transaction() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.general);
   const { transactions, filteredTransactions } = useSelector(
     (state) => state.transaction
   );
@@ -83,8 +91,8 @@ export default function Transaction() {
               value={searchInput}
               onChange={(e) => {
                 setSearchInput(e.target.value);
-                if(e.target.value===""){
-                  setQuery(e.target.value)
+                if (e.target.value === "") {
+                  setQuery(e.target.value);
                 }
               }}
             />
@@ -118,73 +126,79 @@ export default function Transaction() {
           </div>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Plan</th>
-                <th>Amount</th>
-                <th>Payment Gateway</th>
-                <th>Payment ID</th>
-                <th>Payment Date</th>
-                <th>Invoice</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions &&
-                transactions.length > 0 &&
-                transactions.map((transaction, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <Link to={`/admin/user/${transaction?.user?._id}`}>
-                          {transaction?.user?.name}
-                        </Link>
-                      </td>
-                      <td>{transaction?.user?.email}</td>
-                      <td>{transaction?.order?.plan_type}</td>
-                      <td>
-                        {transaction?.gateway === "Razorpay"
-                          ? `₹ ${transaction?.amount / 100}`
-                          : `₹0`}
-                      </td>
-                      <td>{transaction?.gateway}</td>
-                      <td>
-                        {transaction?.payment_id
-                          ? transaction.payment_id
-                          : transaction.razorpay_payment_id}
-                      </td>
-                      <td style={{ whiteSpace: "nowrap" }}>
-                        {formatDateTime(transaction?.createdAt)}
-                      </td>
-                      <td>
-                        <a
-                          className="p-2 rounded"
-                          style={{
-                            color: "#f9f9f9",
-                            backgroundColor: "#ff5b5b",
-                          }}
-                          href={transaction?.invoice_url}
-                        >
-                          <LiaFileDownloadSolid />
-                        </a>
-                      </td>
-                    </tr>
-                  );
-                })}
-              {transactions.length === 0 && (
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
                 <tr>
-                  <td colSpan="8" className="text-center">
-                    No Transactions Found
-                  </td>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Plan</th>
+                  <th>Amount</th>
+                  <th>Payment Gateway</th>
+                  <th>Payment ID</th>
+                  <th>Payment Date</th>
+                  <th>Invoice</th>
                 </tr>
-              )}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {transactions &&
+                  transactions.length > 0 &&
+                  transactions.map((transaction, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <Link to={`/admin/user/${transaction?.user?._id}`}>
+                            {transaction?.user?.name}
+                          </Link>
+                        </td>
+                        <td>{transaction?.user?.email}</td>
+                        <td>{transaction?.order?.plan_type}</td>
+                        <td>
+                          {transaction?.gateway === "Razorpay"
+                            ? `₹ ${transaction?.amount / 100}`
+                            : `₹0`}
+                        </td>
+                        <td>{transaction?.gateway}</td>
+                        <td>
+                          {transaction?.payment_id
+                            ? transaction.payment_id
+                            : transaction.razorpay_payment_id}
+                        </td>
+                        <td style={{ whiteSpace: "nowrap" }}>
+                          {formatDateTime(transaction?.createdAt)}
+                        </td>
+                        <td>
+                          <a
+                            className="p-2 rounded"
+                            style={{
+                              color: "#f9f9f9",
+                              backgroundColor: "#ff5b5b",
+                            }}
+                            href={transaction?.invoice_url}
+                          >
+                            <LiaFileDownloadSolid />
+                          </a>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                {transactions.length === 0 && (
+                  <tr>
+                    <td colSpan="8" className="text-center">
+                      No Transactions Found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
         <Card.Footer>
-          {resultPerPage < filteredTransactions && (
+          {resultPerPage < filteredTransactions && !loading && (
             <CustomPagination
               pages={numOfPages}
               pageHandler={curPageHandler}

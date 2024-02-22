@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { Card, Table } from "react-bootstrap";
+import { Card, Spinner, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,10 +14,11 @@ const Faq = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { faqs } = useSelector((state) => state.faq);
+  const { loading } = useSelector((state) => state.general);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Faqs" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) getAllFaqs(dispatch, token);
@@ -31,14 +32,11 @@ const Faq = () => {
     ) {
       try {
         dispatch(setLoading());
-        const { data } = await axios.delete(
-          `/api/faq/delete-faq/${id}`,
-          {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const { data } = await axios.delete(`/api/faq/delete-faq/${id}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
         if (data.success) {
           getAllFaqs(dispatch, token);
           dispatch(setLoading());
@@ -63,52 +61,72 @@ const Faq = () => {
           </div>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {faqs.map((data, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{data.title}</td>
-                    <td>
-                      <span
-                        className="rounded px-2 py-1"
-                        style={{
-                          backgroundColor: `${
-                            data.status === "Active" ? "#10c469" : "#ff5b5b"
-                          }`,
-                        }}
-                      >
-                        {data.status}
-                      </span>
-                    </td>
-                    <td className="action-link-1">
-                      <Link
-                        style={{ backgroundColor: "#10c469", border: "none" }}
-                        to={`/admin/edit-faq/${data._id}`}
-                        className="btn btn-success"
-                      >
-                        <FaEdit />
-                      </Link>
-                      <Link
-                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                        onClick={() => deleteHandler(data._id)}
-                        className="btn btn-danger"
-                      >
-                        <IoClose />
-                      </Link>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {faqs.length === 0 ? (
+                  <tr>
+                    <td colSpan="3" className="text-center">
+                      No Faqs Found
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                ) : (
+                  faqs.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{data.title}</td>
+                        <td>
+                          <span
+                            className="rounded px-2 py-1"
+                            style={{
+                              backgroundColor: `${
+                                data.status === "Active" ? "#10c469" : "#ff5b5b"
+                              }`,
+                            }}
+                          >
+                            {data.status}
+                          </span>
+                        </td>
+                        <td className="action-link-1">
+                          <Link
+                            style={{
+                              backgroundColor: "#10c469",
+                              border: "none",
+                            }}
+                            to={`/admin/edit-faq/${data._id}`}
+                            className="btn btn-success"
+                          >
+                            <FaEdit />
+                          </Link>
+                          <Link
+                            style={{
+                              backgroundColor: "#ff5b5b",
+                              border: "none",
+                            }}
+                            onClick={() => deleteHandler(data._id)}
+                            className="btn btn-danger"
+                          >
+                            <IoClose />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
       </Card>
     </>

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { Card, Table } from "react-bootstrap";
+import { Card, Spinner, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,10 +14,11 @@ const Page = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { pages } = useSelector((state) => state.page);
+  const { loading } = useSelector((state) => state.general);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Pages" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) getAllPages(dispatch, token);
@@ -31,14 +32,11 @@ const Page = () => {
     ) {
       try {
         dispatch(setLoading());
-        const { data } = await axios.delete(
-          `/api/page/delete-page/${id}`,
-          {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const { data } = await axios.delete(`/api/page/delete-page/${id}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
         if (data.success) {
           getAllPages(dispatch, token);
           dispatch(setLoading());
@@ -63,54 +61,74 @@ const Page = () => {
           </div>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Page Title</th>
-                <th>Page Type</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pages.map((data, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{data.title}</td>
-                    <td>{data.type}</td>
-                    <td>
-                      <span
-                        className="rounded px-2 py-1"
-                        style={{
-                          backgroundColor: `${
-                            data.status === "Active" ? "#10c469" : "#ff5b5b"
-                          }`,
-                        }}
-                      >
-                        {data.status}
-                      </span>
-                    </td>
-                    <td className="action-link-1">
-                      <Link
-                        style={{ backgroundColor: "#10c469", border: "none" }}
-                        to={`/admin/edit-page/${data._id}`}
-                        className="btn btn-success"
-                      >
-                        <FaEdit />
-                      </Link>
-                      <Link
-                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                        onClick={() => deleteHandler(data._id)}
-                        className="btn btn-danger"
-                      >
-                        <IoClose />
-                      </Link>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Page Title</th>
+                  <th>Page Type</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pages.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="text-center">
+                      No Pages Found
                     </td>
                   </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                ) : (
+                  pages.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{data.title}</td>
+                        <td>{data.type}</td>
+                        <td>
+                          <span
+                            className="rounded px-2 py-1"
+                            style={{
+                              backgroundColor: `${
+                                data.status === "Active" ? "#10c469" : "#ff5b5b"
+                              }`,
+                            }}
+                          >
+                            {data.status}
+                          </span>
+                        </td>
+                        <td className="action-link-1">
+                          <Link
+                            style={{
+                              backgroundColor: "#10c469",
+                              border: "none",
+                            }}
+                            to={`/admin/edit-page/${data._id}`}
+                            className="btn btn-success"
+                          >
+                            <FaEdit />
+                          </Link>
+                          <Link
+                            style={{
+                              backgroundColor: "#ff5b5b",
+                              border: "none",
+                            }}
+                            onClick={() => deleteHandler(data._id)}
+                            className="btn btn-danger"
+                          >
+                            <IoClose />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
       </Card>
     </>

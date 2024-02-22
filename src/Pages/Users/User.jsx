@@ -163,7 +163,9 @@ export default function User() {
         </Card.Header>
         <Card.Body className="user-body">
           {loading ? (
-            <div className="text-center"><Spinner animation="border" style={{color:"#caa257"}} /></div>
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
           ) : (
             <Table responsive striped bordered hover>
               <thead>
@@ -179,7 +181,7 @@ export default function User() {
               <tbody>
                 {users.length === 0 ? (
                   <tr>
-                    <td colSpan="8" className="text-center">
+                    <td colSpan="6" className="text-center">
                       No Users Found
                     </td>
                   </tr>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getQueries } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Form, InputGroup, Table } from "react-bootstrap";
+import { Card, Form, InputGroup, Spinner, Table } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
@@ -16,7 +16,7 @@ export default function Query() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { queries, totalQueryCount } = useSelector((state) => state.query);
-
+  const { loading } = useSelector((state) => state.general);
   const [curPage, setCurPage] = useState(1);
   const [searchInput, setSearchInput] = useState("");
   const [query, setQuery] = useState("");
@@ -69,8 +69,8 @@ export default function Query() {
               value={searchInput}
               onChange={(e) => {
                 setSearchInput(e.target.value);
-                if(e.target.value===""){
-                  setQuery(e.target.value)
+                if (e.target.value === "") {
+                  setQuery(e.target.value);
                 }
               }}
             />
@@ -85,55 +85,69 @@ export default function Query() {
           </InputGroup>
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Mobile no</th>
-                <th>Company</th>
-                <th>Address</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {queries && queries.length > 0 ? (
-                queries.map((query, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{query.name}</td>
-                      <td>{query.email}</td>
-                      <td>{query.mobile}</td>
-                      <td>{query.company_name ? query.company_name : "N/A"}</td>
-                      <td>{query.address}</td>
-                      <td className="action-link-1">
-                        <Link
-                          to={`/admin/query/${query._id}`}
-                          style={{ backgroundColor: "#caa257", border: "none" }}
-                          className="btn btn-primary"
-                        >
-                          <FaEye />
-                        </Link>
-                        <Link
-                          style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                          onClick={() => deleteQueryHandler(query?._id)}
-                          className="btn btn-danger"
-                        >
-                          <IoClose />
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })
-              ) : (
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
                 <tr>
-                  <td colSpan="6" className="text-center">
-                    No Queries Found
-                  </td>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile no</th>
+                  <th>Company</th>
+                  <th>Address</th>
+                  <th>Actions</th>
                 </tr>
-              )}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {queries && queries.length > 0 ? (
+                  queries.map((query, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{query.name}</td>
+                        <td>{query.email}</td>
+                        <td>{query.mobile}</td>
+                        <td>
+                          {query.company_name ? query.company_name : "N/A"}
+                        </td>
+                        <td>{query.address}</td>
+                        <td className="action-link-1">
+                          <Link
+                            to={`/admin/query/${query._id}`}
+                            style={{
+                              backgroundColor: "#caa257",
+                              border: "none",
+                            }}
+                            className="btn btn-primary"
+                          >
+                            <FaEye />
+                          </Link>
+                          <Link
+                            style={{
+                              backgroundColor: "#ff5b5b",
+                              border: "none",
+                            }}
+                            onClick={() => deleteQueryHandler(query?._id)}
+                            className="btn btn-danger"
+                          >
+                            <IoClose />
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="text-center">
+                      No Queries Found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
         <Card.Footer>
           {resultPerPage < totalQueryCount && (

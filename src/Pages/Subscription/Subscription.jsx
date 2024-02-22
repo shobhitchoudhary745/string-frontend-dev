@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./Subscription.scss";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { Card, Table } from "react-bootstrap";
+import { Card, Spinner, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,7 @@ const Subscription = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { plans } = useSelector((state) => state.plan);
+  const { loading } = useSelector((state) => state.general);
 
   console.log(plans);
 
@@ -63,47 +64,64 @@ const Subscription = () => {
           </div> */}
         </Card.Header>
         <Card.Body className="user-body">
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Plan Name</th>
-                <th>Monthly Price</th>
-                <th>Yearly Price</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plans.map((data, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{data.name}</td>
-                    <td>₹ {data.prices[0]?.inr_price}</td>
-                    <td>₹ {data.prices[1]?.inr_price}</td>
-                    <td>
-                      <span className="active">Active</span>
-                    </td>
-                    <td className="action-link">
-                      <Link
-                        style={{ backgroundColor: "#10c469", border: "none" }}
-                        to={`/admin/edit-subscription/${data._id}`}
-                        className="btn btn-success"
-                      >
-                        <FaEdit />
-                      </Link>
-                      {/* <Link
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" style={{ color: "#caa257" }} />
+            </div>
+          ) : (
+            <Table responsive striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Plan Name</th>
+                  <th>Monthly Price</th>
+                  <th>Yearly Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {plans.length === 0 ? (
+                   <tr>
+                   <td colSpan="5" className="text-center">
+                     No Plans Found
+                   </td>
+                 </tr>
+                ) : (
+                  plans.map((data, index) => {
+                    return (
+                      <tr key={index}>
+                        <td>{data.name}</td>
+                        <td>₹ {data.prices[0]?.inr_price}</td>
+                        <td>₹ {data.prices[1]?.inr_price}</td>
+                        <td>
+                          <span className="active">Active</span>
+                        </td>
+                        <td className="action-link">
+                          <Link
+                            style={{
+                              backgroundColor: "#10c469",
+                              border: "none",
+                            }}
+                            to={`/admin/edit-subscription/${data._id}`}
+                            className="btn btn-success"
+                          >
+                            <FaEdit />
+                          </Link>
+                          {/* <Link
                         style={{ backgroundColor: "#ff5b5b", border: "none" }}
                         onClick={() => deleteHandler(data._id)}
                         className="btn btn-danger"
                       >
                         <IoClose />
                       </Link> */}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </Table>
+          )}
         </Card.Body>
       </Card>
     </>
