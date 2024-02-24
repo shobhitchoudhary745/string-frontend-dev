@@ -6,6 +6,7 @@ import { setCurrentPage } from "../../features/generalSlice";
 import { getUser } from "../../features/apiCall";
 import { useParams } from "react-router-dom";
 import { FaCircle } from "react-icons/fa";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const ViewUser = () => {
   const { id } = useParams();
@@ -53,7 +54,8 @@ const ViewUser = () => {
     <div>
       <Container className="view_user">
         <Card>
-          <img src={user.avatar} alt=""></img>
+          {/* <img src={user.avatar} alt=""></img> */}
+          <LazyLoadImage alt={"Profile"} src={user.avatar} effect="blur" />
           <div className="user_info">
             <div className="user_name">
               <h4>{user.name}</h4>

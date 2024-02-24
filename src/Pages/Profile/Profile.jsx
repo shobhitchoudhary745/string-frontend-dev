@@ -15,6 +15,7 @@ import axios from "../../utils/axiosUtil";
 import { setLoading } from "../../features/generalSlice";
 import { useNavigate } from "react-router-dom";
 import { setToken } from "../../features/authSlice";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -94,7 +95,7 @@ export default function Profile() {
         <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
             <Col sm={12}>
-              <img
+              {/* <img
                 style={{
                   cursor: "pointer",
                   width: "150px",
@@ -102,6 +103,18 @@ export default function Profile() {
                   borderRadius: "0.25rem",
                 }}
                 src={userProfile}
+              /> */}
+
+              <LazyLoadImage
+                style={{
+                  cursor: "pointer",
+                  width: "150px",
+                  height: "150px",
+                  borderRadius: "0.25rem",
+                }}
+                alt={"Profile"}
+                src={userProfile}
+                effect="blur"
               />
             </Col>
           </Row>

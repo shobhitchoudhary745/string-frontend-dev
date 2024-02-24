@@ -9,6 +9,7 @@ import { getAllActors } from "../../features/apiCall";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Actor = () => {
   const dispatch = useDispatch();
@@ -87,10 +88,16 @@ const Actor = () => {
                       <tr key={index}>
                         <td>{data.name}</td>
                         <td>
-                          <img
+                          {/* <img
                             className="poster"
                             src={data.profile_url}
                             alt="profile"
+                          /> */}
+                          <LazyLoadImage
+                            alt={"Profile"}
+                            src={data.profile_url}
+                            className="poster"
+                            effect="blur"
                           />
                         </td>
                         <td className="action-link">

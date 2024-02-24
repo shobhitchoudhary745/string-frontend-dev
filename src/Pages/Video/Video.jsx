@@ -15,6 +15,7 @@ import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 import "./Video.scss";
 import CustomPagination from "../../utils/CustomPagination";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Video = () => {
   const dispatch = useDispatch();
@@ -178,10 +179,10 @@ const Video = () => {
               <tbody>
                 {videos.length === 0 ? (
                   <tr>
-                  <td colSpan="7" className="text-center">
-                    No Videos Found
-                  </td>
-                </tr>
+                    <td colSpan="7" className="text-center">
+                      No Videos Found
+                    </td>
+                  </tr>
                 ) : (
                   videos.map((data, index) => {
                     return (
@@ -203,10 +204,16 @@ const Video = () => {
                           </div>
                         </td>
                         <td>
-                          <img
+                          {/* <img
                             className="poster"
                             src={data.thumbnail_url}
                             alt=""
+                          /> */}
+                          <LazyLoadImage
+                            alt={"Profile"}
+                            src={data.thumbnail_url}
+                            effect="blur"
+                            className="poster"
                           />
                         </td>
                         <td>

@@ -9,6 +9,7 @@ import { getAllDirectors } from "../../features/apiCall";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const Director = () => {
   const dispatch = useDispatch();
@@ -90,10 +91,11 @@ const Director = () => {
                       <tr key={index}>
                         <td>{data.name}</td>
                         <td>
-                          <img
-                            className="poster"
+                        <LazyLoadImage
+                            alt={"Profile"}
                             src={data.profile_url}
-                            alt="profile"
+                            className="poster"
+                            effect="blur"
                           />
                         </td>
                         <td className="action-link">
