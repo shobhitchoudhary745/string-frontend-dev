@@ -86,79 +86,100 @@ const ViewCategory = () => {
         </div>
       </Card.Header>
       <Card.Body className="user-body">
-        <Table responsive striped bordered hover>
-          <thead>
-            <tr>
-              <th>S No</th>
-              <th>Title</th>
-              <th>Poster</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {videos_category.map((data, index) => {
-              return (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{data.title}</td>
-                  <td>
-                    <img className="poster" src={data.thumbnail_url} alt="" />
-                  </td>
-                  <td>
-                    <div className="action-link">
-                      {category.video_array &&
-                      category.video_array
-                        .map((video, index) => {
-                          return video.video._id;
-                        })
-                        .includes(data._id) ? (
-                        <Link
-                          style={{
-                            border: "none",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                          }}
-                          onClick={() => {
-                            setCurrent(index);
-                            removeVideo(data._id);
-                          }}
-                          className="btn btn-danger"
-                        >
-                          {loading && current === index ? (
-                            <Spinner />
-                          ) : (
-                            <>
-                              <MdRemoveCircleOutline />
-                              Remove
-                            </>
-                          )}
-                        </Link>
-                      ) : (
-                        <Link
-                          style={{ backgroundColor: "#10c469", border: "none" }}
-                          onClick={() => {
-                            setCurrent(index);
-                            addVideo(data._id);
-                          }}
-                          className="btn btn-success"
-                        >
-                          {loading && current === index ? (
-                            <Spinner />
-                          ) : (
-                            <>
-                              <HiPlus /> Add
-                            </>
-                          )}
-                        </Link>
-                      )}
-                    </div>
+        {loading ? (
+          <div className="text-center">
+            <Spinner animation="border" style={{ color: "#caa257" }} />
+          </div>
+        ) : (
+          <Table responsive striped bordered hover>
+            <thead>
+              <tr>
+                <th>S No</th>
+                <th>Title</th>
+                <th>Poster</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {videos_category.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    No Video in This Category
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+              ) : (
+                videos_category.map((data, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{data.title}</td>
+                      <td>
+                        <img
+                          className="poster"
+                          src={data.thumbnail_url}
+                          alt=""
+                        />
+                      </td>
+                      <td>
+                        <div className="action-link">
+                          {category.video_array &&
+                          category.video_array
+                            .map((video, index) => {
+                              return video.video._id;
+                            })
+                            .includes(data._id) ? (
+                            <Link
+                              style={{
+                                border: "none",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "5px",
+                              }}
+                              onClick={() => {
+                                setCurrent(index);
+                                removeVideo(data._id);
+                              }}
+                              className="btn btn-danger"
+                            >
+                              {loading && current === index ? (
+                                <Spinner />
+                              ) : (
+                                <>
+                                  <MdRemoveCircleOutline />
+                                  Remove
+                                </>
+                              )}
+                            </Link>
+                          ) : (
+                            <Link
+                              style={{
+                                backgroundColor: "#10c469",
+                                border: "none",
+                              }}
+                              onClick={() => {
+                                setCurrent(index);
+                                addVideo(data._id);
+                              }}
+                              className="btn btn-success"
+                            >
+                              {loading && current === index ? (
+                                <Spinner />
+                              ) : (
+                                <>
+                                  <HiPlus /> Add
+                                </>
+                              )}
+                            </Link>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </Table>
+        )}
       </Card.Body>
     </Card>
   );

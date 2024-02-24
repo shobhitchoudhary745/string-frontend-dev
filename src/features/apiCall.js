@@ -318,15 +318,18 @@ export const getVideo = async (dispatch, token, id) => {
 
 export const getCategoryVideo = async (dispatch, token, id) => {
   try {
+    dispatch(setLoading())
     const { data } = await axios.get(`/api/video/get-video-category/${id}`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
+      dispatch(setLoading())
       dispatch(setCategoryVideos({ videos_category: data.videos_category }));
     }
   } catch (error) {
+    dispatch(setLoading())
     toast.error(error.message);
     console.log(error);
   }

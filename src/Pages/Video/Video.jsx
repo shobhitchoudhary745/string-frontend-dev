@@ -54,7 +54,7 @@ const Video = () => {
   useEffect(() => {
     getAllLanguages(dispatch, token);
     getAllGenres(dispatch, token);
-  }, [token, dispatch]);
+  }, []);
 
   const deleteHandler = async (id) => {
     if (
