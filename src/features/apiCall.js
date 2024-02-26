@@ -20,6 +20,7 @@ import { setPage, setPages } from "./pageSlice";
 import { setHomeData } from "./homeSlice";
 import { setFaq, setFaqs } from "./faqSlice";
 import { setLoading } from "./generalSlice";
+import * as XLSX from 'xlsx';
 
 export const getAllUsers = async (
   dispatch,
@@ -237,7 +238,35 @@ export const getURL = async (dispatch, token) => {
   }
 };
 
-export const downloadAsCsv = async (Model, Filename = "data", token) => {
+// export const downloadAsCsv = async (Model, Filename = "data", token) => {
+//   try {
+//     const { data } = await axios.get(
+//       `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`,
+//       {
+//         headers: {
+//           authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     const blob = new Blob([data], { type: "text/xlsx" });
+//     const link = document.createElement("a");
+//     link.href = window.URL.createObjectURL(blob);
+//     link.setAttribute("download", Filename + ".xlsx");
+//     link.style.display = "none";
+//     document.body.appendChild(link);
+//     link.click();
+//     toast.success("File Downloaded Successfully");
+//     setTimeout(() => {
+//       document.body.removeChild(link);
+//     }, 1000);
+//     console.log(blob);
+//   } catch (error) {
+//     toast.error(error.response.data.message);
+//     console.log(error);
+//   }
+// };
+
+export const downloadAsCsv = async (Model, Filename = 'data', token) => {
   try {
     const { data } = await axios.get(
       `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`,
@@ -245,20 +274,27 @@ export const downloadAsCsv = async (Model, Filename = "data", token) => {
         headers: {
           authorization: `Bearer ${token}`,
         },
+        responseType: 'arraybuffer', // Important for binary data
       }
     );
-    const blob = new Blob([data], { type: "text/csv" });
-    const link = document.createElement("a");
+
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    const xlsxData = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const blob = new Blob([xlsxData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute("download", Filename + ".csv");
-    link.style.display = "none";
+    link.setAttribute('download', `${Filename}.xlsx`);
+
     document.body.appendChild(link);
     link.click();
-    toast.success("File Downloaded Successfully");
-    setTimeout(() => {
-      document.body.removeChild(link);
-    }, 1000);
-    console.log(blob);
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(link.href);
+    
+    toast.success('File Downloaded Successfully');
   } catch (error) {
     toast.error(error.response.data.message);
     console.log(error);
