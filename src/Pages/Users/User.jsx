@@ -173,6 +173,9 @@ export default function User() {
                   <th>Name</th>
                   <th>Email address</th>
                   <th>Mobile no</th>
+                  <th>Country</th>
+                  <th>State</th>
+                  <th>City</th>
                   <th>Plan</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -181,7 +184,7 @@ export default function User() {
               <tbody>
                 {users.length === 0 ? (
                   <tr>
-                    <td colSpan="6" className="text-center">
+                    <td colSpan="9" className="text-center">
                       No Users Found
                     </td>
                   </tr>
@@ -192,6 +195,9 @@ export default function User() {
                         <td>{user.name}</td>
                         <td>{user.email}</td>
                         <td>{user.mobile}</td>
+                        <td>{user.country}</td>
+                        <td>{user.states}</td>
+                        <td>{user.city}</td>
                         <td>
                           {user.subscription_plans?.plan_name
                             ? user.subscription_plans?.plan_name
