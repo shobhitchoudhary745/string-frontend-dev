@@ -20,7 +20,8 @@ import { setPage, setPages } from "./pageSlice";
 import { setHomeData } from "./homeSlice";
 import { setFaq, setFaqs } from "./faqSlice";
 import { setLoading } from "./generalSlice";
-import * as XLSX from 'xlsx';
+import * as XLSX from "xlsx";
+import { setTrailers } from "./trailerSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -266,7 +267,7 @@ export const getURL = async (dispatch, token) => {
 //   }
 // };
 
-export const downloadAsCsv = async (Model, Filename = 'data', token) => {
+export const downloadAsCsv = async (Model, Filename = "data", token) => {
   try {
     const { data } = await axios.get(
       `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`,
@@ -274,27 +275,29 @@ export const downloadAsCsv = async (Model, Filename = 'data', token) => {
         headers: {
           authorization: `Bearer ${token}`,
         },
-        responseType: 'arraybuffer', // Important for binary data
+        responseType: "arraybuffer", // Important for binary data
       }
     );
 
-    const workbook = XLSX.read(data, { type: 'array' });
+    const workbook = XLSX.read(data, { type: "array" });
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
-    const xlsxData = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
 
-    const blob = new Blob([xlsxData], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-    const link = document.createElement('a');
+    const blob = new Blob([xlsxData], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
-    link.setAttribute('download', `${Filename}.xlsx`);
+    link.setAttribute("download", `${Filename}.xlsx`);
 
     document.body.appendChild(link);
     link.click();
 
     document.body.removeChild(link);
     window.URL.revokeObjectURL(link.href);
-    
-    toast.success('File Downloaded Successfully');
+
+    toast.success("File Downloaded Successfully");
   } catch (error) {
     toast.error(error.response.data.message);
     console.log(error);
@@ -354,18 +357,18 @@ export const getVideo = async (dispatch, token, id) => {
 
 export const getCategoryVideo = async (dispatch, token, id) => {
   try {
-    dispatch(setLoading())
+    dispatch(setLoading());
     const { data } = await axios.get(`/api/video/get-video-category/${id}`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
-      dispatch(setLoading())
+      dispatch(setLoading());
       dispatch(setCategoryVideos({ videos_category: data.videos_category }));
     }
   } catch (error) {
-    dispatch(setLoading())
+    dispatch(setLoading());
     toast.error(error.message);
     console.log(error);
   }
@@ -677,6 +680,25 @@ export const getFaq = async (dispatch, token, id) => {
       dispatch(setFaq({ faq: data.faq }));
     }
   } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllTrailers = async (dispatch) => {
+  try {
+    // dispatch(setLoading());
+    const { data } = await axios.get(`/api/trailer/get-trailers`);
+    if (data.success) {
+      // dispatch(setLoading());
+      dispatch(
+        setTrailers({
+          trailers: data.trailers,
+        })
+      );
+    }
+  } catch (error) {
+    // dispatch(setLoading());
     toast.error(error.message);
     console.log(error);
   }

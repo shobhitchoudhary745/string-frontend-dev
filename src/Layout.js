@@ -50,6 +50,7 @@ import AddFaq from "./Pages/Faq/AddFaq.jsx";
 import EditFaq from "./Pages/Faq/EditFaq.jsx";
 import Email from "./Pages/Email/Email.jsx";
 import ViewUser from "./Pages/Users/ViewUser.jsx";
+import Trailer from "./Pages/Trailer/Trailer.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -335,6 +336,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditCategory />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/trailers"
+              element={
+                <ProtectedRoute>
+                  <Trailer />
                 </ProtectedRoute>
               }
             />

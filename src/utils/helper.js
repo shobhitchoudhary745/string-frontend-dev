@@ -72,6 +72,11 @@ export const secondArray = [
     content: "Carousel",
     link: "/admin/carousels",
   },
+  {
+    icon: <BiCategory size={18} className="mx-2" />,
+    content: "Trailer",
+    link: "/admin/trailers",
+  },
   // {
   //   icon: <IoGiftSharp size={18} className="mx-2" />,
   //   content: "Coupons",
