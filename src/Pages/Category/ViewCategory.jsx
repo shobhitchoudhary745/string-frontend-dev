@@ -18,6 +18,7 @@ const ViewCategory = () => {
   const { category } = useSelector((state) => state.category);
   const { videos_category } = useSelector((state) => state.video);
   const [current, setCurrent] = useState(-1);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -28,7 +29,7 @@ const ViewCategory = () => {
 
   const addVideo = async (video_id) => {
     try {
-      dispatch(setLoading());
+      setLoad(true);
       const { data } = await axios.post(
         `/api/category/add-category-video/${id}`,
         { video_id },
@@ -37,12 +38,12 @@ const ViewCategory = () => {
         }
       );
       if (data.success) {
+        setLoad(false);
         getCategory(dispatch, token, id);
-        dispatch(setLoading());
         toast.success("Video Added Successfully.");
       }
     } catch (error) {
-      dispatch(setLoading());
+      setLoad(false);
       toast.error(error.response.data.message);
       console.log(error);
     }
@@ -50,7 +51,7 @@ const ViewCategory = () => {
 
   const removeVideo = async (video_id) => {
     try {
-      dispatch(setLoading());
+      setLoad(true);
       const { data } = await axios.post(
         `/api/category/remove-category-video/${id}`,
         { video_id },
@@ -59,12 +60,12 @@ const ViewCategory = () => {
         }
       );
       if (data.success) {
+        setLoad(false);
         getCategory(dispatch, token, id);
-        dispatch(setLoading());
         toast.success("Video Removed Successfully.");
       }
     } catch (error) {
-      dispatch(setLoading());
+      setLoad(false);
       toast.error(error.response.data.message);
       console.log(error);
     }
@@ -141,7 +142,7 @@ const ViewCategory = () => {
                               }}
                               className="btn btn-danger"
                             >
-                              {loading && current === index ? (
+                              {load && current === index ? (
                                 <Spinner />
                               ) : (
                                 <>
@@ -162,7 +163,7 @@ const ViewCategory = () => {
                               }}
                               className="btn btn-success"
                             >
-                              {loading && current === index ? (
+                              {load && current === index ? (
                                 <Spinner />
                               ) : (
                                 <>
