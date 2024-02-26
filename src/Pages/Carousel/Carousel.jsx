@@ -4,43 +4,46 @@ import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Card, Spinner, Table } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
-import { FaEdit } from "react-icons/fa";
+// import { FaEdit, FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllActors } from "../../features/apiCall";
+import { getAllCarousels } from "../../features/apiCall";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
-const Actor = () => {
+const Carousel = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  const { actors } = useSelector((state) => state.actor);
+  const { carousels } = useSelector((state) => state.carousel);
   const { loading } = useSelector((state) => state.general);
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Actors" }));
+    dispatch(setCurrentPage({ currentPage: "Add Carousel" }));
   }, []);
 
   useEffect(() => {
-    if (token) getAllActors(dispatch, token);
+    if (token) getAllCarousels(dispatch);
   }, []);
 
   const deleteHandler = async (id) => {
     if (
       window.confirm(
-        "Are you sure you want to delete this Actor?\nThis action cannot be undone."
+        "Are you sure you want to delete this Carousel?\nThis action cannot be undone."
       ) === true
     ) {
       try {
         dispatch(setLoading());
-        const { data } = await axios.delete(`/api/actor/delete-actor/${id}`, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
+        const { data } = await axios.delete(
+          `/api/carousel/delete-carousel/${id}`,
+          {
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (data.success) {
-          getAllActors(dispatch, token);
+          getAllCarousels(dispatch);
           dispatch(setLoading());
           toast.success(data.message);
         }
@@ -57,8 +60,8 @@ const Actor = () => {
       <Card className="user-table">
         <Card.Header className="user-header">
           <div className="button">
-            <Link to={"/admin/add-actor"}>
-              <HiPlus /> Add Actor
+            <Link to={"/admin/add-carousel"}>
+              <HiPlus /> Add New Carousel
             </Link>
           </div>
         </Card.Header>
@@ -71,47 +74,32 @@ const Actor = () => {
             <Table responsive striped bordered hover>
               <thead>
                 <tr>
-                  <th>Actor Name</th>
-                  <th>Image</th>
+                  <th>Carousel Video Title</th>
+                  <th>Carousel Poster</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {actors.length === 0 ? (
+                {carousels.length === 0 ? (
                   <tr>
                     <td colSpan="3" className="text-center">
-                      No Actors Found
+                      No Carousel Found
                     </td>
                   </tr>
                 ) : (
-                  actors.map((data, index) => {
+                  carousels.map((data, index) => {
                     return (
                       <tr key={index}>
-                        <td>{data.name}</td>
+                        <td>{data.video_id.title}</td>
                         <td>
-                          {/* <img
-                            className="poster"
-                            src={data.profile_url}
-                            alt="profile"
-                          /> */}
                           <LazyLoadImage
                             alt={"Profile"}
-                            src={data.profile_url}
-                            className="poster"
+                            src={data.poster_url}
                             effect="blur"
+                            className="poster"
                           />
                         </td>
                         <td className="action-link">
-                          <Link
-                            style={{
-                              backgroundColor: "#10c469",
-                              border: "none",
-                            }}
-                            to={`/admin/edit-actor/${data._id}`}
-                            className="btn btn-success"
-                          >
-                            <FaEdit />
-                          </Link>
                           <Link
                             style={{
                               backgroundColor: "#ff5b5b",
@@ -120,7 +108,7 @@ const Actor = () => {
                             onClick={() => deleteHandler(data._id)}
                             className="btn btn-danger"
                           >
-                            <IoClose />
+                            <IoClose /> Delete Carousel
                           </Link>
                         </td>
                       </tr>
@@ -136,4 +124,4 @@ const Actor = () => {
   );
 };
 
-export default Actor;
+export default Carousel;

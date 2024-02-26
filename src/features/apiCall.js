@@ -22,6 +22,7 @@ import { setFaq, setFaqs } from "./faqSlice";
 import { setLoading } from "./generalSlice";
 import * as XLSX from "xlsx";
 import { setTrailers } from "./trailerSlice";
+import { setCarousels } from "./carouselSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -687,10 +688,8 @@ export const getFaq = async (dispatch, token, id) => {
 
 export const getAllTrailers = async (dispatch) => {
   try {
-    // dispatch(setLoading());
     const { data } = await axios.get(`/api/trailer/get-trailers`);
     if (data.success) {
-      // dispatch(setLoading());
       dispatch(
         setTrailers({
           trailers: data.trailers,
@@ -698,7 +697,22 @@ export const getAllTrailers = async (dispatch) => {
       );
     }
   } catch (error) {
-    // dispatch(setLoading());
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllCarousels = async (dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/carousel/get-all-carousel`);
+    if (data.success) {
+      dispatch(
+        setCarousels({
+          carousels: data.carousels,
+        })
+      );
+    }
+  } catch (error) {
     toast.error(error.message);
     console.log(error);
   }

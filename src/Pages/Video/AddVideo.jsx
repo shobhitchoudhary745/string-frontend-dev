@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
 import "./Video.scss";
@@ -43,7 +44,6 @@ function AddVideo() {
   const [estimatedSecond, setEstimatedSecond] = useState(0);
   const [estimatedMinute, setEstimatedMinute] = useState(0);
   const [estimateHour, setEstimatedHour] = useState(0);
-  // const [fileSize, setFileSize] = useState(0);
 
   useEffect(() => {
     if (token) {
@@ -59,8 +59,6 @@ function AddVideo() {
 
   const handleVideoChange = (e) => {
     const file = e.target.files[0];
-    // setFileSize(file.size);
-    // console.log(file.size);
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -118,8 +116,6 @@ function AddVideo() {
     setGenres_id([]);
     setProgress(0);
   };
-
-  console.log(language);
 
   const submitHandler = async (e) => {
     e.preventDefault();

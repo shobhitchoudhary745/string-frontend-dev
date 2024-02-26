@@ -51,6 +51,9 @@ import EditFaq from "./Pages/Faq/EditFaq.jsx";
 import Email from "./Pages/Email/Email.jsx";
 import ViewUser from "./Pages/Users/ViewUser.jsx";
 import Trailer from "./Pages/Trailer/Trailer.jsx";
+import Carousel from "./Pages/Carousel/Carousel.jsx";
+import ViewAllVideo from "./Pages/Carousel/ViewAllVideo.jsx";
+import AddCarousel from "./Pages/Carousel/AddCarousel.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -424,6 +427,30 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <ViewQuery />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/carousels"
+              element={
+                <ProtectedRoute>
+                  <Carousel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-carousel"
+              element={
+                <ProtectedRoute>
+                  <ViewAllVideo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-carousel/:id"
+              element={
+                <ProtectedRoute>
+                  <AddCarousel />
                 </ProtectedRoute>
               }
             />

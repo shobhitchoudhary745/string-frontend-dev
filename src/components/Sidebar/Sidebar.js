@@ -6,12 +6,12 @@ import { FaSliders, FaDollarSign, FaListUl, FaFile } from "react-icons/fa6";
 import { PiUsersThreeFill, PiListBulletsFill } from "react-icons/pi";
 import { VscListUnordered } from "react-icons/vsc";
 import { FaRegEdit } from "react-icons/fa";
-import { LuPlus } from "react-icons/lu";
-import { HiMiniCog6Tooth } from "react-icons/hi2";
+// import { LuPlus } from "react-icons/lu";
+// import { HiMiniCog6Tooth } from "react-icons/hi2";
 import {
   MdKeyboardArrowDown,
   MdKeyboardArrowRight,
-  MdPlayCircle,
+  // MdPlayCircle,
 } from "react-icons/md";
 import { setCurrentPage } from "../../features/generalSlice";
 import { firstArray, secondArray } from "../../utils/helper";

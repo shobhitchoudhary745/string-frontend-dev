@@ -1,6 +1,6 @@
 import { AiFillDashboard } from "react-icons/ai";
-import { FaVideo } from "react-icons/fa6";
-import { IoLanguage, IoGiftSharp } from "react-icons/io5";
+// import { FaVideo } from "react-icons/fa6";
+import { IoLanguage } from "react-icons/io5";
 import { HiMiniCreditCard } from "react-icons/hi2";
 import { FaUser } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
@@ -8,8 +8,8 @@ import { TfiVideoClapper } from "react-icons/tfi";
 import { BiCategory } from "react-icons/bi";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import { MdEmail } from "react-icons/md";
-import { useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+// import { useSearchParams } from "react-router-dom";
+// import { useSelector } from "react-redux";
 
 
 export const firstArray = [

@@ -3,28 +3,26 @@ import React, { useEffect, useState } from "react";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Card, Form, InputGroup, Spinner, Table } from "react-bootstrap";
-import { IoClose } from "react-icons/io5";
-import { FaEdit, FaSearch } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  getAllCarousels,
   getAllGenres,
   getAllLanguages,
   getAllVideos,
 } from "../../features/apiCall";
-import { setCurrentPage, setLoading } from "../../features/generalSlice";
-import axios from "../../utils/axiosUtil";
-import { toast } from "react-toastify";
-import "./Video.scss";
+import { setCurrentPage } from "../../features/generalSlice";
 import CustomPagination from "../../utils/CustomPagination";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
-const Video = () => {
+const ViewAllVideo = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
   const { videos, totalVideoCount } = useSelector((state) => state.video);
   const { languages } = useSelector((state) => state.language);
   const { genres: gen } = useSelector((state) => state.genre);
+  const { carousels } = useSelector((state) => state.carousel);
 
   const [curPage, setCurPage] = useState(1);
   const [language, setLanguage] = useState("");
@@ -36,7 +34,7 @@ const Video = () => {
   const curPageHandler = (p) => setCurPage(p);
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Videos" }));
+    dispatch(setCurrentPage({ currentPage: "Select Video To Carousel" }));
   }, []);
 
   useEffect(() => {
@@ -56,41 +54,8 @@ const Video = () => {
   useEffect(() => {
     getAllLanguages(dispatch, token);
     getAllGenres(dispatch, token);
+    getAllCarousels(dispatch);
   }, []);
-
-  const deleteHandler = async (id) => {
-    if (
-      window.confirm(
-        "Are you sure you want to delete this Video?\nThis action cannot be undone."
-      ) === true
-    ) {
-      try {
-        dispatch(setLoading());
-        const { data } = await axios.delete(`/api/video/delete-video/${id}`, {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        if (data.success) {
-          getAllVideos(
-            dispatch,
-            token,
-            language,
-            genres,
-            query,
-            curPage,
-            resultPerPage
-          );
-          dispatch(setLoading());
-          toast.success(data.message);
-        }
-      } catch (error) {
-        dispatch(setLoading());
-        toast.error(error.message);
-        console.log(error);
-      }
-    }
-  };
 
   const numOfPages = Math.ceil(totalVideoCount / resultPerPage);
   return (
@@ -153,11 +118,6 @@ const Video = () => {
               <FaSearch />
             </InputGroup.Text>
           </InputGroup>
-          <div className="button">
-            <Link to={"/admin/add-video"}>
-              <HiPlus /> Add Video
-            </Link>
-          </div>
         </Card.Header>
         <Card.Body className="user-body">
           {loading ? (
@@ -169,10 +129,6 @@ const Video = () => {
               <thead>
                 <tr>
                   <th>Title</th>
-                  <th>Description</th>
-                  <th>Language</th>
-                  <th>Access</th>
-                  <th>Genres</th>
                   <th>Poster</th>
                   <th>Actions</th>
                 </tr>
@@ -180,7 +136,7 @@ const Video = () => {
               <tbody>
                 {videos.length === 0 ? (
                   <tr>
-                    <td colSpan="7" className="text-center">
+                    <td colSpan="3" className="text-center">
                       No Videos Found
                     </td>
                   </tr>
@@ -189,21 +145,6 @@ const Video = () => {
                     return (
                       <tr key={index}>
                         <td>{data.title}</td>
-                        <td>{data.description}</td>
-                        <td className="lang">
-                          <span>{data.language?.name}</span>
-                        </td>
-                        <td className="lang">
-                          <span>{data?.access}</span>
-                        </td>
-                        <td>
-                          <div className="cat-item">
-                            {data.genres &&
-                              data.genres.map((genre, i) => {
-                                return <span key={i}>{genre?.name}</span>;
-                              })}
-                          </div>
-                        </td>
                         <td>
                           <LazyLoadImage
                             alt={"Profile"}
@@ -214,26 +155,42 @@ const Video = () => {
                         </td>
                         <td>
                           <div className="action-link">
-                            <Link
-                              style={{
-                                backgroundColor: "#10c469",
-                                border: "none",
-                              }}
-                              to={`/admin/edit-video/${data._id}`}
-                              className="btn btn-success"
-                            >
-                              <FaEdit />
-                            </Link>
-                            <Link
-                              style={{
-                                backgroundColor: "#ff5b5b",
-                                border: "none",
-                              }}
-                              onClick={() => deleteHandler(data._id)}
-                              className="btn btn-danger"
-                            >
-                              <IoClose />
-                            </Link>
+                            {carousels.length > 0 &&
+                            carousels
+                              .map((carousel) => {
+                                return carousel.video_id._id;
+                              })
+                              .includes(data._id) ? (
+                              <Link
+                                style={{
+                                  backgroundColor: "#ff5b5b",
+                                  border: "none",
+                                }}
+                                className="btn btn-primary"
+                              >
+                                Already Added
+                              </Link>
+                            ) : (
+                              <Link
+                                style={{
+                                  backgroundColor: "#10c469",
+                                  border: "none",
+                                }}
+                                to={`/admin/add-carousel/${data._id}`}
+                                className="btn btn-danger"
+                              >
+                                {loading ? (
+                                  <Spinner
+                                    animation="border"
+                                    style={{ color: "#caa257" }}
+                                  />
+                                ) : (
+                                  <span>
+                                    <HiPlus /> Add To Carousel
+                                  </span>
+                                )}
+                              </Link>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -258,4 +215,4 @@ const Video = () => {
   );
 };
 
-export default Video;
+export default ViewAllVideo;
