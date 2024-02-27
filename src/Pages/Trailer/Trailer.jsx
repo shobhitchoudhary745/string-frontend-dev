@@ -170,11 +170,11 @@ const Trailer = () => {
               <FaSearch />
             </InputGroup.Text>
           </InputGroup>
-          <div className="button">
+          {/* <div className="button">
             <Link to={"/admin/add-video"}>
               <HiPlus /> Add Video
             </Link>
-          </div>
+          </div> */}
         </Card.Header>
         <Card.Body className="user-body">
           {loading ? (

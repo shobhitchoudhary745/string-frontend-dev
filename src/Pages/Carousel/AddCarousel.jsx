@@ -28,7 +28,7 @@ export default function AddCarousel() {
   const [thumbnailPreview, setThumbnailPreview] = useState("");
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Add Category" }));
+    dispatch(setCurrentPage({ currentPage: "Add Carousel" }));
     SetVideo_id(id);
   }, []);
 
