@@ -186,7 +186,7 @@ const ViewAllVideo = () => {
                                   />
                                 ) : (
                                   <span>
-                                    <HiPlus /> Add To Carousel
+                                    <HiPlus /> Add
                                   </span>
                                 )}
                               </Link>

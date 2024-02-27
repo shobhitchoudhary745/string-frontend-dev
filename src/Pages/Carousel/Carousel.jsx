@@ -11,6 +11,7 @@ import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { MdRemoveCircleOutline } from "react-icons/md";
 
 const Carousel = () => {
   const dispatch = useDispatch();
@@ -108,7 +109,7 @@ const Carousel = () => {
                             onClick={() => deleteHandler(data._id)}
                             className="btn btn-danger"
                           >
-                            <IoClose /> Delete Carousel
+                            <MdRemoveCircleOutline /> Remove
                           </Link>
                         </td>
                       </tr>
