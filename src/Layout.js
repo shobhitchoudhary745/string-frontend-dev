@@ -54,6 +54,7 @@ import Trailer from "./Pages/Trailer/Trailer.jsx";
 import Carousel from "./Pages/Carousel/Carousel.jsx";
 import ViewAllVideo from "./Pages/Carousel/ViewAllVideo.jsx";
 import AddCarousel from "./Pages/Carousel/AddCarousel.jsx";
+import Footer from "./components/Footer/Footer.js";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -75,8 +76,9 @@ export default function Layout() {
         {token && <Sidebar />}
         <div
           className="mx-3 my-1 flex-1 card-container"
-          style={{ overflowY: "scroll", minHeight: "100%", width: "100%" }}
+          style={{ overflowY: "scroll", width: "100%" }}
         >
+          
           <Routes>
             <Route
               path="/"
@@ -456,7 +458,12 @@ export default function Layout() {
             />
             <Route path="/login" element={<Login />} />
           </Routes>
+        
+          <>
           <Toastify />
+          <Footer />
+          </>
+          
         </div>
       </div>
     </div>

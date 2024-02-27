@@ -22,3 +22,11 @@
      width:0px;
      color:transparent;
   }
+
+  .card-container{
+    min-height: calc(100vh - 90px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
