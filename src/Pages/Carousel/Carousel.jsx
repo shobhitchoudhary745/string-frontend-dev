@@ -20,7 +20,7 @@ const Carousel = () => {
   const { loading } = useSelector((state) => state.general);
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Add Carousel" }));
+    dispatch(setCurrentPage({ currentPage: "Carousel" }));
   }, []);
 
   useEffect(() => {
