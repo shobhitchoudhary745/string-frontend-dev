@@ -98,14 +98,14 @@ const Director = () => {
                             effect="blur"
                           />
                         </td>
-                        <td className="action-link">
+                        <td >
                           <Link
                             style={{
                               backgroundColor: "#10c469",
                               border: "none",
                             }}
                             to={`/admin/edit-director/${data._id}`}
-                            className="btn btn-success"
+                            className="btn btn-success m-1"
                           >
                             <FaEdit />
                           </Link>
@@ -115,7 +115,7 @@ const Director = () => {
                               border: "none",
                             }}
                             onClick={() => deleteHandler(data._id)}
-                            className="btn btn-danger"
+                            className="btn btn-danger m-1"
                           >
                             <IoClose />
                           </Link>

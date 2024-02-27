@@ -100,7 +100,7 @@ const Carousel = () => {
                             className="poster"
                           />
                         </td>
-                        <td className="action-link">
+                        <td >
                           <Link
                             style={{
                               backgroundColor: "#ff5b5b",
