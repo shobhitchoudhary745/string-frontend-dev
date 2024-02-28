@@ -77,8 +77,11 @@ const ViewUser = () => {
         <Card>
           <h3>Subscription Plan</h3>
           {user_transactions &&
-            user_transactions.map((transaction, index) => {
-              if (transaction.order.status === "Active") {
+            [...user_transactions].reverse().map((transaction, index) => {
+              if (
+                transaction.order.status === "Active" ||
+                transaction.order.status === "Upcoming"
+              ) {
                 return (
                   <div key={index} className="sub_plans">
                     <ul className="list_group">
@@ -91,7 +94,11 @@ const ViewUser = () => {
                             {transaction.order.plan_name} -{" "}
                             {transaction.order.plan_type}
                           </span>
-                          <span>Current Plan</span>
+                          <span>
+                            {transaction.order.status === "Active"
+                              ? "Current Plan"
+                              : "Upcoming Plan"}
+                          </span>
                         </div>
                       </li>
                       <li className="list_group_item">
@@ -99,7 +106,9 @@ const ViewUser = () => {
                           <FaCircle />
                         </div>
                         <div className="user_desc">
-                          <span>{formatDate(transaction.order.createdAt)}</span>
+                          <span>
+                            {formatDate(transaction.order.expiry_date)}
+                          </span>
                           <span>Subscription expires on</span>
                         </div>
                       </li>

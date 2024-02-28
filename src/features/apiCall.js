@@ -67,14 +67,15 @@ export const getAllTransactions = async (
   resultPerPage,
   gateway,
   date,
-  query
+  query,
+  status
 ) => {
   try {
     let input_date = null;
     if (date) input_date = new Date(date);
     dispatch(setLoading());
     const { data } = await axios.get(
-      `/api/transaction/get-all-transaction?gateway=${gateway}&from=${input_date}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      `/api/transaction/get-all-transaction?gateway=${gateway}&status=${status}&from=${input_date}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
         headers: {
           authorization: `Bearer ${token}`,

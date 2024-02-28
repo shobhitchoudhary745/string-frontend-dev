@@ -215,9 +215,15 @@ export default function Sidebar() {
         >
           <VscListUnordered size={18} /> Transaction
         </Link>
-        {/* <div className="d-flex hidden-list align-items-center gap-3  my-2">
+        <Link
+          style={{
+            color: currentPage === "Attempt History" ? "#caa257" : "#f9f9f9",
+          }}
+          to={"/admin/transaction-attempt"}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
           <FaListUl size={18} /> Attempt History
-        </div> */}
+        </Link>
       </div>
       <ul>
         <li

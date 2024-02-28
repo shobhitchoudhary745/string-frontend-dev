@@ -17,7 +17,7 @@ import "./Transaction.scss";
 import { setCurrentPage } from "../../features/generalSlice";
 import { Link } from "react-router-dom";
 
-export default function Transaction() {
+export default function TransactionAttempt() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
@@ -35,7 +35,7 @@ export default function Transaction() {
   const curPageHandler = (p) => setCurPage(p);
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Transaction" }));
+    dispatch(setCurrentPage({ currentPage: "Attempt History" }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function Transaction() {
         gateway,
         date,
         query,
-       "COMPLETED"
+       "ALL"
       );
   }, [curPage, resultPerPage, gateway, query, date]);
 

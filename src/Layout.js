@@ -55,6 +55,7 @@ import Carousel from "./Pages/Carousel/Carousel.jsx";
 import ViewAllVideo from "./Pages/Carousel/ViewAllVideo.jsx";
 import AddCarousel from "./Pages/Carousel/AddCarousel.jsx";
 import Footer from "./components/Footer/Footer.js";
+import TransactionAttempt from "./Pages/Transactions/TransactionAttempt.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -117,6 +118,14 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <Transaction />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/transaction-attempt"
+              element={
+                <ProtectedRoute>
+                  <TransactionAttempt />
                 </ProtectedRoute>
               }
             />
