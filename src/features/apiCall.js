@@ -703,9 +703,13 @@ export const getAllTrailers = async (dispatch) => {
   }
 };
 
-export const getAllCarousels = async (dispatch) => {
+export const getAllCarousels = async (token, dispatch) => {
   try {
-    const { data } = await axios.get(`/api/carousel/get-all-carousel`);
+    const { data } = await axios.get(`/api/carousel/get-all-carousel`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
     if (data.success) {
       dispatch(
         setCarousels({

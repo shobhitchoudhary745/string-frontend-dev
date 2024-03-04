@@ -22,7 +22,7 @@ const Carousel = () => {
   }, []);
 
   useEffect(() => {
-    if (token) getAllCarousels(dispatch);
+    if (token) getAllCarousels(token, dispatch);
   }, []);
 
   const deleteHandler = async (id) => {
