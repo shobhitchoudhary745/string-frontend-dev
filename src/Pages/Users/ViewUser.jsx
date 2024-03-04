@@ -114,7 +114,7 @@ const ViewUser = () => {
                 );
               } else return <></>;
             })}
-          {user_transactions.length > 0 && (
+          {user_transactions.length === 0 && (
             <div className="sub_plans">
               <ul className="list_group">
                 <li
