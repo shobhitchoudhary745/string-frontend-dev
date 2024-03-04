@@ -54,7 +54,7 @@ const ViewAllVideo = () => {
   useEffect(() => {
     getAllLanguages(dispatch, token);
     getAllGenres(dispatch, token);
-    getAllCarousels(dispatch);
+    getAllCarousels(token, dispatch);
   }, []);
 
   const numOfPages = Math.ceil(totalVideoCount / resultPerPage);
