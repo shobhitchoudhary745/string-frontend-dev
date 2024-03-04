@@ -77,11 +77,8 @@ const ViewUser = () => {
         <Card>
           <h3>Subscription Plan</h3>
           {user_transactions &&
-            [...user_transactions].reverse().map((transaction, index) => {
-              if (
-                transaction.order.status === "Active" ||
-                transaction.order.status === "Upcoming"
-              ) {
+            user_transactions.map((transaction, index) => {
+              if (transaction.order.status === "Active") {
                 return (
                   <div key={index} className="sub_plans">
                     <ul className="list_group">
@@ -115,30 +112,29 @@ const ViewUser = () => {
                     </ul>
                   </div>
                 );
-              } else {
-                return (
-                  <div className="sub_plans">
-                    <ul className="list_group">
-                      <li
-                        className="list_group_item"
-                        style={{
-                          borderBottomLeftRadius: "0.25rem",
-                          borderBottomRightRadius: "0.25rem",
-                        }}
-                      >
-                        <div className="avatar">
-                          <FaCircle color="red" />
-                        </div>
-                        <div className="user_desc">
-                          <span>No Active Plan</span>
-                          <span>Current Plan</span>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                );
-              }
+              } else return <></>;
             })}
+          {user_transactions.length > 0 && (
+            <div className="sub_plans">
+              <ul className="list_group">
+                <li
+                  className="list_group_item"
+                  style={{
+                    borderBottomLeftRadius: "0.25rem",
+                    borderBottomRightRadius: "0.25rem",
+                  }}
+                >
+                  <div className="avatar">
+                    <FaCircle color="red" />
+                  </div>
+                  <div className="user_desc">
+                    <span>No Active Plan</span>
+                    <span>Current Plan</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          )}
         </Card>
       </Container>
       <Card className="user-table" style={{ marginTop: "20px" }}>
