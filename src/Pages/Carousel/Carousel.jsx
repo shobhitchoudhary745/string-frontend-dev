@@ -3,8 +3,6 @@ import React, { useEffect } from "react";
 import { HiPlus } from "react-icons/hi";
 import { Link } from "react-router-dom";
 import { Card, Spinner, Table } from "react-bootstrap";
-import { IoClose } from "react-icons/io5";
-// import { FaEdit, FaEye } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCarousels } from "../../features/apiCall";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
@@ -51,7 +49,6 @@ const Carousel = () => {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        console.log(error);
       }
     }
   };
@@ -77,6 +74,7 @@ const Carousel = () => {
                 <tr>
                   <th>Carousel Video Title</th>
                   <th>Carousel Poster</th>
+                  <th>Type/Tag</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -100,7 +98,8 @@ const Carousel = () => {
                             className="poster"
                           />
                         </td>
-                        <td >
+                        <td>{data.tag}</td>
+                        <td>
                           <Link
                             style={{
                               backgroundColor: "#ff5b5b",

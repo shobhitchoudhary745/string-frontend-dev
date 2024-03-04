@@ -9,7 +9,6 @@ import {
   Row,
   Spinner,
 } from "react-bootstrap";
-// import "./Category.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
@@ -24,6 +23,7 @@ export default function AddCarousel() {
   const { loading } = useSelector((state) => state.general);
 
   const [video_id, SetVideo_id] = useState("");
+  const [type, setType] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [thumbnailPreview, setThumbnailPreview] = useState("");
 
@@ -54,6 +54,7 @@ export default function AddCarousel() {
       const formData = new FormData();
 
       formData.append("video_id", video_id);
+      formData.append("tag", type);
       formData.append("image", thumbnail);
 
       dispatch(setLoading());
@@ -74,7 +75,6 @@ export default function AddCarousel() {
         }, 1200);
       }
     } catch (error) {
-      console.log(error);
       dispatch(setLoading());
       toast.error(error.response.data.message);
     }
@@ -94,6 +94,23 @@ export default function AddCarousel() {
                 value={video_id}
                 readOnly
               />
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Carousel Type</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <select
+                value={type}
+                className="rounded"
+                onChange={(e) => setType(e.target.value)}
+              >
+                <option value="">Select Carousel Type</option>
+                <option value="Inner">Inner</option>
+                <option value="Outer">Outer</option>
+              </select>
             </Col>
           </Row>
 
