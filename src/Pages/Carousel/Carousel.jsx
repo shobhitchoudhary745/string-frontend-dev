@@ -45,7 +45,7 @@ const Carousel = () => {
           }
         );
         if (data.success) {
-          getAllCarousels(dispatch);
+          getAllCarousels(token, dispatch);
           dispatch(setLoading());
           toast.success(data.message);
         }
