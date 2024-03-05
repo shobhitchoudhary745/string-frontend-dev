@@ -13,23 +13,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function AddCarousel() {
-  const { id } = useParams();
+export default function AddOuterCarousel() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
 
-  const [video_id, SetVideo_id] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState("Outer");
   const [thumbnail, setThumbnail] = useState("");
   const [thumbnailPreview, setThumbnailPreview] = useState("");
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Add Carousel" }));
-    SetVideo_id(id);
+    dispatch(setCurrentPage({ currentPage: "Add Outer Carousel" }));
   }, []);
 
   const handleThumbnailChange = (e) => {
@@ -53,7 +50,6 @@ export default function AddCarousel() {
     try {
       const formData = new FormData();
 
-      formData.append("video_id", video_id);
       formData.append("tag", type);
       formData.append("image", thumbnail);
 
@@ -84,19 +80,6 @@ export default function AddCarousel() {
     <div>
       <Card className="user-table ">
         <Container className="input-fieleds p-4">
-          <Row className="align-items-center mb-4">
-            <Col className="mb-2" sm={12} md={3}>
-              <label>Video Id</label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                style={{ color: "#6c757d" }}
-                value={video_id}
-                readOnly
-              />
-            </Col>
-          </Row>
-
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
               <Form.Label>Carousel Type</Form.Label>

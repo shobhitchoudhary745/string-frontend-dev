@@ -53,9 +53,10 @@ import ViewUser from "./Pages/Users/ViewUser.jsx";
 import Trailer from "./Pages/Trailer/Trailer.jsx";
 import Carousel from "./Pages/Carousel/Carousel.jsx";
 import ViewAllVideo from "./Pages/Carousel/ViewAllVideo.jsx";
-import AddCarousel from "./Pages/Carousel/AddCarousel.jsx";
 import Footer from "./components/Footer/Footer.js";
 import TransactionAttempt from "./Pages/Transactions/TransactionAttempt.jsx";
+import AddInnerCarousel from "./Pages/Carousel/AddInnerCarousel.jsx";
+import AddOuterCarousel from "./Pages/Carousel/AddOuterCarousel.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -79,7 +80,6 @@ export default function Layout() {
           className="mx-3 my-1 flex-1 card-container"
           style={{ overflowY: "scroll", width: "100%" }}
         >
-          
           <Routes>
             <Route
               path="/"
@@ -458,21 +458,28 @@ export default function Layout() {
               }
             />
             <Route
-              path="/admin/add-carousel/:id"
+              path="/admin/add-inner-carousel/:id"
               element={
                 <ProtectedRoute>
-                  <AddCarousel />
+                  <AddInnerCarousel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-outer-carousel"
+              element={
+                <ProtectedRoute>
+                  <AddOuterCarousel />
                 </ProtectedRoute>
               }
             />
             <Route path="/login" element={<Login />} />
           </Routes>
-        
+
           <>
-          <Toastify />
-          <Footer />
+            <Toastify />
+            <Footer />
           </>
-          
         </div>
       </div>
     </div>

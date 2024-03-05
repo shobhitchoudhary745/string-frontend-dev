@@ -34,7 +34,9 @@ const ViewAllVideo = () => {
   const curPageHandler = (p) => setCurPage(p);
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Select Video To Carousel" }));
+    dispatch(
+      setCurrentPage({ currentPage: "Select Video To Add In Carousel" })
+    );
   }, []);
 
   useEffect(() => {
@@ -176,7 +178,7 @@ const ViewAllVideo = () => {
                                   backgroundColor: "#10c469",
                                   border: "none",
                                 }}
-                                to={`/admin/add-carousel/${data._id}`}
+                                to={`/admin/add-inner-carousel/${data._id}`}
                                 className="btn btn-danger"
                               >
                                 {loading ? (

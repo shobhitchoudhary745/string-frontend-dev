@@ -10,12 +10,15 @@ import axios from "../../utils/axiosUtil";
 import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { MdRemoveCircleOutline } from "react-icons/md";
+import { SelectCarouselModal } from "./SelectCarouselModal";
 
 const Carousel = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { carousels } = useSelector((state) => state.carousel);
   const { loading } = useSelector((state) => state.general);
+
+  const [visible, setVisible] = React.useState(false);
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Carousel" }));
@@ -58,7 +61,7 @@ const Carousel = () => {
       <Card className="user-table">
         <Card.Header className="user-header">
           <div className="button">
-            <Link to={"/admin/add-carousel"}>
+            <Link onClick={() => setVisible(true)}>
               <HiPlus /> Add New Carousel
             </Link>
           </div>
@@ -89,7 +92,7 @@ const Carousel = () => {
                   carousels.map((data, index) => {
                     return (
                       <tr key={index}>
-                        <td>{data.video_id.title}</td>
+                        <td>{data.video_id ? data.video_id.title : "N/A"}</td>
                         <td>
                           <LazyLoadImage
                             alt={"Profile"}
@@ -120,6 +123,9 @@ const Carousel = () => {
           )}
         </Card.Body>
       </Card>
+      {visible && (
+        <SelectCarouselModal show={visible} onHide={() => setVisible(false)} />
+      )}
     </>
   );
 };
