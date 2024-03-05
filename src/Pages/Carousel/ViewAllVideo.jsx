@@ -160,7 +160,9 @@ const ViewAllVideo = () => {
                             {carousels.length > 0 &&
                             carousels
                               .map((carousel) => {
-                                return carousel.video_id._id;
+                                return (
+                                  carousel.video_id && carousel.video_id._id
+                                );
                               })
                               .includes(data._id) ? (
                               <Link
