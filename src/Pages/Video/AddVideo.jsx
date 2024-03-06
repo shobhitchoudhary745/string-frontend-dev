@@ -501,19 +501,31 @@ function AddVideo() {
               </Button>
             </Col>
           </Row>
-          <Row className={`align-items-center ${keywords.length?"mb-3":"mb-0"}`}>
+          <Row
+            className={`align-items-center ${
+              keywords.length ? "mb-3" : "mb-0"
+            }`}
+          >
             <Col sm={12} md={3}>
               <Form.Label></Form.Label>
             </Col>
 
             <Col sm={12} md={8}>
               <div className="d-flex flex-wrap gap-0">
-                {keywords&&keywords.map((k, index) => (
-                  <p style={{backgroundColor:"#313133"}} className="mx-2 rounded p-1">
-                    <span className="p-2">{k}</span>
-                    <MdClose style={{cursor:"pointer"}} onClick={() => handleRemoveKeyword(index)} />
-                  </p>
-                ))}
+                {keywords &&
+                  keywords.map((k, index) => (
+                    <p
+                      key={k}
+                      style={{ backgroundColor: "#313133" }}
+                      className="mx-2 rounded p-1"
+                    >
+                      <span className="p-2">{k}</span>
+                      <MdClose
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleRemoveKeyword(index)}
+                      />
+                    </p>
+                  ))}
               </div>
             </Col>
           </Row>
