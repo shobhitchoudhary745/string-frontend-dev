@@ -112,6 +112,16 @@
   }
 }
 
+.grp {
+  .icon {
+    background: #313133;
+    border: none;
+    outline: none;
+    color: #f9f9f9;
+    cursor: pointer;
+  }
+}
+
 @media (max-width: 767px) {
   .wrapper-page {
     width: 90%;

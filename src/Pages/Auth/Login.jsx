@@ -4,8 +4,9 @@ import { FaLock } from "react-icons/fa6";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setToken } from "../../features/authSlice";
-import { Form, Button, Spinner } from "react-bootstrap";
+import { Form, Button, Spinner, InputGroup } from "react-bootstrap";
 import axiosInstance from "../../utils/axiosUtil";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -15,6 +16,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +45,7 @@ const Login = () => {
             mobile: data.user.mobile,
             profile: data.user.avatar,
             name: data.user.name,
-            id: data.user._id
+            id: data.user._id,
           })
         );
         navigate("/");
@@ -82,15 +84,21 @@ const Login = () => {
               required
             />
           </Form.Group>
-          <Form.Group className="mb-3">
+          <Form.Group className="mb-3 input-group grp">
             <Form.Control
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="input-text"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               required
             />
+            <InputGroup.Text
+              className="icon"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+            </InputGroup.Text>
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Check type="checkbox" label="Remember me" />
