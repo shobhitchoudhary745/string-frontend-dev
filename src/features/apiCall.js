@@ -641,6 +641,10 @@ export const getHomeData = async (dispatch, token) => {
             Language: data.data.languages,
             Category: data.data.categories,
             Videos: data.data.videos,
+            "Daily Revenue": data.data.dailyRevenue,
+            "Monthly Revenue": data.data.monthlyRevenue,
+            "Yearly Revenue": data.data.yearlyRevenue,
+            "Weekly Revenue": data.data.weeklyRevenue
           },
         })
       );
@@ -723,7 +727,6 @@ export const getAllCarousels = async (token, dispatch) => {
     console.log(error);
   }
 };
-
 
 export const getAllContacts = async (dispatch, token) => {
   try {
