@@ -118,6 +118,10 @@ function AddVideo() {
   };
 
   const submitHandler = async (e) => {
+    if (!keywords.length) {
+      toast.warning("Please add atleast one keyword for better SEO.");
+      return;
+    }
     e.preventDefault();
     if (
       !video ||
@@ -394,9 +398,7 @@ function AddVideo() {
             </Col>
           </Row>
 
-          <Row
-            className={`align-items-center `}
-          >
+          <Row className={`align-items-center `}>
             <Col sm={12} md={3}>
               <Form.Label>Thumbnail</Form.Label>
             </Col>
@@ -416,7 +418,9 @@ function AddVideo() {
               <Form.Label></Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <label style={{color:"#6c757d"}}>(Recommend 16 x 9 Resolution Image.)</label>
+              <label style={{ color: "#6c757d" }}>
+                (Recommend 16 x 9 Resolution Image.)
+              </label>
             </Col>
           </Row>
           {thumbnailPreview && (
@@ -475,7 +479,7 @@ function AddVideo() {
 
           <Row
             className={`align-items-center ${
-              keywords && keywords.length > 0 ? "mb-5" : "mb-3"
+              keywords && keywords.length > 0 ? "mb-3" : "mb-3"
             }`}
           >
             <Col sm={12} md={3}>
@@ -495,14 +499,21 @@ function AddVideo() {
               <Button type="button" onClick={handleAddKeyword}>
                 Add
               </Button>
-              <div className="video_keywords">
-                {keywords &&
-                  keywords.map((k, index) => (
-                    <li key={index}>
-                      <span>{k}</span>
-                      <MdClose onClick={() => handleRemoveKeyword(index)} />
-                    </li>
-                  ))}
+            </Col>
+          </Row>
+          <Row className={`align-items-center ${keywords.length?"mb-3":"mb-0"}`}>
+            <Col sm={12} md={3}>
+              <Form.Label></Form.Label>
+            </Col>
+
+            <Col sm={12} md={8}>
+              <div className="d-flex flex-wrap gap-0">
+                {keywords.map((k, index) => (
+                  <p style={{backgroundColor:"#313133"}} className="mx-2 rounded p-1">
+                    <span className="p-2">{k}</span>
+                    <MdClose style={{cursor:"pointer"}} onClick={() => handleRemoveKeyword(index)} />
+                  </p>
+                ))}
               </div>
             </Col>
           </Row>
