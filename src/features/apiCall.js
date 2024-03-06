@@ -23,6 +23,7 @@ import { setLoading } from "./generalSlice";
 import * as XLSX from "xlsx";
 import { setTrailers } from "./trailerSlice";
 import { setCarousels } from "./carouselSlice";
+import { setContacts } from "./contactSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -716,6 +717,43 @@ export const getAllCarousels = async (token, dispatch) => {
           carousels: data.carousels,
         })
       );
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+
+export const getAllContacts = async (dispatch, token) => {
+  try {
+    dispatch(setLoading());
+    const { data } = await axios.get(`/api/contact/get-contacts`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setLoading());
+      // console.log(data)
+      dispatch(setContacts({ contacts: data.contacts }));
+    }
+  } catch (error) {
+    dispatch(setLoading());
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getContact = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/actor/get-actor/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setActor({ actor: data.actor }));
     }
   } catch (error) {
     toast.error(error.message);

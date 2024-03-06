@@ -57,6 +57,8 @@ import Footer from "./components/Footer/Footer.js";
 import TransactionAttempt from "./Pages/Transactions/TransactionAttempt.jsx";
 import AddInnerCarousel from "./Pages/Carousel/AddInnerCarousel.jsx";
 import AddOuterCarousel from "./Pages/Carousel/AddOuterCarousel.jsx";
+import Contact from "./Pages/Contact/Contact.jsx";
+import EditContact from "./Pages/Contact/EditContact.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -126,6 +128,22 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <TransactionAttempt />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/contact"
+              element={
+                <ProtectedRoute>
+                  <Contact />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-contact/:id"
+              element={
+                <ProtectedRoute>
+                  <EditContact />
                 </ProtectedRoute>
               }
             />

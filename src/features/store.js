@@ -18,6 +18,7 @@ import homeSlice from "./homeSlice";
 import faqSlice from "./faqSlice";
 import trailerSlice from "./trailerSlice";
 import carouselSlice from "./carouselSlice";
+import contactSlice from "./contactSlice";
 
 export default configureStore({
   reducer: {
@@ -40,5 +41,6 @@ export default configureStore({
     faq: faqSlice,
     trailer: trailerSlice,
     carousel: carouselSlice,
+    contact: contactSlice
   },
 });

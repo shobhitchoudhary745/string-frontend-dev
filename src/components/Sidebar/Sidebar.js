@@ -114,10 +114,15 @@ export default function Sidebar() {
         </div>
         <div className="d-flex hidden-list align-items-center gap-3  my-2">
           <LiaSlidersHSolid size={18} /> Testimonials
+      </div>*/}
+        <div
+          style={{ color: currentPage === "Contact" ? "#caa257" : "#f9f9f9" }}
+          onClick={() => navigate("/admin/contact")}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
+          <PiListBulletsFill size={18} /> Contact Image
         </div>
-        <div className="d-flex hidden-list align-items-center gap-3  my-2">
-          <PiListBulletsFill size={18} /> Home Section
-        </div> */}
+
         <div
           style={{ color: currentPage === "Faqs" ? "#caa257" : "#f9f9f9" }}
           onClick={() => navigate("/admin/faqs")}
