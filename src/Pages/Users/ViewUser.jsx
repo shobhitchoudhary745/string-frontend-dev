@@ -13,8 +13,6 @@ const ViewUser = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { user, user_transactions } = useSelector((state) => state.user);
-  console.log(user_transactions);
-  console.log(user);
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Users" }));
@@ -54,7 +52,6 @@ const ViewUser = () => {
     <div>
       <Container className="view_user">
         <Card>
-          {/* <img src={user.avatar} alt=""></img> */}
           <LazyLoadImage alt={"Profile"} src={user.avatar} effect="blur" />
           <div className="user_info">
             <div className="user_name">
