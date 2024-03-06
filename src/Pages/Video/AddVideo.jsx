@@ -508,7 +508,7 @@ function AddVideo() {
 
             <Col sm={12} md={8}>
               <div className="d-flex flex-wrap gap-0">
-                {keywords.map((k, index) => (
+                {keywords&&keywords.map((k, index) => (
                   <p style={{backgroundColor:"#313133"}} className="mx-2 rounded p-1">
                     <span className="p-2">{k}</span>
                     <MdClose style={{cursor:"pointer"}} onClick={() => handleRemoveKeyword(index)} />
