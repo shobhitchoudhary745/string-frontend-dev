@@ -52,7 +52,7 @@ const ViewUser = () => {
     <div>
       <Container className="view_user">
         <Card>
-          <LazyLoadImage alt={"Profile"} src={user.avatar} effect="blur" />
+          <LazyLoadImage alt={"Profile"} src={`${process.env.REACT_APP_URL}/${user.avatar}`} effect="blur" />
           <div className="user_info">
             <div className="user_name">
               <h4>{user.name}</h4>

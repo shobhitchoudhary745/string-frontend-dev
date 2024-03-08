@@ -212,7 +212,7 @@ const Trailer = () => {
                           /> */}
                           <LazyLoadImage
                             alt={"Profile"}
-                            src={data.thumbnail_url}
+                            src={`${process.env.REACT_APP_URL}/${data.thumbnail_url}`}
                             effect="blur"
                             className="poster"
                           />

@@ -96,7 +96,7 @@ const Carousel = () => {
                         <td>
                           <LazyLoadImage
                             alt={"Profile"}
-                            src={data.poster_url}
+                            src={`${process.env.REACT_APP_URL}/${data.poster_url}`}
                             effect="blur"
                             className="poster"
                           />

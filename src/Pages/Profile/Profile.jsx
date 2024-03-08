@@ -113,7 +113,7 @@ export default function Profile() {
                   borderRadius: "0.25rem",
                 }}
                 alt={"Profile"}
-                src={userProfile}
+                src={`${process.env.REACT_APP_URL}/${userProfile}`}
                 effect="blur"
               />
             </Col>

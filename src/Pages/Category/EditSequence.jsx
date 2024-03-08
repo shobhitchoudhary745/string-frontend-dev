@@ -105,7 +105,7 @@ const EditSequence = () => {
                     <td>
                       <img
                         className="poster"
-                        src={video.video.thumbnail_url}
+                        src={`${process.env.REACT_APP_URL}/${video.video.thumbnail_url}`}
                         alt=""
                       />
                     </td>

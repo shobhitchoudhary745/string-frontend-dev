@@ -117,7 +117,7 @@ const ViewCategory = () => {
                       <td>
                         <img
                           className="poster"
-                          src={data.thumbnail_url}
+                          src={`${process.env.REACT_APP_URL}/${data.thumbnail_url}`}
                           alt=""
                         />
                       </td>

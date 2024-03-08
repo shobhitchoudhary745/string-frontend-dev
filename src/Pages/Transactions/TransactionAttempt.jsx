@@ -179,7 +179,7 @@ export default function TransactionAttempt() {
                               color: "#f9f9f9",
                               backgroundColor: "#ff5b5b",
                             }}
-                            href={transaction?.invoice_url}
+                            href={`${process.nextTick.REACT_APP_URL}/${transaction?.invoice_url}`}
                           >
                             <LiaFileDownloadSolid />
                           </a>

@@ -83,8 +83,8 @@ function EditVideo() {
         setCategories_id(cat_id);
       }
       setAccess(video1.access);
-      setThumbnailPreview(video1.thumbnail_url);
-      setVideoPreview(video1.video_url);
+      setThumbnailPreview(`${process.env.REACT_APP_URL}/${video1.thumbnail_url}`);
+      setVideoPreview(`${process.env.REACT_APP_URL}/admin-uploads/${video1.video_url}`);
     }
   }, [video1]);
 

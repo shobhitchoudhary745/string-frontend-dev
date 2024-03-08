@@ -93,7 +93,7 @@ const Director = () => {
                         <td>
                         <LazyLoadImage
                             alt={"Profile"}
-                            src={data.profile_url}
+                            src={`${process.env.REACT_APP_URL}/${data.profile_url}`}
                             className="poster"
                             effect="blur"
                           />
