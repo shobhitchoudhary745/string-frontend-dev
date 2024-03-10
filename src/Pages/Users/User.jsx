@@ -199,8 +199,8 @@ export default function User() {
                         <td>{user.states}</td>
                         <td>{user.city}</td>
                         <td>
-                          {user.subscription_plans?.plan_name
-                            ? user.subscription_plans?.plan_name
+                          {user.latestOrder
+                            ? user.latestOrder?.plan_name
                             : "N/A"}
                         </td>
                         <td>
