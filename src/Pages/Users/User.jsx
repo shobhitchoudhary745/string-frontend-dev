@@ -194,7 +194,7 @@ export default function User() {
                       <tr key={index}>
                         <td>{user.name}</td>
                         <td>{user.email}</td>
-                        <td>{user.mobile}</td>
+                        <td>{user.mobile ? user.mobile : "N/A"}</td>
                         <td>{user.country}</td>
                         <td>{user.states}</td>
                         <td>{user.city}</td>
