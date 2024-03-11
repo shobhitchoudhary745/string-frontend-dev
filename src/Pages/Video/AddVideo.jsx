@@ -118,7 +118,7 @@ function AddVideo() {
   };
 
   const submitHandler = async (e) => {
-    if (!keywords.length) {
+    if (genres && !genres.includes("Carousel") && !keywords.length) {
       toast.warning("Please add atleast one keyword for better SEO.");
       return;
     }
@@ -131,8 +131,7 @@ function AddVideo() {
       !description ||
       !categories ||
       !genres ||
-      !language ||
-      !keywords
+      !language
     ) {
       toast.warning("All fields are required");
       return;
@@ -173,6 +172,14 @@ function AddVideo() {
 
         if (data2.status === 200) {
           const formData = new FormData();
+
+          if (genres && genres.includes("Carousel")) {
+            setCategory("");
+            setCategories([]);
+            setCategories_id([]);
+            setKeywords([]);
+            setCurrentKeyword("");
+          }
 
           formData.append("title", title);
           formData.append("description", description);
@@ -365,38 +372,42 @@ function AddVideo() {
             </Col>
           </Row>
 
-          <Row
-            className={`align-items-center ${
-              categories && categories.length > 0 ? "mb-5" : "mb-4"
-            }`}
-          >
-            <Col className="mb-2" sm={12} md={3}>
-              <label>Video Categories</label>
-            </Col>
-            <Col style={{ position: "relative" }} sm={12} md={8}>
-              <select
-                value={category}
-                className="rounded"
-                onChange={handleCategoryChange}
-              >
-                <option value="">Select Category</option>
-                {availableCategories.map((category) => (
-                  <option key={category._id} value={category.name}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-              <div className="video_keywords">
-                {categories &&
-                  categories.map((c, i) => (
-                    <li key={i}>
-                      <span>{c}</span>
-                      <MdClose onClick={() => handleRemoveCategory(c)} />
-                    </li>
+          {genres && genres.includes("Carousel") ? (
+            ""
+          ) : (
+            <Row
+              className={`align-items-center ${
+                categories && categories.length > 0 ? "mb-5" : "mb-4"
+              }`}
+            >
+              <Col className="mb-2" sm={12} md={3}>
+                <label>Video Categories</label>
+              </Col>
+              <Col style={{ position: "relative" }} sm={12} md={8}>
+                <select
+                  value={category}
+                  className="rounded"
+                  onChange={handleCategoryChange}
+                >
+                  <option value="">Select Category</option>
+                  {availableCategories.map((category) => (
+                    <option key={category._id} value={category.name}>
+                      {category.name}
+                    </option>
                   ))}
-              </div>
-            </Col>
-          </Row>
+                </select>
+                <div className="video_keywords">
+                  {categories &&
+                    categories.map((c, i) => (
+                      <li key={i}>
+                        <span>{c}</span>
+                        <MdClose onClick={() => handleRemoveCategory(c)} />
+                      </li>
+                    ))}
+                </div>
+              </Col>
+            </Row>
+          )}
 
           <Row className={`align-items-center `}>
             <Col sm={12} md={3}>
@@ -477,30 +488,34 @@ function AddVideo() {
             </Row>
           )}
 
-          <Row
-            className={`align-items-center ${
-              keywords && keywords.length > 0 ? "mb-3" : "mb-3"
-            }`}
-          >
-            <Col sm={12} md={3}>
-              <Form.Label>Keywords</Form.Label>
-            </Col>
-            <Col
-              style={{ display: "flex", gap: "10px", position: "relative" }}
-              sm={12}
-              md={8}
+          {genres && genres.includes("Carousel") ? (
+            ""
+          ) : (
+            <Row
+              className={`align-items-center ${
+                keywords && keywords.length > 0 ? "mb-3" : "mb-3"
+              }`}
             >
-              <Form.Control
-                type="text"
-                placeholder="Enter a Keyword"
-                value={currentKeyword}
-                onChange={handleKeywordChange}
-              />
-              <Button type="button" onClick={handleAddKeyword}>
-                Add
-              </Button>
-            </Col>
-          </Row>
+              <Col sm={12} md={3}>
+                <Form.Label>Keywords</Form.Label>
+              </Col>
+              <Col
+                style={{ display: "flex", gap: "10px", position: "relative" }}
+                sm={12}
+                md={8}
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="Enter a Keyword"
+                  value={currentKeyword}
+                  onChange={handleKeywordChange}
+                />
+                <Button type="button" onClick={handleAddKeyword}>
+                  Add
+                </Button>
+              </Col>
+            </Row>
+          )}
           <Row
             className={`align-items-center ${
               keywords.length ? "mb-3" : "mb-0"
