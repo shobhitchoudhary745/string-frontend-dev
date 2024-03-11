@@ -58,7 +58,7 @@ export default function Header() {
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: "#f9f9f9" }}
-                href={"https://string-geo.vercel.app"}
+                href={"https://www.stringevolve.in"}
               >
                 <FaDesktop size={25} style={{ cursor: "pointer" }} />
               </a>
