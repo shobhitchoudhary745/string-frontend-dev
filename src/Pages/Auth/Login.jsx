@@ -61,7 +61,7 @@ const Login = () => {
   ) : (
     <div className="wrapper-page">
       <div className="text-center">
-        <Link to="https://stringgeo.com">
+        <Link to="https://www.stringevolve.in">
           <img
             style={{ width: "150px", height: "42px" }}
             src="https://stringgeo.com/upload/NewFolder/String%20Geo%20logo%20Icon.png"
