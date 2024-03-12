@@ -24,9 +24,12 @@ const ViewAllVideo = () => {
   const { genres: gen } = useSelector((state) => state.genre);
   const { carousels } = useSelector((state) => state.carousel);
 
+  const filtered_genre = gen.filter((genre) => genre.name === "Carousel");
+  const set_genre = filtered_genre ? filtered_genre[0]?._id : "";
+
   const [curPage, setCurPage] = useState(1);
   const [language, setLanguage] = useState("");
-  const [genres, setGenres] = useState("");
+  const [genres, setGenres] = useState(set_genre ? set_genre : "");
   const [search, setSearch] = useState("");
   const [query, setQuery] = useState("");
 
@@ -139,7 +142,7 @@ const ViewAllVideo = () => {
                 {videos.length === 0 ? (
                   <tr>
                     <td colSpan="3" className="text-center">
-                      No Videos Found
+                      No Videos Found In `keyword=Carousel`
                     </td>
                   </tr>
                 ) : (

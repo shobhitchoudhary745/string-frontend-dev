@@ -283,8 +283,8 @@ export const downloadAsCsv = async (Model, Filename = "data", token) => {
     );
 
     const workbook = XLSX.read(data, { type: "array" });
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
+    // const firstSheetName = workbook.SheetNames[0];
+    // const worksheet = workbook.Sheets[firstSheetName];
     const xlsxData = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
 
     const blob = new Blob([xlsxData], {
