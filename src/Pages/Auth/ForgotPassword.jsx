@@ -59,7 +59,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data } = await axiosInstance.post("/api/user/validate-code", {
+      const { data } = await axiosInstance.post("/api/user/reset-password", {
         email,
         password: newPassword,
         confirmPassword,
@@ -182,7 +182,7 @@ const ForgotPassword = () => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="input-text"
-                type="text"
+                type="password"
                 placeholder="New Password"
                 required
               />
