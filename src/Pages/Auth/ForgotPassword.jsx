@@ -25,6 +25,7 @@ const ForgotPassword = () => {
       });
 
       if (data.success) {
+        setLoading(false);
         toast.success(data.message);
         setStage(2);
       }
@@ -44,6 +45,7 @@ const ForgotPassword = () => {
       });
 
       if (data.success) {
+        setLoading(false);
         toast.success(data.message);
         setStage(3);
       }
@@ -64,6 +66,7 @@ const ForgotPassword = () => {
       });
 
       if (data.success) {
+        setLoading(false);
         toast.success(data.message);
         navigate("/login");
       }
