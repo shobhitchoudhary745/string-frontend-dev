@@ -59,6 +59,7 @@ import AddInnerCarousel from "./Pages/Carousel/AddInnerCarousel.jsx";
 import AddOuterCarousel from "./Pages/Carousel/AddOuterCarousel.jsx";
 import Contact from "./Pages/Contact/Contact.jsx";
 import EditContact from "./Pages/Contact/EditContact.jsx";
+import ForgotPassword from "./Pages/Auth/ForgotPassword.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -492,6 +493,7 @@ export default function Layout() {
               }
             />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
           </Routes>
 
           <>
