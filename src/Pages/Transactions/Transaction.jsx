@@ -48,7 +48,7 @@ export default function Transaction() {
         gateway,
         date,
         query,
-       "COMPLETED"
+        "COMPLETED"
       );
   }, [curPage, resultPerPage, gateway, query, date]);
 
@@ -152,11 +152,15 @@ export default function Transaction() {
                     return (
                       <tr key={index}>
                         <td>
-                          <Link to={`/admin/user/${transaction?.user?._id}`}>
-                            {transaction?.user?.name}
-                          </Link>
+                          {transaction?.user ? (
+                            <Link to={`/admin/user/${transaction?.user?._id}`}>
+                              {transaction?.user?.name}
+                            </Link>
+                          ) : (
+                            <p className="m-0">Deleted User</p>
+                          )}
                         </td>
-                        <td>{transaction?.user?.email}</td>
+                        <td>{transaction?.user?transaction.user.email:"Deleted User"}</td>
                         <td>{transaction?.order?.plan_type}</td>
                         <td>
                           {transaction?.gateway === "Razorpay"

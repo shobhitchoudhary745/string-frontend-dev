@@ -26,9 +26,9 @@ function EditVideo() {
   const { loading } = useSelector((state) => state.general);
   const { video: video1 } = useSelector((state) => state.video);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit Video" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     getVideo(dispatch, token, id);
@@ -83,8 +83,12 @@ function EditVideo() {
         setCategories_id(cat_id);
       }
       setAccess(video1.access);
-      setThumbnailPreview(`${process.env.REACT_APP_URL}/${video1.thumbnail_url}`);
-      setVideoPreview(`${process.env.REACT_APP_URL}/admin-uploads/${video1.video_url}`);
+      setThumbnailPreview(
+        `${process.env.REACT_APP_URL}/${video1.thumbnail_url}`
+      );
+      setVideoPreview(
+        `${process.env.REACT_APP_URL}/admin-uploads/${video1.video_url}`
+      );
     }
   }, [video1]);
 
@@ -157,7 +161,7 @@ function EditVideo() {
       !video &&
       !thumbnail &&
       !title &&
-      !access &&
+      // !access &&
       !description &&
       !genres.length &&
       !language &&
@@ -352,7 +356,7 @@ function EditVideo() {
             </Col>
           </Row>
 
-          <Row className="align-items-center mb-4">
+          {/* <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
               <Form.Label>Video Access</Form.Label>
             </Col>
@@ -367,7 +371,7 @@ function EditVideo() {
                 <option value="paid">Paid</option>
               </select>
             </Col>
-          </Row>
+          </Row> */}
 
           <Row
             className={`align-items-center ${
@@ -384,11 +388,13 @@ function EditVideo() {
                 onChange={handleGenreChange}
               >
                 <option value="">Select Genre</option>
-                {availableGenres.map((genre) => (
-                  <option key={genre._id} value={genre.name}>
-                    {genre.name}
-                  </option>
-                ))}
+                {availableGenres
+                  .filter((genre) => genre.name != "Carousel")
+                  .map((genre) => (
+                    <option key={genre._id} value={genre.name}>
+                      {genre.name}
+                    </option>
+                  ))}
               </select>
               <div className="video_keywords">
                 {genres &&
@@ -435,9 +441,7 @@ function EditVideo() {
             </Col>
           </Row>
 
-          <Row
-            className={`align-items-center mb-1`}
-          >
+          <Row className={`align-items-center mb-1`}>
             <Col sm={12} md={3}>
               <Form.Label>Thumbnail</Form.Label>
             </Col>
@@ -456,7 +460,9 @@ function EditVideo() {
               <Form.Label></Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <label style={{color:"#6c757d"}}>(Recommend 16 x 9 Resolution Image.)</label>
+              <label style={{ color: "#6c757d" }}>
+                (Recommend 16 x 9 Resolution Image.)
+              </label>
             </Col>
           </Row>
           {thumbnailPreview && (

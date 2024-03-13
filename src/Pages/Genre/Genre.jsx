@@ -15,9 +15,9 @@ const Genre = () => {
   const { token } = useSelector((state) => state.auth);
   const { genres } = useSelector((state) => state.genre);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Genres" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     if (token) getAllGenres(dispatch, token);
@@ -86,20 +86,30 @@ const Genre = () => {
                       </span>
                     </td>
                     <td className="action-link-1">
-                      <Link
-                        style={{ backgroundColor: "#10c469", border: "none" }}
-                        to={`/admin/edit-genre/${data._id}`}
-                        className="btn btn-success"
-                      >
-                        <FaEdit />
-                      </Link>
-                      <Link
-                        style={{ backgroundColor: "#ff5b5b", border: "none" }}
-                        onClick={() => deleteHandler(data._id)}
-                        className="btn btn-danger"
-                      >
-                        <IoClose />
-                      </Link>
+                      {data.name != "Carousel" && (
+                        <>
+                          <Link
+                            style={{
+                              backgroundColor: "#10c469",
+                              border: "none",
+                            }}
+                            to={`/admin/edit-genre/${data._id}`}
+                            className="btn btn-success"
+                          >
+                            <FaEdit />
+                          </Link>
+                          <Link
+                            style={{
+                              backgroundColor: "#ff5b5b",
+                              border: "none",
+                            }}
+                            onClick={() => deleteHandler(data._id)}
+                            className="btn btn-danger"
+                          >
+                            <IoClose />
+                          </Link>
+                        </>
+                      )}
                     </td>
                   </tr>
                 );

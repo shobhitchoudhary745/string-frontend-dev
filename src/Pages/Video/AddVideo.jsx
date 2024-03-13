@@ -127,7 +127,7 @@ function AddVideo() {
       !video ||
       !thumbnail ||
       !title ||
-      !access ||
+      // !access ||
       !description ||
       !categories ||
       !genres ||
@@ -245,6 +245,21 @@ function AddVideo() {
 
   const handleGenreChange = (e) => {
     const selectedGenre = e.target.value;
+    if (selectedGenre === "Carousel" && genres.length > 0) {
+      toast.warning("You cannot select Carousel with other genres");
+      return;
+    }
+
+    if (
+      selectedGenre !== "Carousel" &&
+      genres.length &&
+      genres[0] === "Carousel"
+    ) {
+      toast.warning(
+        "If you select carousel then you can not select other genre"
+      );
+      return;
+    }
     const selectedGenre_id = gen.find((genre) => genre.name === selectedGenre);
 
     if (!genres.includes(selectedGenre)) {
@@ -322,7 +337,7 @@ function AddVideo() {
             </Col>
           </Row>
 
-          <Row className="align-items-center mb-4">
+          {/* <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
               <Form.Label>Video Access</Form.Label>
             </Col>
@@ -337,7 +352,7 @@ function AddVideo() {
                 <option value="paid">Paid</option>
               </select>
             </Col>
-          </Row>
+          </Row> */}
 
           <Row
             className={`align-items-center ${
