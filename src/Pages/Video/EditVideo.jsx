@@ -521,7 +521,7 @@ function EditVideo() {
 
           <Row
             className={`align-items-center ${
-              keywords && keywords.length > 0 ? "mb-5" : "mb-3"
+              keywords && keywords.length > 0 ? "mb-3" : "mb-3"
             }`}
           >
             <Col sm={12} md={3}>
@@ -541,13 +541,42 @@ function EditVideo() {
               <Button type="button" onClick={handleAddKeyword}>
                 Add
               </Button>
-              <div className="video_keywords">
+              {/* <div className="video_keywords">
                 {keywords &&
                   keywords.map((k, index) => (
                     <li key={index}>
                       <span>{k}</span>
                       <MdClose onClick={() => handleRemoveKeyword(index)} />
                     </li>
+                  ))}
+              </div> */}
+            </Col>
+          </Row>
+
+          <Row
+            className={`align-items-center ${
+              keywords.length ? "mb-3" : "mb-0"
+            }`}
+          >
+            <Col sm={12} md={3}>
+              <Form.Label></Form.Label>
+            </Col>
+
+            <Col sm={12} md={8}>
+              <div className="d-flex flex-wrap gap-0">
+                {keywords &&
+                  keywords.map((k, index) => (
+                    <p
+                      key={k}
+                      style={{ backgroundColor: "#313133" }}
+                      className="mx-2 rounded p-1"
+                    >
+                      <span className="p-2">{k}</span>
+                      <MdClose
+                        style={{ cursor: "pointer" }}
+                        onClick={() => handleRemoveKeyword(index)}
+                      />
+                    </p>
                   ))}
               </div>
             </Col>
