@@ -122,13 +122,15 @@ const Video = () => {
               }}
             >
               <option value="all">Filter By Genres</option>
-              {gen.map((genre) => {
-                return (
-                  <option value={genre._id} key={genre._id}>
-                    {genre.name}
-                  </option>
-                );
-              })}
+              {gen
+                .filter((g) => g.name != "Carousel")
+                .map((genre) => {
+                  return (
+                    <option value={genre._id} key={genre._id}>
+                      {genre.name}
+                    </option>
+                  );
+                })}
             </Form.Select>
           </Form.Group>
           <InputGroup className="user-search">
