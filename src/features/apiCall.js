@@ -21,7 +21,7 @@ import { setHomeData } from "./homeSlice";
 import { setFaq, setFaqs } from "./faqSlice";
 import { setLoading } from "./generalSlice";
 import * as XLSX from "xlsx";
-import { setTrailers } from "./trailerSlice";
+import { setTrailers, setTrailersVideo } from "./trailerSlice";
 import { setCarousels } from "./carouselSlice";
 import { setContacts } from "./contactSlice";
 
@@ -759,6 +759,42 @@ export const getContact = async (dispatch, token, id) => {
       dispatch(setActor({ actor: data.actor }));
     }
   } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllTrailerVideos = async (
+  dispatch,
+  token,
+  language,
+  genres,
+  query,
+  curPage,
+  resultPerPage
+) => {
+  try {
+    dispatch(setLoading());
+    const { data } = await axios.get(
+      `/api/trailer/get-all-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      dispatch(setLoading());
+      console.log(data.videos)
+      dispatch(
+        setTrailersVideo({
+          videos: data.videos,
+          totalVideoCount: data.totalVideoCount,
+        })
+      );
+    }
+  } catch (error) {
+    dispatch(setLoading());
     toast.error(error.message);
     console.log(error);
   }

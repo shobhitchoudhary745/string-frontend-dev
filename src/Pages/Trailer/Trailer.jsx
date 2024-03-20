@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getAllGenres,
   getAllLanguages,
+  getAllTrailerVideos,
   getAllTrailers,
   getAllVideos,
 } from "../../features/apiCall";
@@ -24,12 +25,13 @@ const Trailer = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
-  const { videos, totalVideoCount } = useSelector((state) => state.video);
+  const { videos, totalVideoCount } = useSelector((state) => state.trailer);
+  console.log(videos, totalVideoCount);
   const { trailers } = useSelector((state) => state.trailer);
   console.log(trailers);
   const { languages } = useSelector((state) => state.language);
   const { genres: gen } = useSelector((state) => state.genre);
-  const [load,setLoad] = useState(false);
+  const [load, setLoad] = useState(false);
 
   const [curPage, setCurPage] = useState(1);
   const [language, setLanguage] = useState("");
@@ -48,7 +50,7 @@ const Trailer = () => {
   useEffect(() => {
     if (token) {
       getAllTrailers(dispatch);
-      getAllVideos(
+      getAllTrailerVideos(
         dispatch,
         token,
         language,
@@ -68,7 +70,7 @@ const Trailer = () => {
   const addVideo = async (id) => {
     // e.preventDefault();
     try {
-      setLoad(true)
+      setLoad(true);
       const { data } = await axiosInstance.post(
         "/api/trailer/create-trailer",
         { video: id },
@@ -78,20 +80,29 @@ const Trailer = () => {
       );
       if (data.success) {
         getAllTrailers(dispatch);
-        setLoad(false)
+        getAllTrailerVideos(
+          dispatch,
+          token,
+          language,
+          genres,
+          query,
+          curPage,
+          resultPerPage
+        );
+        setLoad(false);
         toast.success("Video Added Successfully to Trailer Video");
       }
     } catch (error) {
-      setLoad(false)
+      setLoad(false);
       toast.error(error.response.data.message);
     }
   };
 
   const removeVideo = async () => {
     // e.preventDefault();
-    const id = trailers[0]._id
+    const id = trailers[0]._id;
     try {
-      setLoad(true)
+      setLoad(true);
       const { data } = await axiosInstance.delete(
         `/api/trailer/delete-trailer/${id}`,
         {
@@ -99,12 +110,21 @@ const Trailer = () => {
         }
       );
       if (data.success) {
-        setLoad(false)
+        setLoad(false);
         getAllTrailers(dispatch);
+        getAllTrailerVideos(
+          dispatch,
+          token,
+          language,
+          genres,
+          query,
+          curPage,
+          resultPerPage
+        );
         toast.success("Video Removed Successfully From Trailer Video");
       }
     } catch (error) {
-      setLoad(false)
+      setLoad(false);
       toast.error(error.response.data.message);
     }
   };

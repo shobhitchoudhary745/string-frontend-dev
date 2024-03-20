@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getQueries } from "../../features/apiCall";
+import { downloadAsCsv, getQueries } from "../../features/apiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { Card, Form, InputGroup, Spinner, Table } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
+import { Button, Card, Form, InputGroup, Spinner, Table } from "react-bootstrap";
+import { FaRegFileExcel, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
@@ -83,6 +83,14 @@ export default function Query() {
               <FaSearch />
             </InputGroup.Text>
           </InputGroup>
+          <Button
+            style={{ backgroundColor: "#35b8e0", border: "none" }}
+            onClick={() => {
+              downloadAsCsv("Query", "queries", token);
+            }}
+          >
+            <FaRegFileExcel /> Export Queries
+          </Button>
         </Card.Header>
         <Card.Body className="user-body">
           {loading ? (
