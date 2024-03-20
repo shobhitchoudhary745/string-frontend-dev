@@ -159,7 +159,7 @@ const Trailer = () => {
               }}
             >
               <option value="all">Filter By Genres</option>
-              {gen.map((genre) => {
+              {gen.filter(data=>data.name!="Carousel").map((genre) => {
                 return (
                   <option value={genre._id} key={genre._id}>
                     {genre.name}
