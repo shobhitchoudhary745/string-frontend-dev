@@ -40,7 +40,7 @@ export const SelectCarouselModal = (props) => {
           </Link>
         </Button>
         <Button variant="success">
-          <Link style={{ color: "#f9f9f9" }} to={"/admin/add-outer-carousel"}>
+          <Link style={{ color: "#f9f9f9" }} to={"/admin/add-carousel"}>
             Outer
           </Link>
         </Button>

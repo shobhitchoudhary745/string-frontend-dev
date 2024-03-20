@@ -61,7 +61,7 @@ const Carousel = () => {
       <Card className="user-table">
         <Card.Header className="user-header">
           <div className="button">
-            <Link onClick={() => setVisible(true)}>
+            <Link to="/admin/add-carousel">
               <HiPlus /> Add New Carousel
             </Link>
           </div>

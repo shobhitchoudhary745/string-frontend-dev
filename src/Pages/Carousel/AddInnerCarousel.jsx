@@ -102,11 +102,15 @@ export default function AddInnerCarousel() {
               <Form.Label>Carousel Type</Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <Form.Control
+              {/* <Form.Control
                 style={{ color: "#6c757d" }}
                 value={type}
                 readOnly
-              />
+              /> */}
+              <select className="rounded" onChange={(e)=>setType(e.target.value)}>
+                <option value="Inner">Inner</option>
+                <option value="Outer">Outer</option>
+              </select>
             </Col>
           </Row>
 

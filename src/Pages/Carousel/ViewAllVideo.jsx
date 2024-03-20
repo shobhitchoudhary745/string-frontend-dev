@@ -51,7 +51,8 @@ const ViewAllVideo = () => {
         genres,
         query,
         curPage,
-        resultPerPage
+        resultPerPage,
+        true
       );
     }
   }, [language, genres, query, curPage, resultPerPage]);

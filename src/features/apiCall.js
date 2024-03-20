@@ -314,12 +314,13 @@ export const getAllVideos = async (
   genres,
   query,
   curPage,
-  resultPerPage
+  resultPerPage,
+  carousel = false
 ) => {
   try {
     dispatch(setLoading());
     const { data } = await axios.get(
-      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&carousel=${carousel}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -644,7 +645,7 @@ export const getHomeData = async (dispatch, token) => {
             "Daily Revenue": data.data.dailyRevenue,
             "Monthly Revenue": data.data.monthlyRevenue,
             "Yearly Revenue": data.data.yearlyRevenue,
-            "Weekly Revenue": data.data.weeklyRevenue
+            "Weekly Revenue": data.data.weeklyRevenue,
           },
         })
       );
@@ -785,7 +786,7 @@ export const getAllTrailerVideos = async (
     );
     if (data.success) {
       dispatch(setLoading());
-      console.log(data.videos)
+      console.log(data.videos);
       dispatch(
         setTrailersVideo({
           videos: data.videos,
