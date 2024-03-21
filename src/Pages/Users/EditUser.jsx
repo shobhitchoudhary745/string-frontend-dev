@@ -20,7 +20,7 @@ import { getUser } from "../../features/apiCall";
 export default function EditUser() {
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.user);
+  const { user, user_transactions } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const countries = Country.getAllCountries();
@@ -38,10 +38,14 @@ export default function EditUser() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
+  const [plan_name, setPlanName] = useState("Select Plan Name");
+  const [plan_type, setPlanType] = useState("Select Plan Type");
+  const [expiry, setExpiry] = useState("");
+  console.log(typeof expiry)
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit User" }));
-  },[])
+  }, []);
 
   useEffect(() => {
     getUser(dispatch, token, id);
@@ -53,7 +57,12 @@ export default function EditUser() {
       setEmail(user.email);
       setMobile(user.mobile);
     }
-  }, [user]);
+    if (user_transactions.length > 0) {
+      setPlanName(user_transactions[0].order.plan_name);
+      setPlanType(user_transactions[0].order.plan_type);
+      setExpiry(user_transactions[0].order.expiry_date.slice(0, 10));
+    }
+  }, [user, user_transactions]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -64,22 +73,35 @@ export default function EditUser() {
       !mobile &&
       !country &&
       !city &&
-      !state
+      !state &&
+      !plan_name &&
+      !plan_type &&
+      !expiry
     ) {
       toast.warning("Please Fill Atleast One Fieled");
       return;
     }
     try {
+      const order_id =
+        plan_name && plan_type && expiry ? user_transactions[0].order._id : "";
       dispatch(setLoading());
-      const { data } = await axios.patch(`/api/admin/update-user/${id}`, {
-        name,
-        email,
-        password,
-        country,
-        states: state,
-        city,
-        mobile,
-      },{headers:{authorization:`Bearer ${token}`}});
+      const { data } = await axios.patch(
+        `/api/admin/update-user/${id}`,
+        {
+          name,
+          email,
+          password,
+          country,
+          states: state,
+          city,
+          mobile,
+          plan_name: plan_name ? plan_name : "",
+          plan_type: plan_type ? plan_type : "",
+          expiry: expiry ? expiry : "",
+          order_id
+        },
+        { headers: { authorization: `Bearer ${token}` } }
+      );
       if (data.success) {
         dispatch(setLoading());
         toast.success("User Updated Successfully.  Redirecting...");
@@ -231,6 +253,54 @@ export default function EditUser() {
               </select>
             </Col>
           </Row>
+          {user_transactions.length > 0 && (
+            <>
+              <Row className="align-items-center mb-4">
+                <Col sm={12} md={3}>
+                  <Form.Label>Plan Name</Form.Label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <select
+                    value={plan_name}
+                    className="rounded"
+                    onChange={(e) => setPlanName(e.target.value)}
+                  >
+                    <option value="Select Plan Name">Select Plan Name</option>
+                    <option value="Individual">Individual</option>
+                    <option value="Family">Family</option>
+                  </select>
+                </Col>
+              </Row>
+              <Row className="align-items-center mb-4">
+                <Col sm={12} md={3}>
+                  <Form.Label>Plan Type</Form.Label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <select
+                    value={plan_type}
+                    className="rounded"
+                    onChange={(e) => setPlanType(e.target.value)}
+                  >
+                    <option value="Select Plan Type">Select Plan Type</option>
+                    <option value="monthly">monthly</option>
+                    <option value="annual">annual</option>
+                  </select>
+                </Col>
+              </Row>
+              <Row className="align-items-center mb-4">
+                <Col sm={12} md={3}>
+                  <Form.Label>Expiry Date</Form.Label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <Form.Control
+                    value={expiry}
+                    onChange={(e) => setExpiry(e.target.value)}
+                    type="date"
+                  />
+                </Col>
+              </Row>
+            </>
+          )}
           <Row className="align-items-center mb-4">
             <Col className="d-none d-md-block" md={3}>
               <Form.Label></Form.Label>
