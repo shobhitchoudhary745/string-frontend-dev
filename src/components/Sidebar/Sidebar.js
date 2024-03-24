@@ -124,6 +124,14 @@ export default function Sidebar() {
         </div>
 
         <div
+          style={{ color: currentPage === "About" ? "#caa257" : "#f9f9f9" }}
+          onClick={() => navigate("/admin/about")}
+          className="d-flex hidden-list align-items-center gap-3  my-2"
+        >
+          <PiListBulletsFill size={18} /> About Image
+        </div>
+
+        <div
           style={{ color: currentPage === "Faqs" ? "#caa257" : "#f9f9f9" }}
           onClick={() => navigate("/admin/faqs")}
           className="d-flex hidden-list align-items-center gap-3  my-2"

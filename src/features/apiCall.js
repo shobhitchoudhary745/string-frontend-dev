@@ -24,6 +24,7 @@ import * as XLSX from "xlsx";
 import { setTrailers, setTrailersVideo } from "./trailerSlice";
 import { setCarousels } from "./carouselSlice";
 import { setContacts } from "./contactSlice";
+import { setAbouts } from "./aboutSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -741,6 +742,26 @@ export const getAllContacts = async (dispatch, token) => {
       dispatch(setLoading());
       // console.log(data)
       dispatch(setContacts({ contacts: data.contacts }));
+    }
+  } catch (error) {
+    dispatch(setLoading());
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getAllAbouts = async (dispatch, token) => {
+  try {
+    dispatch(setLoading());
+    const { data } = await axios.get(`/api/about/get-abouts`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setLoading());
+      // console.log(data)
+      dispatch(setAbouts({ abouts: data.abouts }));
     }
   } catch (error) {
     dispatch(setLoading());

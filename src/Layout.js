@@ -60,6 +60,8 @@ import AddOuterCarousel from "./Pages/Carousel/AddOuterCarousel.jsx";
 import Contact from "./Pages/Contact/Contact.jsx";
 import EditContact from "./Pages/Contact/EditContact.jsx";
 import ForgotPassword from "./Pages/Auth/ForgotPassword.jsx";
+import EditAbout from "./Pages/About/EditAbout.jsx";
+import About from "./Pages/About/About.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -148,6 +150,24 @@ export default function Layout() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="/admin/about"
+              element={
+                <ProtectedRoute>
+                  <About />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-about/:id"
+              element={
+                <ProtectedRoute>
+                  <EditAbout />
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="/admin/add-users"
               element={
