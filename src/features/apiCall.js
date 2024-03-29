@@ -25,6 +25,7 @@ import { setTrailers, setTrailersVideo } from "./trailerSlice";
 import { setCarousels } from "./carouselSlice";
 import { setContacts } from "./contactSlice";
 import { setAbouts } from "./aboutSlice";
+import { setFreeVideo, setFreeVideos } from "./freeVideoSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -344,6 +345,40 @@ export const getAllVideos = async (
   }
 };
 
+export const getAllFreeVideos = async (
+  dispatch,
+  token,
+  language,
+  query,
+  curPage,
+  resultPerPage,
+) => {
+  try {
+    dispatch(setLoading());
+    const { data } = await axios.get(
+      `/api/free-video/get-videos?language=${language}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      dispatch(setLoading());
+      dispatch(
+        setFreeVideos({
+          videos: data.videos,
+          totalVideoCount: data.totalVideoCount,
+        })
+      );
+    }
+  } catch (error) {
+    dispatch(setLoading());
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
 export const getVideo = async (dispatch, token, id) => {
   try {
     const { data } = await axios.get(`/api/video/get-video/${id}`, {
@@ -353,6 +388,22 @@ export const getVideo = async (dispatch, token, id) => {
     });
     if (data.success) {
       dispatch(setVideo({ video: data.video }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    console.log(error);
+  }
+};
+
+export const getFreeVideo = async (dispatch, token, id) => {
+  try {
+    const { data } = await axios.get(`/api/free-video/get-video/${id}`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(setFreeVideo({ video: data.video }));
     }
   } catch (error) {
     toast.error(error.message);

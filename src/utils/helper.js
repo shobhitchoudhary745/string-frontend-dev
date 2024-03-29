@@ -24,6 +24,11 @@ export const firstArray = [
     link: "/admin/videos",
   },
   {
+    icon: <TfiVideoClapper className="mx-2" size={18} />,
+    content: "Free Videos",
+    link: "/admin/free-videos",
+  },
+  {
     icon: <MdEmail className="mx-2" size={18} />,
     content: "Send Email",
     link: "/admin/emails"

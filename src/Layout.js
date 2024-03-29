@@ -62,6 +62,9 @@ import EditContact from "./Pages/Contact/EditContact.jsx";
 import ForgotPassword from "./Pages/Auth/ForgotPassword.jsx";
 import EditAbout from "./Pages/About/EditAbout.jsx";
 import About from "./Pages/About/About.jsx";
+import FreeVideo from "./Pages/Free/Video.jsx";
+import AddFreeVideo from "./Pages/Free/AddVideo.jsx";
+import EditFreeVideo from "./Pages/Free/EditVideo.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -301,6 +304,30 @@ export default function Layout() {
               element={
                 <ProtectedRoute>
                   <EditVideo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/free-videos"
+              element={
+                <ProtectedRoute>
+                  <FreeVideo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/add-free-video"
+              element={
+                <ProtectedRoute>
+                  <AddFreeVideo />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/edit-free-video/:id"
+              element={
+                <ProtectedRoute>
+                  <EditFreeVideo />
                 </ProtectedRoute>
               }
             />
