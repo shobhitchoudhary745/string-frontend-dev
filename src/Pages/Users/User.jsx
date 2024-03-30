@@ -174,8 +174,8 @@ export default function User() {
                   <th>Email address</th>
                   <th>Mobile no</th>
                   <th>Country</th>
-                  <th>State</th>
-                  <th>City</th>
+                  {/* <th>State</th> */}
+                  {/* <th>City</th> */}
                   <th>Plan</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -196,8 +196,8 @@ export default function User() {
                         <td>{user.email}</td>
                         <td>{user.mobile ? user.mobile : "N/A"}</td>
                         <td>{user.country}</td>
-                        <td>{user.states}</td>
-                        <td>{user.city}</td>
+                        {/* <td>{user.states}</td> */}
+                        {/* <td>{user.city}</td> */}
                         <td>
                           {user.latestOrder
                             ? user.latestOrder?.plan_name

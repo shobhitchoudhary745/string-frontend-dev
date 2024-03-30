@@ -28,7 +28,7 @@ function EditFreeVideo() {
   const { video: video1 } = useSelector((state) => state.free_video);
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Edit Video" }));
+    dispatch(setCurrentPage({ currentPage: "Edit Free Video" }));
   }, []);
 
   useEffect(() => {

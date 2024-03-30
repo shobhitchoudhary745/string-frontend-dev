@@ -17,21 +17,25 @@ export const firstArray = [
     icon: <AiFillDashboard className="mx-2" size={18} />,
     content: "Dashboard",
     link: "/",
+    arr: ["Dashboard"]
   },
   {
     icon: <TfiVideoClapper className="mx-2" size={18} />,
     content: "Videos",
     link: "/admin/videos",
+    arr: ["Videos","Add Video","Edit Video"]
   },
   {
     icon: <TfiVideoClapper className="mx-2" size={18} />,
     content: "Free Videos",
     link: "/admin/free-videos",
+    arr: ["Free Videos","Add Free Video","Edit Free Video"]
   },
   {
     icon: <MdEmail className="mx-2" size={18} />,
     content: "Send Email",
-    link: "/admin/emails"
+    link: "/admin/emails",
+    arr: ["Send Email"]
   },
   // {
   //   icon: <FaVideo className="mx-2" size={18} />,
@@ -56,31 +60,37 @@ export const secondArray = [
     icon: <IoLanguage size={18} className="mx-2" />,
     content: "Languages",
     link: "/admin/languages",
+    arr: ["Languages","Add Language","Edit Language"]
   },
   {
     icon: <VscListUnordered size={18} className="mx-2" />,
     content: "Genres",
     link: "/admin/genres",
+    arr: ["Genres","Add Genre","Edit Genre"]
   },
   {
     icon: <BiCategory size={18} className="mx-2" />,
     content: "Categories",
     link: "/admin/categories",
+    arr: ["Categories","Add Category","Edit Category"]
   },
   {
     icon: <AiOutlineQuestionCircle size={18} className="mx-2" />,
     content: "Queries",
     link: "/admin/queries",
+    arr: ["Queries","View Query"]
   },
   {
     icon: <BiCategory size={18} className="mx-2" />,
     content: "Carousel",
     link: "/admin/carousels",
+    arr: ["Carousel","Add Carousel"]
   },
   {
     icon: <BiCategory size={18} className="mx-2" />,
     content: "Trailer",
     link: "/admin/trailers",
+    arr: ["Trailer"]
   },
   // {
   //   icon: <IoGiftSharp size={18} className="mx-2" />,
@@ -91,11 +101,13 @@ export const secondArray = [
     icon: <FaUser size={18} className="mx-2" />,
     content: "Actors",
     link: "/admin/actors",
+    arr: ["Actors","Add Actor","Edit Actor"]
   },
   {
     icon: <FaUser size={18} className="mx-2" />,
     content: "Directors",
     link: "/admin/directors",
+    arr: ["Directors","Add Director","Edit Director"]
   },
   {
     icon: <HiMiniCreditCard size={18} className="mx-2" />,

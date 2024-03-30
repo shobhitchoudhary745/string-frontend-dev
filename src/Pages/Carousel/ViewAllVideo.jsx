@@ -38,7 +38,7 @@ const ViewAllVideo = () => {
 
   useEffect(() => {
     dispatch(
-      setCurrentPage({ currentPage: "Select Video To Add In Carousel" })
+      setCurrentPage({ currentPage: "Add Carousel" })
     );
   }, []);
 

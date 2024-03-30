@@ -36,7 +36,7 @@ export default function Sidebar() {
                 setCurrent("");
                 navigate(data.link);
               }}
-              className={`${currentPage === data.content ? "active" : ""}`}
+              className={`${data.arr?.includes(currentPage) ? "active" : ""}`}
             >
               {data.icon} {data.content}
             </li>
@@ -85,10 +85,20 @@ export default function Sidebar() {
         <li
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(setCurrentPage({ currentPage: "Homes" }));
+            // dispatch(setCurrentPage({ currentPage: "Homes" }));
             setCurrent((p) => (p === "Home" ? "" : "Home"));
           }}
-          className={`${currentPage === "Homes" ? "active" : ""}`}
+          className={`${
+            currentPage === "Contact" ||
+            currentPage === "Edit Contact" ||
+            currentPage === "About" ||
+            currentPage === "Faqs" ||
+            currentPage === "Edit About" ||
+            currentPage === "Add Faq" ||
+            currentPage === "Edit Faq"
+              ? "active"
+              : ""
+          }`}
         >
           <div className="d-flex justify-content-between">
             <div>
@@ -143,10 +153,17 @@ export default function Sidebar() {
         <li
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(setCurrentPage({ currentPage: "Users" }));
+            // dispatch(setCurrentPage({ currentPage: "Users" }));
             setCurrent((p) => (p === "Users" ? "" : "Users"));
           }}
-          className={`my-0 ${currentPage === "Users" ? "active" : ""}`}
+          className={`my-0 ${
+            currentPage === "User" ||
+            currentPage === "Add User" ||
+            currentPage === "Edit User" ||
+            currentPage === "View User"
+              ? "active"
+              : ""
+          }`}
         >
           <div className="d-flex justify-content-between">
             <div>
@@ -185,7 +202,12 @@ export default function Sidebar() {
             navigate("/admin/subscription");
             setCurrent("");
           }}
-          className={`${currentPage === "Subscription Plans" ? "active" : ""}`}
+          className={`${
+            currentPage === "Subscription Plans" ||
+            currentPage === "Edit Subscription"
+              ? "active"
+              : ""
+          }`}
         >
           <FaDollarSign size={18} className="mx-2" />
           Subscription Plans
@@ -195,10 +217,14 @@ export default function Sidebar() {
         <li
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(setCurrentPage({ currentPage: "Transactions" }));
+            // dispatch(setCurrentPage({ currentPage: "Transactions" }));
             setCurrent((p) => (p === "Transactions" ? "" : "Transactions"));
           }}
-          className={`my-0 ${currentPage === "Transactions" ? "active" : ""}`}
+          className={`my-0 ${
+            currentPage === "Transaction" || currentPage === "Attempt History"
+              ? "active"
+              : ""
+          }`}
         >
           <div className="d-flex justify-content-between">
             <div>
@@ -242,10 +268,14 @@ export default function Sidebar() {
         <li
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(setCurrentPage({ currentPage: "Pages" }));
+            // dispatch(setCurrentPage({ currentPage: "Pages" }));
             setCurrent((p) => (p === "Pages" ? "" : "Pages"));
           }}
-          className={`mb-0 ${currentPage === "Pages" ? "active" : ""}`}
+          className={`mb-0 ${
+            currentPage === "Pages" || currentPage === "Edit Page"
+              ? "active"
+              : ""
+          }`}
         >
           <div className="d-flex justify-content-between">
             <div>
@@ -295,7 +325,7 @@ export default function Sidebar() {
                 setCurrent("");
                 navigate(data.link);
               }}
-              className={`${currentPage === data.content ? "active" : ""}`}
+              className={`${data.arr?.includes(currentPage) ? "active" : ""}`}
             >
               {data.icon} {data.content}
             </li>

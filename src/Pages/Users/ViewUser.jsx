@@ -15,7 +15,7 @@ const ViewUser = () => {
   const { user, user_transactions } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Users" }));
+    dispatch(setCurrentPage({ currentPage: "View User" }));
   }, []);
 
   useEffect(() => {
