@@ -17,7 +17,7 @@ const Subscription = () => {
   const { plans } = useSelector((state) => state.plan);
   const { loading } = useSelector((state) => state.general);
 
-  console.log(plans);
+ 
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Subscription Plans" }));
@@ -48,7 +48,7 @@ const Subscription = () => {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        console.log(error);
+       
       }
     }
   };
@@ -76,7 +76,7 @@ const Subscription = () => {
                   <th>Monthly Price</th>
                   <th>Yearly Price</th>
                   <th>Status</th>
-                  <th>Actions</th>
+                  {/* <th>Actions</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -96,7 +96,7 @@ const Subscription = () => {
                         <td>
                           <span className="active">Active</span>
                         </td>
-                        <td className="action-link">
+                        {/* <td className="action-link">
                           <Link
                             style={{
                               backgroundColor: "#10c469",
@@ -106,7 +106,7 @@ const Subscription = () => {
                             className="btn btn-success"
                           >
                             <FaEdit />
-                          </Link>
+                          </Link> */}
                           {/* <Link
                         style={{ backgroundColor: "#ff5b5b", border: "none" }}
                         onClick={() => deleteHandler(data._id)}
@@ -114,7 +114,7 @@ const Subscription = () => {
                       >
                         <IoClose />
                       </Link> */}
-                        </td>
+                        {/* </td> */}
                       </tr>
                     );
                   })

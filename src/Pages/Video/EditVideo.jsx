@@ -14,6 +14,9 @@ import {
   getVideo,
 } from "../../features/apiCall";
 import { useNavigate, useParams } from "react-router-dom";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { modules, formats } from "../../utils/helper";
 
 function EditVideo() {
   const { id } = useParams();
@@ -25,6 +28,7 @@ function EditVideo() {
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
   const { video: video1 } = useSelector((state) => state.video);
+  
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit Video" }));
@@ -36,7 +40,7 @@ function EditVideo() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [language, setLanguage] = useState("");
+  // const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
   const [genres_id, setGenres_id] = useState([]);
@@ -54,7 +58,13 @@ function EditVideo() {
   const [estimatedSecond, setEstimatedSecond] = useState(0);
   const [estimatedMinute, setEstimatedMinute] = useState(0);
   const [estimateHour, setEstimatedHour] = useState(0);
-  // const [fileSize, setFileSize] = useState(0);
+  const [file, setFile] = useState("");
+  const [files, setFiles] = useState([]);
+  const [parts, setParts] = useState([]);
+  const [progres, setProgres] = useState(languages.map((lan) => 0));
+  const [currentLanguage, setCurrentLanguage] = useState([]);
+  const [currentUrl, setCurrentUrl] = useState([]);
+  
 
   useEffect(() => {
     if (token) {
@@ -68,7 +78,17 @@ function EditVideo() {
     if (video1.description) {
       setDescription(video1.description);
       setTitle(video1.title);
-      setLanguage(video1.language?._id);
+      // setLanguage(video1.language?._id);
+      setCurrentLanguage(video1?.language?.map((lan) => lan._id));
+      setCurrentUrl(
+        video1?.video_url?.map((url) => {
+          
+          return {
+            language: url?.language?._id,
+            value: url?.value,
+          };
+        })
+      );
       setKeywords(video1.keywords);
       if (video1.genres.length > 0) {
         const gen_name = video1.genres.map((gen) => gen.name);
@@ -87,12 +107,13 @@ function EditVideo() {
         `${process.env.REACT_APP_URL}/${video1.thumbnail_url}`
       );
       setVideoPreview(
-        `${process.env.REACT_APP_URL}/admin-uploads/${video1.video_url}`
+        `${process.env.REACT_APP_URL}/admin-uploads/${video1?.video_url[0]?.value}`
       );
     }
   }, [video1]);
 
   const handleVideoChange = (e) => {
+    setFile(e.target.files[0]);
     const file = e.target.files[0];
     // setFileSize(file.size);
 
@@ -119,6 +140,20 @@ function EditVideo() {
     setCurrentKeyword(e.target.value);
   };
 
+  const handleFileChange = (e, index) => {
+    setFile(e.target.files[0]);
+    let temp = [...files];
+    temp[index] = e.target.files[0];
+    setFiles(temp);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setVideo(file);
+      setVideoPreview(reader.result);
+    };
+  };
+
   const handleAddKeyword = () => {
     if (currentKeyword.trim() !== "") {
       setKeywords(
@@ -137,7 +172,7 @@ function EditVideo() {
   const resetForm = () => {
     setTitle("");
     setDescription("");
-    setLanguage("");
+    // setLanguage("");
     setAccess("");
     setGenre("");
     setCategory("");
@@ -164,7 +199,6 @@ function EditVideo() {
       // !access &&
       !description &&
       !genres.length &&
-      !language &&
       !keywords.length &&
       !categories.length
     ) {
@@ -216,7 +250,7 @@ function EditVideo() {
           formData.append("description", description);
           formData.append("keywords", keywords);
           formData.append("genres", genres_id);
-          formData.append("language", language);
+          // formData.append("language", language);
           thumbnail && formData.append("image", thumbnail);
           video && formData.append("video_url", data.data.imageName);
           formData.append("access", access);
@@ -239,12 +273,176 @@ function EditVideo() {
           }
         }
       } else {
-        console.log("some error");
+        
       }
     } catch (error) {
-      console.log(error);
+     
       dispatch(setLoading());
       toast.error(error.message);
+    }
+  };
+
+  const startUpload = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let temp = [];
+        for (let file of files) {
+          if (file) {
+            temp.push(axiosInstance.post("/api/video/start-upload", {}));
+          }
+        }
+        const response = await Promise.all(temp);
+        // const response = await axiosInstance.post("/api/video/start-upload", {
+        //   // fileName: file.name,
+        //   // access: "Paid",
+        // });
+
+        const data = [];
+        let j = 0;
+        for (let i = 0; i < files.length; ++i) {
+          if (files[i]) {
+            data.push({
+              fileName: response[j]?.data?.fileName,
+              uploadId: response[j]?.data?.UploadId,
+            });
+            j += 1;
+          } else data.push({});
+        }
+
+        resolve(data);
+        // setFileName(response.data.fileName);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const uploadChunk = async (chunk, partNumber, fileName, uploadId) => {
+    const formData = new FormData();
+    formData.append("file", chunk);
+    formData.append("uploadId", uploadId);
+    formData.append("partNumber", partNumber);
+    formData.append("fileName", fileName);
+
+    const response = await axiosInstance.post("/api/video/upload", formData);
+    
+    return response.data;
+  };
+
+  const uploadFileInChunks = async (e) => {
+    e.preventDefault();
+
+    if (
+      !files.length &&
+      !thumbnail &&
+      !title &&
+      // !access &&
+      !description &&
+      !genres.length &&
+      !keywords.length &&
+      !categories.length
+    ) {
+      toast.warning("Please fill Atleast one fieled");
+      return;
+    }
+
+    dispatch(setLoading());
+    const data = !files.length ? true : await startUpload();
+    for (let counter = 0; counter < files.length; ++counter) {
+      if (!files[counter]) continue;
+      const chunkSize = 100 * 1024 * 1024;
+      const totalChunks = Math.ceil(files[counter].size / chunkSize);
+      let currentUploaded = 0;
+
+      const uploadParts = [];
+
+      for (let i = 0; i < totalChunks; i++) {
+        const start = i * chunkSize;
+        const end = Math.min(start + chunkSize, files[counter].size);
+        const chunk = files[counter].slice(start, end);
+
+        const partNumber = i + 1;
+        const uploadData = await uploadChunk(
+          chunk,
+          partNumber,
+          data[counter].fileName,
+          data[counter].uploadId
+        );
+
+        uploadParts.push({
+          ETag: uploadData.ETag,
+          PartNumber: partNumber,
+        });
+
+        currentUploaded += chunkSize;
+        if (files[counter].size <= currentUploaded) {
+          setProgres((p) => {
+            let arr = [...p];
+            p[counter] = 100;
+            return arr;
+          });
+        } else {
+          setProgres((p) => {
+            let arr = [...p];
+            p[counter] = parseFloat(
+              (currentUploaded / files[counter].size) * 100
+            ).toFixed(2);
+            return arr;
+          });
+        }
+      }
+
+      setParts(uploadParts);
+      // completeUpload(uploadParts, data);
+      const { data3 } = await axiosInstance.post("/api/video/complete-upload", {
+        uploadId: data[counter].uploadId,
+        fileName: data[counter].fileName,
+        parts: uploadParts,
+      });
+    }
+    const formData = new FormData();
+    let language = [],
+      urls = [];
+    for (let count = 0; count < files.length; ++count) {
+      if (files[count]) {
+        language.push(languages[count]._id);
+        urls.push({
+          language: languages[count]._id,
+          value: data[count].fileName.split("/")[1],
+        });
+      }
+    }
+    language = Array.from(new Set([...language, ...currentLanguage]));
+
+    const curr = urls.map((url) => url.language);
+    for (let u of currentUrl) {
+      if (!curr.includes(u.language)) urls.push(u);
+    }
+
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("keywords", keywords);
+    formData.append("genres", genres_id);
+    formData.append("language", JSON.stringify(language));
+    thumbnail && formData.append("image", thumbnail);
+    formData.append("video_url", JSON.stringify(urls));
+    formData.append("access", access);
+    formData.append("categories", categories_id);
+
+    const data4 = await axiosInstance.patch(
+      `/api/video/update-video/${id}`,
+      formData,
+      {
+        headers: { authorization: `Bearer ${token}` },
+      }
+    );
+    if (data4.data.success) {
+      toast.success("Video Updated Successfully.    ...Redirecting");
+      dispatch(setLoading());
+      resetForm();
+      setTimeout(() => {
+        navigate("/admin/videos");
+      }, 1200);
     }
   };
 
@@ -273,6 +471,10 @@ function EditVideo() {
       categories_id.filter((c) => c !== selectedCategory_id._id)
     );
     setCategories(newCategories);
+  };
+
+  const handleChange = (value) => {
+    setDescription(value);
   };
 
   const handleGenreChange = (e) => {
@@ -326,52 +528,18 @@ function EditVideo() {
               <Form.Label>Video Description</Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <Form.Control
+              
+              <ReactQuill
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                type="text"
-                as="textarea"
-                placeholder="Enter Video Description"
+                onChange={handleChange}
+                modules={modules}
+                formats={formats}
+                style={{ border: "1px solid black", color: "black" }}
               />
             </Col>
           </Row>
 
-          <Row className="align-items-center mb-4">
-            <Col className="mb-2" sm={12} md={3}>
-              <label>Video Language</label>
-            </Col>
-            <Col sm={12} md={8}>
-              <select
-                value={language}
-                className="rounded"
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                <option value="">Select Language</option>
-                {languages.map((language) => (
-                  <option key={language._id} value={language._id}>
-                    {language.name}
-                  </option>
-                ))}
-              </select>
-            </Col>
-          </Row>
-
-          {/* <Row className="align-items-center mb-4">
-            <Col sm={12} md={3}>
-              <Form.Label>Video Access</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <select
-                value={access}
-                className="rounded"
-                onChange={(e) => setAccess(e.target.value)}
-              >
-                <option value="">Select Access</option>
-                <option value="free">Free</option>
-                <option value="paid">Paid</option>
-              </select>
-            </Col>
-          </Row> */}
+         
 
           <Row
             className={`align-items-center ${
@@ -389,7 +557,7 @@ function EditVideo() {
               >
                 <option value="">Select Genre</option>
                 {availableGenres
-                  .filter((genre) => genre.name != "Carousel")
+                  // .filter((genre) => genre.name != "Carousel")
                   .map((genre) => (
                     <option key={genre._id} value={genre.name}>
                       {genre.name}
@@ -487,37 +655,64 @@ function EditVideo() {
             </Row>
           )}
 
-          <Row
-            className={`align-items-center ${videoPreview ? "mb-0" : "mb-4"}`}
-          >
-            <Col sm={12} md={3}>
-              <Form.Label>Video</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                className="choose-video"
-                onChange={handleVideoChange}
-                type="file"
-                accept="video/*"
-              />
-            </Col>
-          </Row>
-          {videoPreview && (
-            <Row className="align-items-center mb-1">
-              <Col sm={12} md={3}>
-                <Form.Label></Form.Label>
-              </Col>
-              <Col sm={12} md={8} className="edit-video">
-                {videoPreview && (
-                  <video
-                    style={{ height: "300px", width: "100%" }}
-                    src={videoPreview}
-                    controls
-                  />
-                )}
-              </Col>
-            </Row>
-          )}
+          {languages.map((data, index) => {
+            return (
+              <>
+                <Row className="align-items-center mb-4" key={index}>
+                  <Col className="mb-2" sm={12} md={3}>
+                    <label>Video Language ({languages[index]?.name})</label>
+                  </Col>
+                  <Col sm={12} md={8}>
+                    <select
+                      // value={language}
+                      className="rounded"
+                      // onChange={(e) => setLanguage(e.target.value)}
+                      value={languages[index]._id}
+                      disabled
+                    >
+                      <option value="">Select Language</option>
+                      {languages.map((language) => (
+                        <option key={language._id} value={language._id}>
+                          {language.name}
+                        </option>
+                      ))}
+                    </select>
+                  </Col>
+                </Row>
+                <Row
+                  className={`align-items-center ${
+                    videoPreview ? "mb-4" : "mb-4"
+                  }`}
+                >
+                  <Col sm={12} md={3}>
+                    <Form.Label>Video</Form.Label>
+                  </Col>
+                  <Col sm={12} md={8}>
+                    <Form.Control
+                      className="choose-video"
+                      onChange={(e) => {
+                        handleFileChange(e, index);
+                      }}
+                      type="file"
+                      accept="video/*"
+                    />
+                  </Col>
+                </Row>
+                <Row className="mb-4">
+                  <Col sm={12} md={3}></Col>
+                  <Col sm={12} md={9}>
+                    {progres[index] != 0 && (
+                      <progress
+                        style={{ width: "88%" }}
+                        max="100"
+                        value={progres[index]}
+                      />
+                    )}
+                  </Col>
+                </Row>
+              </>
+            );
+          })}
 
           <Row
             className={`align-items-center ${
@@ -607,18 +802,13 @@ function EditVideo() {
                       ? "Processing..."
                       : `Uploading - ${progress}%`}
                   </Button>
-                  <p>
-                    Estimated Time to Upload Video:{" "}
-                    {estimateHour !== 0 ? `${estimateHour} hours, ` : ""}
-                    {estimatedMinute !== 0
-                      ? `${estimatedMinute} minutes`
-                      : ""}{" "}
-                    {estimatedSecond} seconds
-                  </p>
+                  
                 </div>
               </Col>
             </Row>
           )}
+
+          
 
           {progress === 0 && (
             <Row className="align-items-center">
@@ -627,7 +817,7 @@ function EditVideo() {
               </Col>
 
               <Col sm={12} md={8}>
-                <Button onClick={submitHandler} className="pt-2 pb-2">
+                <Button disabled={loading} onClick={uploadFileInChunks} className="pt-2 pb-2">
                   {loading ? (
                     <Spinner animation="border" size="sm" />
                   ) : (

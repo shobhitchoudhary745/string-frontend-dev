@@ -11,9 +11,12 @@ import {
   getAllLanguages,
   getAllVideos,
 } from "../../features/apiCall";
-import { setCurrentPage } from "../../features/generalSlice";
+import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import CustomPagination from "../../utils/CustomPagination";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { MdRemoveCircleOutline } from "react-icons/md";
+import { toast } from "react-toastify";
+import axios from "../../utils/axiosUtil";
 
 const ViewAllVideo = () => {
   const dispatch = useDispatch();
@@ -37,9 +40,7 @@ const ViewAllVideo = () => {
   const curPageHandler = (p) => setCurPage(p);
 
   useEffect(() => {
-    dispatch(
-      setCurrentPage({ currentPage: "Add Carousel" })
-    );
+    dispatch(setCurrentPage({ currentPage: "Add Carousel" }));
   }, []);
 
   useEffect(() => {
@@ -63,11 +64,46 @@ const ViewAllVideo = () => {
     getAllCarousels(token, dispatch);
   }, []);
 
+  const deleteHandler = async (id) => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this Video?\nThis action cannot be undone."
+      ) === true
+    ) {
+      try {
+        dispatch(setLoading());
+        const { data } = await axios.delete(`/api/video/delete-video/${id}`, {
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        if (data.success) {
+          getAllVideos(
+            dispatch,
+            token,
+            language,
+            genres,
+            query,
+            curPage,
+            resultPerPage,
+            true
+          );
+          dispatch(setLoading());
+          toast.success(data.message);
+        }
+      } catch (error) {
+        dispatch(setLoading());
+        toast.error(error.message);
+        
+      }
+    }
+  };
+
   const numOfPages = Math.ceil(totalVideoCount / resultPerPage);
   return (
     <>
       <Card className="user-table">
-        <Card.Header className="user-header">
+        {/* <Card.Header className="user-header">
           <Form.Group>
             <Form.Select
               value={language}
@@ -124,7 +160,7 @@ const ViewAllVideo = () => {
               <FaSearch />
             </InputGroup.Text>
           </InputGroup>
-        </Card.Header>
+        </Card.Header> */}
         <Card.Body className="user-body">
           {loading ? (
             <div className="text-center">
@@ -179,25 +215,38 @@ const ViewAllVideo = () => {
                                 Already Added
                               </Link>
                             ) : (
-                              <Link
-                                style={{
-                                  backgroundColor: "#10c469",
-                                  border: "none",
-                                }}
-                                to={`/admin/add-inner-carousel/${data._id}`}
-                                className="btn btn-danger"
-                              >
-                                {loading ? (
-                                  <Spinner
-                                    animation="border"
-                                    style={{ color: "#caa257" }}
-                                  />
-                                ) : (
-                                  <span>
-                                    <HiPlus /> Add
-                                  </span>
-                                )}
-                              </Link>
+                              <>
+                                <Link
+                                  style={{
+                                    backgroundColor: "#10c469",
+                                    border: "none",
+                                  }}
+                                  to={`/admin/add-inner-carousel/${data._id}`}
+                                  className="btn btn-danger"
+                                >
+                                  {loading ? (
+                                    <Spinner
+                                      animation="border"
+                                      style={{ color: "#caa257" }}
+                                    />
+                                  ) : (
+                                    <span>
+                                      <HiPlus /> Add
+                                    </span>
+                                  )}
+                                </Link>
+
+                                <Link
+                                  style={{
+                                    backgroundColor: "#ff5b5b",
+                                    border: "none",
+                                  }}
+                                  onClick={() => deleteHandler(data._id)}
+                                  className="btn btn-danger"
+                                >
+                                  <MdRemoveCircleOutline /> Remove
+                                </Link>
+                              </>
                             )}
                           </div>
                         </td>

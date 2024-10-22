@@ -1,12 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { downloadAsCsv, getAllTransactions } from "../../features/apiCall";
+import {
+  downloadAsCsv,
+  getAllTransactions,
+  getFilteredTransactions,
+} from "../../features/apiCall";
 import {
   Button,
   Card,
+  Col,
+  Container,
   Form,
   InputGroup,
+  Row,
   Spinner,
   Table,
 } from "react-bootstrap";
@@ -16,6 +23,7 @@ import { LiaFileDownloadSolid } from "react-icons/lia";
 import "./Transaction.scss";
 import { setCurrentPage } from "../../features/generalSlice";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Transaction() {
   const dispatch = useDispatch();
@@ -30,6 +38,9 @@ export default function Transaction() {
   const [query, setQuery] = useState("");
   const [gateway, setGateway] = useState("");
   const [date, setData] = useState("");
+  const [month, setMonth] = useState("Download Transaction");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   const resultPerPage = 10;
   const curPageHandler = (p) => setCurPage(p);
@@ -119,12 +130,91 @@ export default function Transaction() {
             <Button
               style={{ backgroundColor: "#35b8e0", border: "none" }}
               onClick={() => {
-                downloadAsCsv("Transaction", "transactions", token);
+                downloadAsCsv("Transaction", "transactions", token, from, to);
               }}
             >
               <FaRegFileExcel /> Export Transactions
             </Button>
           </div>
+          <Container>
+            <div className="d-flex gap-3">
+              <div md={"3"}>
+                <InputGroup
+                  style={{
+                    border: "1px solid #313133",
+                    backgroundColor: "#313133",
+                    borderRadius: "5px",
+                  }}
+                  className="user-search d-flex align-items-center"
+                >
+                  <Form.Label className="m-2" style={{ color: "#f9f9f9" }}>
+                    From
+                  </Form.Label>
+                  <Form.Control
+                    aria-label="Search Input"
+                    type="date"
+                    value={from}
+                    onChange={(e) => {
+                      if (new Date() < new Date(e.target.value)) {
+                        toast.warning(
+                          "From must be lesser or equal to current date"
+                        );
+                        return;
+                      }
+                      setFrom(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </div>
+              <div md={"3"}>
+                <InputGroup
+                  style={{
+                    border: "1px solid #313133",
+                    backgroundColor: "#313133",
+                    borderRadius: "5px",
+                  }}
+                  className="user-search d-flex align-items-center"
+                >
+                  <Form.Label className="m-2" style={{ color: "#f9f9f9" }}>
+                    To
+                  </Form.Label>
+                  <Form.Control
+                    aria-label="Search Input"
+                    type="date"
+                    value={to}
+                    onChange={(e) => {
+                      if (from && new Date(from) > new Date(e.target.value)) {
+                        toast.warning(
+                          "To Date must be greater or equal than From"
+                        );
+                        return;
+                      }
+                      if (!from) {
+                        toast.warning("Please Select From Date First");
+                        return;
+                      }
+                      setTo(e.target.value);
+                    }}
+                  />
+                </InputGroup>
+              </div>
+              <div md={"3"} className="d-flex align-items-end">
+                <Button
+                  disabled={!(from && to)}
+                  style={{
+                    backgroundColor: "#35b8e0",
+                    border: "none",
+                    height: "44px",
+                  }}
+                  onClick={() => {
+                    getFilteredTransactions(dispatch, token, from, to);
+                  }}
+                >
+                  Download Transactions
+                </Button>
+              </div>
+            </div>
+          </Container>
         </Card.Header>
         <Card.Body className="user-body">
           {loading ? (
@@ -160,12 +250,16 @@ export default function Transaction() {
                             <p className="m-0">Deleted User</p>
                           )}
                         </td>
-                        <td>{transaction?.user?transaction.user.email:"Deleted User"}</td>
+                        <td>
+                          {transaction?.user
+                            ? transaction.user.email
+                            : "Deleted User"}
+                        </td>
                         <td>{transaction?.order?.plan_type}</td>
                         <td>
                           {transaction?.gateway === "Razorpay"
                             ? `₹ ${transaction?.amount}`
-                            : `₹0`}
+                            : `$ ${transaction?.amount}`}
                         </td>
                         <td>{transaction?.gateway}</td>
                         <td>

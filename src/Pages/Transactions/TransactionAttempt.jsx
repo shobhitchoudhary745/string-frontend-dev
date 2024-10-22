@@ -161,7 +161,7 @@ export default function TransactionAttempt() {
                         <td>
                           {transaction?.gateway === "Razorpay"
                             ? `₹ ${transaction?.amount}`
-                            : `₹0`}
+                            : `$ ${transaction?.amount}`}
                         </td>
                         <td>{transaction?.gateway}</td>
                         <td>

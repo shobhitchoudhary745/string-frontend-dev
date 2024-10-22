@@ -217,3 +217,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+.check-in-put {
+  background-color: none !important;
+  border-color: none !important;
+  box-shadow: none !important;
+  background: none !important;
+  width: 18px;
+  height: 18px;
+}
+
+.check-in-put:checked {
+  background-color: #caa257 !important;
+  border-color: #caa257 !important;
+}

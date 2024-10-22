@@ -15,7 +15,7 @@ export default function Footer() {
           <footer style={{color:"#98a6ad",fontSize:"14px"}} className="text-center">
             <strong >
               Copyright © 2014-{`${d.getFullYear()} `}
-              <Link target="_blank" rel="noreferrer" style={{color:"#007bff"}} to="https://www.stringevolve.in/">String Geo</Link>.{" "}
+              <Link target="_blank" rel="noreferrer" style={{color:"#007bff"}} to="https://www.stringgeo.com/">String Geo</Link>.{" "}
             </strong>
             All rights reserved.
           </footer>

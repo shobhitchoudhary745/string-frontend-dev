@@ -26,9 +26,9 @@ const Trailer = () => {
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
   const { videos, totalVideoCount } = useSelector((state) => state.trailer);
-  console.log(videos, totalVideoCount);
+  
   const { trailers } = useSelector((state) => state.trailer);
-  console.log(trailers);
+ 
   const { languages } = useSelector((state) => state.language);
   const { genres: gen } = useSelector((state) => state.genre);
   const [load, setLoad] = useState(false);
@@ -223,7 +223,7 @@ const Trailer = () => {
                     return (
                       <tr key={index}>
                         <td>{(curPage - 1) * 10 + (index + 1)}</td>
-                        <td>{data.title}</td>
+                        <td>{data?.title}</td>
                         <td>
                           {/* <img
                             className="poster"
@@ -232,7 +232,7 @@ const Trailer = () => {
                           /> */}
                           <LazyLoadImage
                             alt={"Profile"}
-                            src={`${process.env.REACT_APP_URL}/${data.thumbnail_url}`}
+                            src={`${process.env.REACT_APP_URL}/${data?.thumbnail_url}`}
                             effect="blur"
                             className="poster"
                           />
@@ -240,7 +240,7 @@ const Trailer = () => {
                         <td>
                           <div className="action-link">
                             {trailers.length &&
-                            trailers[0].video == data._id ? (
+                            trailers[0]?.video == data?._id ? (
                               <Link
                                 style={{
                                   border: "none",

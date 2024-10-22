@@ -57,12 +57,7 @@ const Contact = () => {
                       <tr key={index}>
                         <td>{index+1}</td>
                         <td>
-                          {/* {console.log(data.image_url)} */}
-                          {/* <img
-                            className="poster"
-                            src={data.profile_url}
-                            alt="profile"
-                          /> */}
+                        
                           <LazyLoadImage
                             alt={"Profile"} 
                             src={`${process.env.REACT_APP_URL}/${data.image_url}`}

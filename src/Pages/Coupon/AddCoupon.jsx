@@ -82,7 +82,7 @@ export default function AddCoupon() {
         }, 1200);
       }
     } catch (error) {
-      console.log(error);
+     
       dispatch(setLoading());
       toast.error(error.response.data.message || error.message);
     }

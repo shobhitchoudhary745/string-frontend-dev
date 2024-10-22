@@ -84,7 +84,7 @@ export default function Profile() {
       }
     } catch (error) {
       dispatch(setLoading());
-      console.log(error);
+     
       toast.error(error.message);
     }
   };

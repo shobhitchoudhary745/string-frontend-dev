@@ -21,6 +21,7 @@ import carouselSlice from "./carouselSlice";
 import contactSlice from "./contactSlice";
 import aboutSlice from "./aboutSlice";
 import freeVideoSlice from "./freeVideoSlice";
+import deletedUserSlice from "./deletedUserSlice";
 
 export default configureStore({
   reducer: {
@@ -45,6 +46,7 @@ export default configureStore({
     carousel: carouselSlice,
     contact: contactSlice,
     about: aboutSlice,
-    free_video: freeVideoSlice
+    free_video: freeVideoSlice,
+    deleted_user: deletedUserSlice,
   },
 });

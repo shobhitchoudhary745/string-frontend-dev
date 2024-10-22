@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Pagination } from "react-bootstrap";
 
 const CustomPagination = ({ pages, pageHandler, curPage }) => {
-  //   console.log("cur page", curPage);
   const [left, setLeft] = useState();
   const [right, setRight] = useState();
 
   const getPageArray = () => {
     const arr = [...Array(pages).keys()].slice(left + 1, right);
-    // console.log(curPage === left);
-    // console.log(left, right, arr);
+
     return arr;
   };
 

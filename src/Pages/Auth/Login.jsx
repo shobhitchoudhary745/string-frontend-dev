@@ -28,7 +28,7 @@ const Login = () => {
       });
 
       if (data.success) {
-        // console.log(data);
+       
         setLoading(false);
         toast.success(data.message);
         localStorage.setItem("token", data.accessToken);
@@ -61,10 +61,10 @@ const Login = () => {
   ) : (
     <div className="wrapper-page">
       <div className="text-center">
-        <Link to="https://www.stringevolve.in">
+        <Link to="https://www.stringgeo.com">
           <img
             style={{ width: "150px", height: "42px" }}
-            src="https://stringgeo.com/upload/NewFolder/String%20Geo%20logo%20Icon.png"
+            src="https://www.stringgeo.com/logo/string-geo-logo-white.png"
             alt="main-logo"
           />
         </Link>

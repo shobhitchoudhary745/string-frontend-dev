@@ -35,7 +35,7 @@ export default function AddFaq() {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (!title||!description) {
-      toast.warning("Please Enter Language Name");
+      toast.warning("Please Enter All Fieleds");
       return;
     }
     try {
@@ -43,7 +43,7 @@ export default function AddFaq() {
       const { data } = await axios.post(
         "/api/faq/create-faq",
         {
-          title,
+          title:title.toUpperCase(),
           description,
           status,
         },

@@ -70,7 +70,7 @@ export default function EditContact() {
       }
     } catch (error) {
       dispatch(setLoading());
-      console.log(error);
+      
       toast.error(error.response.data.message || error.message);
     }
   };

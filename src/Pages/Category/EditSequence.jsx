@@ -14,8 +14,7 @@ const EditSequence = () => {
   const { token } = useSelector((state) => state.auth);
   const { category } = useSelector((state) => state.category);
   const [array, setArray] = useState([]);
-  // console.log(category);
-  // console.log(array);
+ 
 
   useEffect(() => {
     if (token) {
@@ -55,8 +54,7 @@ const EditSequence = () => {
           video: data.video._id,
         };
       });
-      // console.log(video_array);
-      // return;
+     
 
       const { data } = await axios.patch(
         `/api/category/shuffle-category-sequence/${id}`,

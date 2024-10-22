@@ -25,7 +25,9 @@ export default function AddInnerCarousel() {
   const [video_id, SetVideo_id] = useState("");
   const [type, setType] = useState("Inner");
   const [thumbnail, setThumbnail] = useState("");
+  const [mobilethumbnail, setMobileThumbnail] = useState("");
   const [thumbnailPreview, setThumbnailPreview] = useState("");
+  const [mobilethumbnailPreview, setMobileThumbnailPreview] = useState("");
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Add Inner Carousel" }));
@@ -43,6 +45,16 @@ export default function AddInnerCarousel() {
     };
   };
 
+  const handleMobileThumbnailChange = (e) => {
+    const file = e.target.files[0];
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setMobileThumbnail(file);
+      setMobileThumbnailPreview(reader.result);
+    };
+  };
   const resetForm = () => {
     setThumbnail("");
     setThumbnailPreview("");
@@ -56,6 +68,7 @@ export default function AddInnerCarousel() {
       formData.append("video_id", video_id);
       formData.append("tag", type);
       formData.append("image", thumbnail);
+      formData.append("image", mobilethumbnail);
 
       dispatch(setLoading());
       const { data } = await axios.post(
@@ -107,7 +120,10 @@ export default function AddInnerCarousel() {
                 value={type}
                 readOnly
               /> */}
-              <select className="rounded" onChange={(e)=>setType(e.target.value)}>
+              <select
+                className="rounded"
+                onChange={(e) => setType(e.target.value)}
+              >
                 <option value="Inner">Inner</option>
                 <option value="Outer">Outer</option>
               </select>
@@ -160,6 +176,59 @@ export default function AddInnerCarousel() {
                       objectFit: "fill",
                     }}
                     src={thumbnailPreview}
+                    alt="thumbnail"
+                  />
+                )}
+              </Col>
+            </Row>
+          )}
+
+          <Row
+            className={`align-items-center ${
+              mobilethumbnailPreview ? "mb-0" : "mb-1"
+            }`}
+          >
+            <Col sm={12} md={3}>
+              <Form.Label>Mobile Poster</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <Form.Control
+                onChange={handleMobileThumbnailChange}
+                type="file"
+                accept="image/*"
+                placeholder="Select Poster To Upload"
+              />
+            </Col>
+          </Row>
+          <Row
+            className={`align-items-center ${
+              mobilethumbnailPreview ? "mb-0" : "mb-4"
+            }`}
+          >
+            <Col sm={12} md={3}>
+              <Form.Label></Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <label style={{ color: "#6c757d" }}>
+                (Recommend 375 x 400 Resolution Image.)
+              </label>
+            </Col>
+          </Row>
+          {mobilethumbnailPreview && (
+            <Row className="align-items-center mb-2">
+              <Col sm={12} md={3}>
+                <Form.Label></Form.Label>
+              </Col>
+              <Col sm={12} md={8} className="edit-video">
+                {mobilethumbnailPreview && (
+                  <img
+                    style={{
+                      height: "250px",
+                      width: "300px",
+                      borderRadius: "7px",
+                      objectFit: "fill",
+                    }}
+                    src={mobilethumbnailPreview}
                     alt="thumbnail"
                   />
                 )}

@@ -65,6 +65,8 @@ import About from "./Pages/About/About.jsx";
 import FreeVideo from "./Pages/Free/Video.jsx";
 import AddFreeVideo from "./Pages/Free/AddVideo.jsx";
 import EditFreeVideo from "./Pages/Free/EditVideo.jsx";
+import Whatsapp from "./Pages/Whatsapp/Whatsapp.jsx";
+import DeletedUser from "./Pages/Deleted User/DeletedUser.js";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -484,10 +486,26 @@ export default function Layout() {
               }
             />
             <Route
+              path="/admin/deleted-user"
+              element={
+                <ProtectedRoute>
+                  <DeletedUser />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/emails"
               element={
                 <ProtectedRoute>
                   <Email />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/whatsapp"
+              element={
+                <ProtectedRoute>
+                  <Whatsapp />
                 </ProtectedRoute>
               }
             />

@@ -2,7 +2,7 @@ import { AiFillDashboard } from "react-icons/ai";
 // import { FaVideo } from "react-icons/fa6";
 import { IoLanguage } from "react-icons/io5";
 import { HiMiniCreditCard } from "react-icons/hi2";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaWhatsapp } from "react-icons/fa";
 import { VscListUnordered } from "react-icons/vsc";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { BiCategory } from "react-icons/bi";
@@ -37,10 +37,12 @@ export const firstArray = [
     link: "/admin/emails",
     arr: ["Send Email"]
   },
-  // {
-  //   icon: <FaVideo className="mx-2" size={18} />,
-  //   content: "Truth",
-  // },
+  {
+    icon: <FaWhatsapp  className="mx-2" size={18} />,
+    content: "Whatsapp",
+    link: "/admin/whatsapp",
+    arr: ["Whatsapp"]
+  },
   // {
   //   icon: <FaVideo className="mx-2" size={18} />,
   //   content: "Sanatan Dharma",
@@ -113,6 +115,13 @@ export const secondArray = [
     icon: <HiMiniCreditCard size={18} className="mx-2" />,
     content: "Payment Gateways",
     link: "/admin/gateways",
+    arr: ["Payment Gateways"]
+  },
+  {
+    icon: <FaUser size={18} className="mx-2" />,
+    content: "Deleted User",
+    link: "/admin/deleted-user",
+    arr: ["Deleted User"]
   },
 ];
 
@@ -164,28 +173,28 @@ export const dashBoardArray = [
     value: 5923,
     color: "#caa257",
     path: "/",
-    content: "",
+    content: "Dashboard",
   },
   {
     key: "Weekly Revenue",
     value: 26102,
     color: "#ff8acc",
     path: "/",
-    content: "",
+    content: "Dashboard",
   },
   {
     key: "Monthly Revenue",
     value: 26102,
     color: "#f9c851",
     path: "/",
-    content: "",
+    content: "Dashboard",
   },
   {
     key: "Yearly Revenue",
     value: 26102,
     color: "#10c469",
     path: "/",
-    content: "",
+    content: "Dashboard",
   },
 ];
 

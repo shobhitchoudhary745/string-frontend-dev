@@ -87,7 +87,7 @@ const Video = () => {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        console.log(error);
+        
       }
     }
   };
@@ -123,7 +123,7 @@ const Video = () => {
             >
               <option value="all">Filter By Genres</option>
               {gen
-                .filter((g) => g.name != "Carousel")
+                // .filter((g) => g.name != "Carousel")
                 .map((genre) => {
                   return (
                     <option value={genre._id} key={genre._id}>
@@ -136,7 +136,7 @@ const Video = () => {
           <InputGroup className="user-search">
             <Form.Control
               aria-label="Search Input"
-              placeholder="Search By title or description"
+              placeholder="Search By title"
               type="search"
               value={search}
               onChange={(e) => {
@@ -191,9 +191,18 @@ const Video = () => {
                     return (
                       <tr key={index}>
                         <td>{data.title}</td>
-                        <td>{data.description}</td>
+
+                        <td>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: data.description.slice(0, 500),
+                            }}
+                          />
+                        </td>
                         <td className="lang">
-                          <span>{data.language?.name}</span>
+                          {data?.language?.map((lan, ind) => {
+                            return <span className="m-1" key={ind}>{lan?.name}</span>;
+                          })}
                         </td>
                         <td className="lang">
                           <span>{data?.access}</span>

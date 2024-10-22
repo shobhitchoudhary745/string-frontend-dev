@@ -13,7 +13,7 @@ const Home = () => {
   const { token } = useSelector((state) => state.auth);
   const { loading } = useSelector((state) => state.general);
   const { homeData } = useSelector((state) => state.home);
-  // console.log(homeData);
+  
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Dashboard" }));

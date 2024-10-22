@@ -56,7 +56,7 @@ export default function EditFaq() {
       const { data } = await axios.patch(
         `/api/faq/update-faq/${id}`,
         {
-          title,
+          title: title ? title.toUpperCase() : "",
           description,
           status,
         },
@@ -73,7 +73,7 @@ export default function EditFaq() {
       }
     } catch (error) {
       dispatch(setLoading());
-      console.log(error);
+      
       toast.error(error.response.data.message || error.message);
     }
   };
@@ -81,7 +81,7 @@ export default function EditFaq() {
   return (
     <div>
       <Card className="user-table ">
-      <Container className="input-fieleds p-4">
+        <Container className="input-fieleds p-4">
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
               <Form.Label>Title</Form.Label>

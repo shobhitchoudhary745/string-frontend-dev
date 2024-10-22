@@ -45,7 +45,7 @@ const ViewCategory = () => {
     } catch (error) {
       setLoad(false);
       toast.error(error.response.data.message);
-      console.log(error);
+  
     }
   };
 
@@ -67,7 +67,7 @@ const ViewCategory = () => {
     } catch (error) {
       setLoad(false);
       toast.error(error.response.data.message);
-      console.log(error);
+     
     }
   };
 
@@ -126,7 +126,7 @@ const ViewCategory = () => {
                           {category.video_array &&
                           category.video_array
                             .map((video, index) => {
-                              return video.video._id;
+                              return video?.video?._id;
                             })
                             .includes(data._id) ? (
                             <Link

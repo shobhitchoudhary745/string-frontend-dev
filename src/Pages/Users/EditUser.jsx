@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 import axios from "../../utils/axiosUtil";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUser } from "../../features/apiCall";
+import { getAllPlans, getUser } from "../../features/apiCall";
 
 export default function EditUser() {
   const { id } = useParams();
@@ -33,15 +33,18 @@ export default function EditUser() {
   const [city, setCity] = useState("");
 
   const { loading } = useSelector((state) => state.general);
-  // console.log(city,state,country)
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
-  const [plan_name, setPlanName] = useState("Select Plan Name");
-  const [plan_type, setPlanType] = useState("Select Plan Type");
+  const [plan_name, setPlanName] = useState("");
+  const [plan_type, setPlanType] = useState("");
   const [expiry, setExpiry] = useState("");
-  console.log(typeof expiry)
+  const [currency, setCurrency] = useState("");
+  const { plans } = useSelector((state) => state.plan);
+  const [deletePlan, setDeletePlan] = useState(false);
+  
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit User" }));
@@ -49,6 +52,7 @@ export default function EditUser() {
 
   useEffect(() => {
     getUser(dispatch, token, id);
+    getAllPlans(dispatch, token);
   }, [dispatch, token, id]);
 
   useEffect(() => {
@@ -76,7 +80,8 @@ export default function EditUser() {
       !state &&
       !plan_name &&
       !plan_type &&
-      !expiry
+      !expiry &&
+      !deletePlan
     ) {
       toast.warning("Please Fill Atleast One Fieled");
       return;
@@ -98,7 +103,9 @@ export default function EditUser() {
           plan_name: plan_name ? plan_name : "",
           plan_type: plan_type ? plan_type : "",
           expiry: expiry ? expiry : "",
-          order_id
+          order_id,
+          currency,
+          delete_plan: deletePlan,
         },
         { headers: { authorization: `Bearer ${token}` } }
       );
@@ -111,7 +118,7 @@ export default function EditUser() {
       }
     } catch (error) {
       dispatch(setLoading());
-      console.log(error);
+      
       toast.error(error.message);
     }
   };
@@ -253,9 +260,25 @@ export default function EditUser() {
               </select>
             </Col>
           </Row>
-          {user_transactions.length > 0 && (
-            <>
+          {user_transactions.length > 0 ? (
+            <div>
               <Row className="align-items-center mb-4">
+                <Col sm={12} md={3}>
+                  <Form.Label>Delete User Plan</Form.Label>
+                </Col>
+                <Col>
+                  {/* <Form.Group className="mb-3"> */}
+                  <input
+                    className="check-in-put"
+                    onClick={() => setDeletePlan((p) => !p)}
+                    type="checkbox"
+                    label=""
+                    checked={deletePlan}
+                  />
+                  {/* </Form.Group> */}
+                </Col>
+              </Row>
+              {/* <Row className="align-items-center mb-4">
                 <Col sm={12} md={3}>
                   <Form.Label>Plan Name</Form.Label>
                 </Col>
@@ -297,6 +320,67 @@ export default function EditUser() {
                     onChange={(e) => setExpiry(e.target.value)}
                     type="date"
                   />
+                </Col>
+              </Row> */}
+            </div>
+          ) : (
+            <>
+              <Row className="align-items-center mb-4">
+                <Col sm={12} md={3}>
+                  <Form.Label>Plan Name</Form.Label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <select
+                    value={plan_name}
+                    className="rounded"
+                    onChange={(e) => setPlanName(e.target.value)}
+                  >
+                    <option value="">Select Plan Name</option>
+                    {plans.map((plan, ind) => {
+                      return (
+                        <option key={ind} value={plan?._id}>
+                          {plan.name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </Col>
+              </Row>
+              <Row className="align-items-center mb-4">
+                <Col sm={12} md={3}>
+                  <Form.Label>Plan Type</Form.Label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <select
+                    value={plan_type}
+                    className="rounded"
+                    onChange={(e) => setPlanType(e.target.value)}
+                  >
+                    <option value="">Select Plan Type</option>
+                    {plans[0]?.prices?.map((data, ind) => {
+                      return (
+                        <option key={ind} value={data.plan_type}>
+                          {data.plan_type}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </Col>
+              </Row>
+              <Row className="align-items-center mb-4">
+                <Col sm={12} md={3}>
+                  <Form.Label>Currency</Form.Label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <select
+                    value={currency}
+                    className="rounded"
+                    onChange={(e) => setCurrency(e.target.value)}
+                  >
+                    <option value="">Select Currency</option>
+                    <option value="INR">INR</option>
+                    <option value="Dollar">Dollar</option>
+                  </select>
                 </Col>
               </Row>
             </>

@@ -80,8 +80,8 @@ const EditSubscription = () => {
       }
     } catch (err) {
       dispatch(setLoading());
-      window.alert(err);
-      console.log(err);
+      
+     
     }
   };
 

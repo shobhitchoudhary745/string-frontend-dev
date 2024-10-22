@@ -90,7 +90,7 @@ const FreeVideo = () => {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        console.log(error);
+      
       }
     }
   };
@@ -139,7 +139,7 @@ const FreeVideo = () => {
           <InputGroup className="user-search">
             <Form.Control
               aria-label="Search Input"
-              placeholder="Search By title or description"
+              placeholder="Search By title"
               type="search"
               value={search}
               onChange={(e) => {
@@ -193,16 +193,39 @@ const FreeVideo = () => {
                   videos.map((data, index) => {
                     return (
                       <tr key={index}>
+                        {/* <td>
+                          {data?.thumbnail_url?.split(".")[
+                            data?.thumbnail_url?.split(".").length - 1
+                          ] == "bmp"
+                            ? "True"
+                            : "False"}
+                        </td> */}
                         <td>{data.title}</td>
-                        <td>{data.description}</td>
+                        <td>
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html: data.description.slice(0, 500),
+                            }}
+                          />
+                        </td>
                         <td className="lang">
-                          <span>{data.language?.name}</span>
+                          {data?.language?.map((lan, ind) => {
+                            return (
+                              <span className="m-1" key={ind}>
+                                {lan?.name}
+                              </span>
+                            );
+                          })}
                         </td>
                         <td className="lang">
                           <span>{data?.access}</span>
                         </td>
                         <td className="lang">
-                          <span>{data.video_type==="shorts"?"Short":"Full Length"}</span>
+                          <span>
+                            {data.video_type === "shorts"
+                              ? "Short"
+                              : "Full Length"}
+                          </span>
                         </td>
                         <td>
                           <LazyLoadImage

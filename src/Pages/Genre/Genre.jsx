@@ -44,7 +44,7 @@ const Genre = () => {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        console.log(error);
+       
       }
     }
   };

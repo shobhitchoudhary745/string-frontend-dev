@@ -16,7 +16,6 @@ import axios from "../../utils/axiosUtil";
 import { setCurrentPage, setLoading } from "../../features/generalSlice";
 import { useNavigate, useParams } from "react-router-dom";
 
-
 export default function EditAbout() {
   const { id } = useParams();
   const { token } = useSelector((state) => state.auth);
@@ -29,9 +28,9 @@ export default function EditAbout() {
   // const [name, setName] = useState("");
   const [profile, setProfile] = useState("");
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit About" }));
-  },[])
+  }, []);
 
   // useEffect(() => {
   //   getActor(dispatch, token, id);
@@ -40,7 +39,7 @@ export default function EditAbout() {
   // useEffect(() => {
   //   if (actor.name) {
   //     setName(actor.name);
-      
+
   //   }
   // }, [actor]);
 
@@ -53,7 +52,7 @@ export default function EditAbout() {
     try {
       dispatch(setLoading());
       const formData = new FormData();
-      formData.append("image",profile);
+      formData.append("image", profile);
       const { data } = await axios.patch(
         `/api/about/update-about/${id}`,
         formData,
@@ -70,7 +69,6 @@ export default function EditAbout() {
       }
     } catch (error) {
       dispatch(setLoading());
-      console.log(error);
       toast.error(error.response.data.message || error.message);
     }
   };
@@ -84,8 +82,7 @@ export default function EditAbout() {
               <label>Image</label>
             </Col>
             <Col sm={12} md={8}>
-            <Form.Control
-                
+              <Form.Control
                 onChange={(e) => setProfile(e.target.files[0])}
                 type="file"
                 accept="image/*"

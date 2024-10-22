@@ -67,7 +67,7 @@ export default function EditCategory() {
       }
     } catch (error) {
       dispatch(setLoading());
-      console.log(error);
+     
       toast.error(error.message);
     }
   };

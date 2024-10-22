@@ -43,7 +43,7 @@ export default function Query() {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        console.log(error);
+        
       }
     }
   };

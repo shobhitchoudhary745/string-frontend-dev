@@ -23,13 +23,10 @@ const About = () => {
     if (token) getAllAbouts(dispatch, token);
   }, []);
 
-
   return (
     <>
       <Card className="user-table">
-        <Card.Header className="user-header">
-         
-        </Card.Header>
+        <Card.Header className="user-header"></Card.Header>
         <Card.Body className="user-body">
           {loading ? (
             <div className="text-center">
@@ -50,21 +47,15 @@ const About = () => {
                     <td colSpan="3" className="text-center">
                       No About Image Found
                     </td>
-                  </tr> 
+                  </tr>
                 ) : (
                   abouts.map((data, index) => {
                     return (
                       <tr key={index}>
-                        <td>{index+1}</td>
+                        <td>{index + 1}</td>
                         <td>
-                          {/* {console.log(data.image_url)} */}
-                          {/* <img
-                            className="poster"
-                            src={data.profile_url}
-                            alt="profile"
-                          /> */}
                           <LazyLoadImage
-                            alt={"Profile"} 
+                            alt={"Profile"}
                             src={`${process.env.REACT_APP_URL}/${data.image_url}`}
                             className="poster"
                             effect="blur"

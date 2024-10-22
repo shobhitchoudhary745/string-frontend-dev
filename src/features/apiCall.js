@@ -26,6 +26,7 @@ import { setCarousels } from "./carouselSlice";
 import { setContacts } from "./contactSlice";
 import { setAbouts } from "./aboutSlice";
 import { setFreeVideo, setFreeVideos } from "./freeVideoSlice";
+import { setDeletedUsers } from "./deletedUserSlice";
 
 export const getAllUsers = async (
   dispatch,
@@ -59,7 +60,6 @@ export const getAllUsers = async (
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -98,7 +98,6 @@ export const getAllTransactions = async (
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -117,41 +116,36 @@ export const getAllPlans = async (dispatch, token) => {
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
 export const getAllLanguages = async (dispatch, token) => {
   try {
-    const { data } = await axios.get(`/api/language/get-languages`, {
+    const { data } = await axios.get(`/api/language/get-languages?admin=true`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
-      // console.log(data)
       dispatch(setLanguages({ languages: data.languages }));
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
 export const getAllGenres = async (dispatch, token) => {
   try {
-    const { data } = await axios.get(`/api/genre/get-genres`, {
+    const { data } = await axios.get(`/api/genre/get-genres?admin=true`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
     if (data.success) {
-      // console.log(data)
       dispatch(setGenres({ genres: data.genres }));
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -169,7 +163,6 @@ export const getUser = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -185,7 +178,6 @@ export const getPlan = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -201,7 +193,6 @@ export const getLanguage = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -217,7 +208,6 @@ export const getGenre = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -232,7 +222,7 @@ export const getURL = async (dispatch, token) => {
         },
       }
     );
-    console.log(data);
+
     if (data.success) {
       dispatch(
         setURL({ url: data.data.uploadURL, imageName: data.data.imageName })
@@ -240,42 +230,56 @@ export const getURL = async (dispatch, token) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
-// export const downloadAsCsv = async (Model, Filename = "data", token) => {
-//   try {
-//     const { data } = await axios.get(
-//       `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`,
-//       {
-//         headers: {
-//           authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     const blob = new Blob([data], { type: "text/xlsx" });
-//     const link = document.createElement("a");
-//     link.href = window.URL.createObjectURL(blob);
-//     link.setAttribute("download", Filename + ".xlsx");
-//     link.style.display = "none";
-//     document.body.appendChild(link);
-//     link.click();
-//     toast.success("File Downloaded Successfully");
-//     setTimeout(() => {
-//       document.body.removeChild(link);
-//     }, 1000);
-//     console.log(blob);
-//   } catch (error) {
-//     toast.error(error.response.data.message);
-//     console.log(error);
-//   }
-// };
-
-export const downloadAsCsv = async (Model, Filename = "data", token) => {
+export const getFilteredTransactions = async (dispatch, token, from, to) => {
   try {
     const { data } = await axios.get(
-      `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}`,
+      `/api/transaction/get-selected-transactions?from=${from}&to=${to}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      const transactions = data.transaction;
+      if (transactions.length === 0) {
+        toast.warning("No transaction Found");
+      }
+      for (let transaction of transactions) {
+        if (transaction.invoice_url) {
+          await new Promise((resolve, reject) => {
+            const link = document.createElement("a");
+            link.href = `${process.env.REACT_APP_URL}/${transaction.invoice_url}`;
+            link.setAttribute("download", transaction.invoice_url);
+            link.style.display = "none";
+            document.body.appendChild(link);
+            link.click();
+            setTimeout(() => {
+              document.body.removeChild(link);
+              resolve();
+            }, 1000);
+          });
+        }
+      }
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const downloadAsCsv = async (
+  Model,
+  Filename = "data",
+  token,
+  from,
+  to
+) => {
+  try {
+    const { data } = await axios.get(
+      `/api/admin/download-as-csv?Model=${Model}&Filename=${Filename}&from=${from}&to=${to}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -305,7 +309,6 @@ export const downloadAsCsv = async (Model, Filename = "data", token) => {
     toast.success("File Downloaded Successfully");
   } catch (error) {
     toast.error(error.response.data.message);
-    console.log(error);
   }
 };
 
@@ -341,7 +344,6 @@ export const getAllVideos = async (
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -351,7 +353,7 @@ export const getAllFreeVideos = async (
   language,
   query,
   curPage,
-  resultPerPage,
+  resultPerPage
 ) => {
   try {
     dispatch(setLoading());
@@ -375,7 +377,6 @@ export const getAllFreeVideos = async (
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -391,7 +392,6 @@ export const getVideo = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -407,7 +407,6 @@ export const getFreeVideo = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -426,7 +425,6 @@ export const getCategoryVideo = async (dispatch, token, id) => {
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -440,13 +438,12 @@ export const getAllActors = async (dispatch, token) => {
     });
     if (data.success) {
       dispatch(setLoading());
-      // console.log(data)
+
       dispatch(setActors({ actors: data.actors }));
     }
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -462,7 +459,6 @@ export const getActor = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -476,13 +472,12 @@ export const getAllDirectors = async (dispatch, token) => {
     });
     if (data.success) {
       dispatch(setLoading());
-      // console.log(data)
+
       dispatch(setDirectors({ directors: data.directors }));
     }
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -498,18 +493,20 @@ export const getDirector = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
 export const getCategories = async (dispatch, token) => {
   try {
     dispatch(setLoading());
-    const { data } = await axios.get(`/api/category/get-categories`, {
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
-    });
+    const { data } = await axios.get(
+      `/api/category/get-categories?admin=true`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
     if (data.success) {
       dispatch(setLoading());
       dispatch(setCategories({ categories: data.categories }));
@@ -517,7 +514,6 @@ export const getCategories = async (dispatch, token) => {
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -533,7 +529,6 @@ export const getCategory = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -552,7 +547,6 @@ export const getCategory_Video = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -585,7 +579,6 @@ export const getQueries = async (
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -601,7 +594,6 @@ export const getQuery = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -613,12 +605,10 @@ export const getAllCoupons = async (dispatch, token) => {
       },
     });
     if (data.success) {
-      // console.log(data)
       dispatch(setCoupons({ coupons: data.coupons }));
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -629,13 +619,12 @@ export const getCoupon = async (dispatch, token, id) => {
         authorization: `Bearer ${token}`,
       },
     });
-    // console.log(data.coupon)
+
     if (data.success) {
       dispatch(setCoupon({ coupon: data.coupon }));
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -649,13 +638,12 @@ export const getAllPages = async (dispatch, token) => {
     });
     if (data.success) {
       dispatch(setLoading());
-      // console.log(data)
+
       dispatch(setPages({ pages: data.pages }));
     }
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -666,13 +654,12 @@ export const getPage = async (dispatch, token, id) => {
         authorization: `Bearer ${token}`,
       },
     });
-    // console.log(data.coupon)
+
     if (data.success) {
       dispatch(setPage({ page: data.page }));
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -683,7 +670,7 @@ export const getHomeData = async (dispatch, token) => {
         authorization: `Bearer ${token}`,
       },
     });
-    // console.log(data.coupon)
+
     if (data.success) {
       dispatch(
         setHomeData({
@@ -704,7 +691,6 @@ export const getHomeData = async (dispatch, token) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -718,13 +704,12 @@ export const getAllFaqs = async (dispatch, token) => {
     });
     if (data.success) {
       dispatch(setLoading());
-      // console.log(data)
+
       dispatch(setFaqs({ faqs: data.faqs }));
     }
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -735,13 +720,12 @@ export const getFaq = async (dispatch, token, id) => {
         authorization: `Bearer ${token}`,
       },
     });
-    // console.log(data.coupon)
+
     if (data.success) {
       dispatch(setFaq({ faq: data.faq }));
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -757,7 +741,6 @@ export const getAllTrailers = async (dispatch) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -777,7 +760,6 @@ export const getAllCarousels = async (token, dispatch) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -791,13 +773,12 @@ export const getAllContacts = async (dispatch, token) => {
     });
     if (data.success) {
       dispatch(setLoading());
-      // console.log(data)
+
       dispatch(setContacts({ contacts: data.contacts }));
     }
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -811,13 +792,12 @@ export const getAllAbouts = async (dispatch, token) => {
     });
     if (data.success) {
       dispatch(setLoading());
-      // console.log(data)
+
       dispatch(setAbouts({ abouts: data.abouts }));
     }
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -833,7 +813,6 @@ export const getContact = async (dispatch, token, id) => {
     }
   } catch (error) {
     toast.error(error.message);
-    console.log(error);
   }
 };
 
@@ -858,7 +837,7 @@ export const getAllTrailerVideos = async (
     );
     if (data.success) {
       dispatch(setLoading());
-      console.log(data.videos);
+
       dispatch(
         setTrailersVideo({
           videos: data.videos,
@@ -869,6 +848,26 @@ export const getAllTrailerVideos = async (
   } catch (error) {
     dispatch(setLoading());
     toast.error(error.message);
-    console.log(error);
+  }
+};
+
+export const getAllDeletedUsers = async (dispatch, token, curPage) => {
+  try {
+    dispatch(setLoading());
+    const { data } = await axios.get(
+      `/api/deleteduser/get-deleted-users?currentPage=${curPage}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      dispatch(setLoading());
+      dispatch(setDeletedUsers({ ...data }));
+    }
+  } catch (error) {
+    toast.error(error.message);
+    dispatch(setLoading());
   }
 };

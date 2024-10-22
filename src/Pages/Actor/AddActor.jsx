@@ -33,8 +33,8 @@ export default function AddActor() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!name) {
-      toast.warning("Please Enter Name");
+    if (!name || !profile) {
+      toast.warning("All Fieleds are required");
       return;
     }
     try {

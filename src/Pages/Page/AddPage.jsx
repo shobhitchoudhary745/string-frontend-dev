@@ -61,7 +61,7 @@ export default function AddPage() {
         }, 1200);
       }
     } catch (error) {
-      console.log(error);
+     
       dispatch(setLoading());
       toast.error(error.response.data.message || error.message);
     }
@@ -69,7 +69,7 @@ export default function AddPage() {
 
   const handleChange = (value) => {
     setDescription(value);
-    // console.log(value);
+    
   };
 
   return (

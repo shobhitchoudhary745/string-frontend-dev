@@ -10,6 +10,7 @@ import { setCurrentPage, toggle } from "../../features/generalSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { removeToken } from "../../features/authSlice";
 import { toast } from "react-toastify";
+const image = "https://dewv7gdonips4.cloudfront.net/uploads/user-66bcc3c36d6e0c1c35f55569/profile/1723709281147-stringgeologo.jpeg"
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ export default function Header() {
           <Link className="text-center" to="/">
             <img
               className="string-geo-logo"
-              src="https://stringgeo.com/upload/NewFolder/String%20Geo%20logo%20Icon.png"
+              src="https://www.stringgeo.com/logo/string-geo-logo-white.png"
               alt="logoimage"
             />
           </Link>
@@ -58,7 +59,7 @@ export default function Header() {
                 target="_blank"
                 rel="noreferrer"
                 style={{ color: "#f9f9f9" }}
-                href={"https://www.stringevolve.in"}
+                href={"https://www.stringgeo.com"}
               >
                 <FaDesktop size={25} style={{ cursor: "pointer" }} />
               </a>
@@ -69,7 +70,7 @@ export default function Header() {
                 >
                   <img
                     className="avatar"
-                    src="https://stringgeo.com/upload/stringgeo-282da67f48305d53442105c86436c3bf-b.jpg"
+                    src={image}
                     alt=""
                   />
                 </Dropdown.Toggle>

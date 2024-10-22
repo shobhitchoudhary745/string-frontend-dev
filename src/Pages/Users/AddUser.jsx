@@ -30,7 +30,7 @@ export default function AddUser() {
   const [city, setCity] = useState("");
 
   const { loading } = useSelector((state) => state.general);
-  // console.log(city,state,country)
+  
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -104,6 +104,7 @@ export default function AddUser() {
             </Col>
             <Col sm={12} md={8}>
               <Form.Control
+                autoComplete="new-password"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
@@ -116,9 +117,10 @@ export default function AddUser() {
             </Col>
             <Col sm={12} md={8}>
               <Form.Control
+                autoComplete="new-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                type="password"
+                type="text"
               />
             </Col>
           </Row>

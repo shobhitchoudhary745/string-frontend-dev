@@ -14,6 +14,8 @@ import {
   getCategories,
 } from "../../features/apiCall";
 import { useNavigate } from "react-router-dom";
+import ReactQuill from "react-quill";
+import { modules, formats } from "../../utils/helper";
 
 function AddFreeVideo() {
   const dispatch = useDispatch();
@@ -39,11 +41,16 @@ function AddFreeVideo() {
   const [videoPreview, setVideoPreview] = useState("");
   const [thumbnailPreview, setThumbnailPreview] = useState("");
   const [progress, setProgress] = useState(0);
+  const [progres, setProgres] = useState(languages.map((lan) => 0));
   const [estimatedSecond, setEstimatedSecond] = useState(0);
   const [estimatedMinute, setEstimatedMinute] = useState(0);
   const [estimateHour, setEstimatedHour] = useState(0);
   const [video_type, setVideoType] = useState("shorts");
-
+  const [long_video, setLongVideo] = useState("");
+  const [file, setFile] = useState("");
+  const [parts, setParts] = useState([]);
+  const [files, setFiles] = useState([]);
+ 
   useEffect(() => {
     if (token) {
       getAllGenres(dispatch, token);
@@ -51,7 +58,7 @@ function AddFreeVideo() {
       getAllLanguages(dispatch, token);
     }
   }, [token, dispatch]);
- 
+
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Add Free Video" }));
   }, []);
@@ -77,6 +84,228 @@ function AddFreeVideo() {
     };
   };
 
+  const handler = (e) => {
+    const input = e.target.value;
+    const alphanumericPattern = /^[a-zA-Z0-9]+$/;
+    if (alphanumericPattern.test(input || e.target.value == "")) {
+      setLongVideo(e.target.value);
+    }
+  };
+
+  const handleFileChange = (e, index) => {
+    setFile(e.target.files[0]);
+    let temp = [...files];
+    temp[index] = e.target.files[0];
+    setFiles(temp);
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setVideo(file);
+      setVideoPreview(reader.result);
+    };
+  };
+
+  const startUpload = (video) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let temp = [];
+
+        for (let file of files) {
+          if (file) {
+            temp.push(
+              axiosInstance.post("/api/video/start-upload", {
+                video_type: video_type ? video_type : "shorts",
+                access: "Free",
+              })
+            );
+          }
+        }
+
+      
+        const response = await Promise.all(temp);
+        
+        const data = [];
+        let j = 0;
+
+        for (let i = 0; i < files.length; ++i) {
+          if (files[i]) {
+            data.push({
+              fileName: response[j]?.data?.fileName,
+              uploadId: response[j]?.data?.UploadId,
+            });
+            j += 1;
+          } else data.push({});
+        }
+
+        resolve(data);
+        
+        // setFileName(response.data.fileName);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const uploadChunk = async (chunk, partNumber, fileName, uploadId) => {
+    const formData = new FormData();
+    formData.append("file", chunk);
+    formData.append("uploadId", uploadId);
+    formData.append("partNumber", partNumber);
+    formData.append("fileName", fileName);
+    formData.append("video_type", video_type);
+    formData.append("access", "free");
+
+    const response = await axiosInstance.post("/api/video/upload", formData);
+    
+    return response.data;
+  };
+
+  const uploadFileInChunks = async (e) => {
+    try {
+      e.preventDefault();
+      if (genres && !genres.includes("Carousel") && !keywords.length) {
+        toast.warning("Please add atleast one keyword for better SEO.");
+        return;
+      }
+      if (video_type === "shorts" && long_video.length < 24) {
+        toast.warning("Enter Valid Long Video URL");
+        return;
+      }
+      if (
+        !files.length ||
+        !thumbnail ||
+        !title ||
+        // !access ||
+        !description ||
+        !(language || files.length)
+      ) {
+        toast.warning("All fields are required");
+        return;
+      }
+      const video_extension = video_type == "shorts" ? "" : "";
+      dispatch(setLoading());
+      const data = await startUpload(video_extension);
+      for (let counter = 0; counter < files.length; ++counter) {
+        if (!files[counter]) continue;
+        const chunkSize = 100 * 1024 * 1024;
+        const totalChunks = Math.ceil(files[counter].size / chunkSize);
+        let currentUploaded = 0;
+
+        const uploadParts = [];
+
+        for (let i = 0; i < totalChunks; i++) {
+          const start = i * chunkSize;
+          const end = Math.min(start + chunkSize, files[counter].size);
+          const chunk = files[counter].slice(start, end);
+
+          const partNumber = i + 1;
+          const uploadData = await uploadChunk(
+            chunk,
+            partNumber,
+            data[counter].fileName,
+            data[counter].uploadId
+          );
+
+          uploadParts.push({
+            ETag: uploadData.ETag,
+            PartNumber: partNumber,
+          });
+
+          currentUploaded += chunkSize;
+          if (files[counter].size <= currentUploaded) {
+            setProgres((p) => {
+              let arr = [...p];
+              p[counter] = 100;
+              return arr;
+            });
+          } else {
+            setProgres((p) => {
+              let arr = [...p];
+              p[counter] = parseFloat(
+                (currentUploaded / files[counter].size) * 100
+              ).toFixed(2);
+              return arr;
+            });
+          }
+        }
+
+        setParts(uploadParts);
+        // completeUpload(uploadParts, data);
+        const { data3 } = await axiosInstance.post(
+          "/api/video/complete-upload",
+          {
+            uploadId: data[counter].uploadId,
+            fileName: data[counter].fileName,
+            parts: uploadParts,
+            video_type: video_type ? video_type : "shorts",
+          }
+        );
+      }
+      const formData = new FormData();
+
+      if (genres && genres.includes("Carousel")) {
+        setCategory("");
+        setCategories([]);
+        setCategories_id([]);
+        setKeywords([]);
+        setCurrentKeyword("");
+      }
+
+      let lan = [],
+        urls = [];
+      if (video_type != "shorts") {
+        for (let count = 0; count < files.length; ++count) {
+          if (files[count]) {
+            lan.push(languages[count]._id);
+            urls.push({
+              language: languages[count]._id,
+              value: data[count].fileName.split("/")[1],
+            });
+          }
+        }
+      } else {
+        lan.push(language);
+        urls.push({
+          language,
+          value: data[0].fileName.split("/")[1],
+        });
+      }
+
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("keywords", keywords);
+      formData.append("genres", genres_id);
+      formData.append("language", JSON.stringify(lan));
+      formData.append("image", thumbnail);
+      formData.append("video_url", JSON.stringify(urls));
+      formData.append("access", access);
+      formData.append("categories", categories_id);
+      formData.append("video_type", video_type);
+      long_video &&
+        video_type === "shorts" &&
+        formData.append("long_video_url", "/video/" + long_video);
+
+      const data4 = await axiosInstance.post(
+        "/api/free-video/create-video",
+        formData,
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+      if (data4.data.success) {
+        toast.success("Video Uploaded Successfully.    ...Redirecting");
+        dispatch(setLoading());
+        resetForm();
+        setTimeout(() => {
+          navigate("/admin/free-videos");
+        }, 1200);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
   const handleKeywordChange = (e) => {
     setCurrentKeyword(e.target.value);
   };
@@ -94,6 +323,10 @@ function AddFreeVideo() {
     const newKeywords = [...keywords];
     newKeywords.splice(index, 1);
     setKeywords(newKeywords);
+  };
+
+  const handleChange = (value) => {
+    setDescription(value);
   };
 
   const resetForm = () => {
@@ -114,105 +347,6 @@ function AddFreeVideo() {
     setGenres([]);
     setGenres_id([]);
     setProgress(0);
-  };
-
-  const submitHandler = async (e) => {
-    if (genres && !genres.includes("Carousel") && !keywords.length) {
-      toast.warning("Please add atleast one keyword for better SEO.");
-      return;
-    }
-    e.preventDefault();
-    if (
-      !video ||
-      !thumbnail ||
-      !title ||
-      // !access ||
-      !description ||
-      !language
-    ) {
-      toast.warning("All fields are required");
-      return;
-    }
-
-    try {
-      dispatch(setLoading());
-      const { data } = await axiosInstance.post(
-        `/api/admin/get-url`,
-        {access:"true"},
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (data.success) {
-        const data2 = await axios.put(data.data.uploadURL, video, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          onUploadProgress: (progressEvent) => {
-            const { loaded, total, estimated } = progressEvent;
-            let percent = Math.floor((loaded * 100) / total);
-
-            const hours = Math.floor(estimated / 3600);
-            const minutes = Math.floor((estimated % 3600) / 60);
-            const seconds = Math.floor(estimated % 60);
-
-            setEstimatedSecond(Math.round(seconds));
-            setEstimatedMinute(Math.round(minutes));
-            setEstimatedHour(Math.round(hours));
-
-            setProgress(percent);
-          },
-        });
-
-        if (data2.status === 200) {
-          const formData = new FormData();
-
-          if (genres && genres.includes("Carousel")) {
-            setCategory("");
-            setCategories([]);
-            setCategories_id([]);
-            setKeywords([]);
-            setCurrentKeyword("");
-          }
-
-          formData.append("title", title);
-          formData.append("description", description);
-          formData.append("keywords", keywords);
-          formData.append("genres", genres_id);
-          formData.append("language", language);
-          formData.append("image", thumbnail);
-          formData.append("video_url", data.data.imageName);
-          formData.append("access", access);
-          formData.append("categories", categories_id);
-          formData.append("video_type",video_type)
-
-          const data3 = await axiosInstance.post(
-            "/api/free-video/create-video",
-            formData,
-            {
-              headers: { authorization: `Bearer ${token}` },
-            }
-          );
-          if (data3.data.success) {
-            toast.success("Video Uploaded Successfully.    ...Redirecting");
-            dispatch(setLoading());
-            resetForm();
-            setTimeout(() => {
-              navigate("/admin/free-videos");
-            }, 1200);
-          }
-        }
-      } else {
-        console.log("some error");
-      }
-    } catch (error) {
-      console.log(error);
-      dispatch(setLoading());
-      toast.error(error.message);
-    }
   };
 
   return (
@@ -238,33 +372,14 @@ function AddFreeVideo() {
               <Form.Label>Video Description</Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <Form.Control
+              
+              <ReactQuill
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                type="text"
-                as="textarea"
-                placeholder="Enter Video Description"
+                onChange={handleChange}
+                modules={modules}
+                formats={formats}
+                style={{ border: "1px solid black", color: "black" }}
               />
-            </Col>
-          </Row>
-
-          <Row className="align-items-center mb-4">
-            <Col className="mb-2" sm={12} md={3}>
-              <label>Video Language</label>
-            </Col>
-            <Col sm={12} md={8}>
-              <select
-                value={language}
-                className="rounded"
-                onChange={(e) => setLanguage(e.target.value)}
-              >
-                <option value="">Select Language</option>
-                {languages.map((language) => (
-                  <option key={language._id} value={language._id}>
-                    {language.name}
-                  </option>
-                ))}
-              </select>
             </Col>
           </Row>
 
@@ -276,13 +391,32 @@ function AddFreeVideo() {
               <select
                 value={video_type}
                 className="rounded"
-                onChange={(e) => setVideoType(e.target.value)}
+                onChange={(e) => {
+                  setVideoType(e.target.value);
+                  setFiles([]);
+                }}
               >
                 <option value="shorts">Shorts</option>
                 <option value="full_length">Full Length</option>
               </select>
             </Col>
           </Row>
+
+          {video_type === "shorts" && (
+            <Row className={`align-items-center mb-4`}>
+              <Col sm={12} md={3}>
+                <Form.Label>Video URL</Form.Label>
+              </Col>
+              <Col sm={12} md={8}>
+                <Form.Control
+                  value={long_video}
+                  onChange={(e) => handler(e)}
+                  placeholder="Enter URL"
+                  maxLength={24}
+                />
+              </Col>
+            </Row>
+          )}
 
           <Row className={`align-items-center `}>
             <Col sm={12} md={3}>
@@ -331,36 +465,115 @@ function AddFreeVideo() {
             </Row>
           )}
 
-          <Row
-            className={`align-items-center ${videoPreview ? "mb-0" : "mb-4"}`}
-          >
-            <Col sm={12} md={3}>
-              <Form.Label>Video</Form.Label>
-            </Col>
-            <Col sm={12} md={8}>
-              <Form.Control
-                className="choose-video"
-                onChange={handleVideoChange}
-                type="file"
-                accept="video/*"
-              />
-            </Col>
-          </Row>
-          {videoPreview && (
-            <Row className="align-items-center mb-1">
-              <Col sm={12} md={3}>
-                <Form.Label></Form.Label>
-              </Col>
-              <Col sm={12} md={8} className="edit-video">
-                {videoPreview && (
-                  <video
-                    style={{ height: "300px", width: "100%" }}
-                    src={videoPreview}
-                    controls
+          {video_type === "shorts" ? (
+            <>
+              <Row className="align-items-center mb-4">
+                <Col className="mb-2" sm={12} md={3}>
+                  <label>Video Language</label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <select
+                    value={language}
+                    className="rounded"
+                    onChange={(e) => setLanguage(e.target.value)}
+                  >
+                    <option value="">Select Language</option>
+                    {languages.map((language) => (
+                      <option key={language._id} value={language._id}>
+                        {language.name}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
+              </Row>
+
+              <Row
+                className={`align-items-center ${
+                  videoPreview ? "mb-4" : "mb-4"
+                }`}
+              >
+                <Col sm={12} md={3}>
+                  <Form.Label>Video</Form.Label>
+                </Col>
+                <Col sm={12} md={8}>
+                  <Form.Control
+                    className="choose-video"
+                    onChange={(e) => {
+                      handleVideoChange(e);
+                      setFile(e.target.files[0]);
+                      setFiles((p) => {
+                        let temp = [];
+                        temp.push(e.target.files[0]);
+                        return temp;
+                      });
+                    }}
+                    type="file"
+                    accept="video/*"
                   />
-                )}
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </>
+          ) : (
+            <>
+              {languages.map((data, index) => {
+                return (
+                  <div key={index}>
+                    <Row className="align-items-center mb-4">
+                      <Col className="mb-2" sm={12} md={3}>
+                        <label>Video Language ({languages[index]?.name})</label>
+                      </Col>
+                      <Col sm={12} md={8}>
+                        <select
+                          // value={language}
+                          className="rounded"
+                          onChange={(e) => setLanguage(e.target.value)}
+                          value={languages[index]._id}
+                          disabled
+                        >
+                          <option value="">Select Language</option>
+                          {languages.map((language) => (
+                            <option key={language._id} value={language._id}>
+                              {language.name}
+                            </option>
+                          ))}
+                        </select>
+                      </Col>
+                    </Row>
+                    <Row
+                      className={`align-items-center ${
+                        videoPreview ? "mb-4" : "mb-4"
+                      }`}
+                    >
+                      <Col sm={12} md={3}>
+                        <Form.Label>Video</Form.Label>
+                      </Col>
+                      <Col sm={12} md={8}>
+                        <Form.Control
+                          className="choose-video"
+                          onChange={(e) => {
+                            handleFileChange(e, index);
+                          }}
+                          type="file"
+                          accept="video/*"
+                        />
+                      </Col>
+                    </Row>
+                    <Row className="mb-4">
+                      <Col sm={12} md={3}></Col>
+                      <Col sm={12} md={9}>
+                        {progres[index] != 0 && (
+                          <progress
+                            style={{ width: "88%" }}
+                            max="100"
+                            value={progres[index]}
+                          />
+                        )}
+                      </Col>
+                    </Row>
+                  </div>
+                );
+              })}
+            </>
           )}
 
           {genres && genres.includes("Carousel") ? (
@@ -445,14 +658,7 @@ function AddFreeVideo() {
                       ? "Processing..."
                       : `Uploading - ${progress}%`}
                   </Button>
-                  <p>
-                    Estimated Time to Upload Video:{" "}
-                    {estimateHour !== 0 ? `${estimateHour} hours, ` : ""}
-                    {estimatedMinute !== 0
-                      ? `${estimatedMinute} minutes`
-                      : ""}{" "}
-                    {estimatedSecond} seconds
-                  </p>
+                 
                 </div>
               </Col>
             </Row>
@@ -465,7 +671,11 @@ function AddFreeVideo() {
               </Col>
 
               <Col sm={12} md={8}>
-                <Button onClick={submitHandler} className="pt-2 pb-2">
+                <Button
+                  disabled={loading}
+                  onClick={uploadFileInChunks}
+                  className="pt-2 pb-2"
+                >
                   {loading ? (
                     <Spinner animation="border" size="sm" />
                   ) : (

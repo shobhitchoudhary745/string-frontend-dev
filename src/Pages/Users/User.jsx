@@ -66,7 +66,7 @@ export default function User() {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        console.log(error);
+        
       }
     }
   };
@@ -93,7 +93,7 @@ export default function User() {
     <div>
       <Card className="user-table">
         <Card.Header className="user-header">
-          <Form.Group>
+          {/* <Form.Group>
             <Form.Select
               value={plan_name}
               onChange={(e) => {
@@ -118,7 +118,7 @@ export default function User() {
               <option value="monthly">Monthly</option>
               <option value="annual">Annually</option>
             </Form.Select>
-          </Form.Group>
+          </Form.Group> */}
           <InputGroup className="user-search">
             <Form.Control
               aria-label="Search Input"
@@ -176,7 +176,7 @@ export default function User() {
                   <th>Country</th>
                   {/* <th>State</th> */}
                   {/* <th>City</th> */}
-                  <th>Plan</th>
+                  {/* <th>Plan</th> */}
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -198,11 +198,11 @@ export default function User() {
                         <td>{user.country}</td>
                         {/* <td>{user.states}</td> */}
                         {/* <td>{user.city}</td> */}
-                        <td>
+                        {/* <td>
                           {user.latestOrder
                             ? user.latestOrder?.plan_name
                             : "N/A"}
-                        </td>
+                        </td> */}
                         <td>
                           <span className="active">Active</span>
                         </td>
