@@ -94,7 +94,6 @@ const ViewAllVideo = () => {
       } catch (error) {
         dispatch(setLoading());
         toast.error(error.message);
-        
       }
     }
   };
@@ -103,7 +102,7 @@ const ViewAllVideo = () => {
   return (
     <>
       <Card className="user-table">
-        {/* <Card.Header className="user-header">
+        <Card.Header className="user-header">
           <Form.Group>
             <Form.Select
               value={language}
@@ -121,23 +120,7 @@ const ViewAllVideo = () => {
               })}
             </Form.Select>
           </Form.Group>
-          <Form.Group>
-            <Form.Select
-              value={genres}
-              onChange={(e) => {
-                setGenres(e.target.value);
-              }}
-            >
-              <option value="all">Filter By Genres</option>
-              {gen.map((genre) => {
-                return (
-                  <option value={genre._id} key={genre._id}>
-                    {genre.name}
-                  </option>
-                );
-              })}
-            </Form.Select>
-          </Form.Group>
+
           <InputGroup className="user-search">
             <Form.Control
               aria-label="Search Input"
@@ -160,7 +143,12 @@ const ViewAllVideo = () => {
               <FaSearch />
             </InputGroup.Text>
           </InputGroup>
-        </Card.Header> */}
+          <div className="button">
+            <Link to={"/admin/add-inner-carousel/without-video"}>
+              Skip Video
+            </Link>
+          </div>
+        </Card.Header>
         <Card.Body className="user-body">
           {loading ? (
             <div className="text-center">
@@ -197,57 +185,25 @@ const ViewAllVideo = () => {
                         </td>
                         <td>
                           <div className="action-link">
-                            {carousels.length > 0 &&
-                            carousels
-                              .map((carousel) => {
-                                return (
-                                  carousel.video_id && carousel.video_id._id
-                                );
-                              })
-                              .includes(data._id) ? (
-                              <Link
-                                style={{
-                                  backgroundColor: "#ff5b5b",
-                                  border: "none",
-                                }}
-                                className="btn btn-primary"
-                              >
-                                Already Added
-                              </Link>
-                            ) : (
-                              <>
-                                <Link
-                                  style={{
-                                    backgroundColor: "#10c469",
-                                    border: "none",
-                                  }}
-                                  to={`/admin/add-inner-carousel/${data._id}`}
-                                  className="btn btn-danger"
-                                >
-                                  {loading ? (
-                                    <Spinner
-                                      animation="border"
-                                      style={{ color: "#caa257" }}
-                                    />
-                                  ) : (
-                                    <span>
-                                      <HiPlus /> Add
-                                    </span>
-                                  )}
-                                </Link>
-
-                                <Link
-                                  style={{
-                                    backgroundColor: "#ff5b5b",
-                                    border: "none",
-                                  }}
-                                  onClick={() => deleteHandler(data._id)}
-                                  className="btn btn-danger"
-                                >
-                                  <MdRemoveCircleOutline /> Remove
-                                </Link>
-                              </>
-                            )}
+                            <Link
+                              style={{
+                                backgroundColor: "#10c469",
+                                border: "none",
+                              }}
+                              to={`/admin/add-inner-carousel/${data._id}`}
+                              className="btn btn-danger"
+                            >
+                              {loading ? (
+                                <Spinner
+                                  animation="border"
+                                  style={{ color: "#caa257" }}
+                                />
+                              ) : (
+                                <span>
+                                  <HiPlus /> Add
+                                </span>
+                              )}
+                            </Link>
                           </div>
                         </td>
                       </tr>

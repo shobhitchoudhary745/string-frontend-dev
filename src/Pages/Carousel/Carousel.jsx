@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { MdRemoveCircleOutline } from "react-icons/md";
 import { SelectCarouselModal } from "./SelectCarouselModal";
+import { FaEdit } from "react-icons/fa";
 
 const Carousel = () => {
   const dispatch = useDispatch();
@@ -63,6 +64,11 @@ const Carousel = () => {
           <div className="button">
             <Link to="/admin/add-carousel">
               <HiPlus /> Add New Carousel
+            </Link>
+          </div>
+          <div className="button">
+            <Link to="/admin/edit-carousel-sequence">
+              <FaEdit /> Edit Sequence
             </Link>
           </div>
         </Card.Header>

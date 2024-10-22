@@ -325,7 +325,7 @@ export const getAllVideos = async (
   try {
     dispatch(setLoading());
     const { data } = await axios.get(
-      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&carousel=${carousel}`,
+      `/api/video/get-carousel-videos?language=${language}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -747,6 +747,44 @@ export const getAllTrailers = async (dispatch) => {
 export const getAllCarousels = async (token, dispatch) => {
   try {
     const { data } = await axios.get(`/api/carousel/get-all-carousel`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(
+        setCarousels({
+          carousels: data.carousels,
+        })
+      );
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const getAllInnerCarousels = async (token, dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/carousel/get-inner-carousel`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+      },
+    });
+    if (data.success) {
+      dispatch(
+        setCarousels({
+          carousels: data.carousels,
+        })
+      );
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+export const getAllOuterCarousels = async (token, dispatch) => {
+  try {
+    const { data } = await axios.get(`/api/carousel/get-outer-carousel`, {
       headers: {
         authorization: `Bearer ${token}`,
       },

@@ -56,7 +56,6 @@ import ViewAllVideo from "./Pages/Carousel/ViewAllVideo.jsx";
 import Footer from "./components/Footer/Footer.js";
 import TransactionAttempt from "./Pages/Transactions/TransactionAttempt.jsx";
 import AddInnerCarousel from "./Pages/Carousel/AddInnerCarousel.jsx";
-import AddOuterCarousel from "./Pages/Carousel/AddOuterCarousel.jsx";
 import Contact from "./Pages/Contact/Contact.jsx";
 import EditContact from "./Pages/Contact/EditContact.jsx";
 import ForgotPassword from "./Pages/Auth/ForgotPassword.jsx";
@@ -67,6 +66,7 @@ import AddFreeVideo from "./Pages/Free/AddVideo.jsx";
 import EditFreeVideo from "./Pages/Free/EditVideo.jsx";
 import Whatsapp from "./Pages/Whatsapp/Whatsapp.jsx";
 import DeletedUser from "./Pages/Deleted User/DeletedUser.js";
+import EditCarousel from "./Pages/Carousel/EditCarouselSequence.jsx";
 
 export default function Layout() {
   const { token } = useSelector((state) => state.auth);
@@ -550,10 +550,10 @@ export default function Layout() {
               }
             />
             <Route
-              path="/admin/add-outer-carousel"
+              path="/admin/edit-carousel-sequence"
               element={
                 <ProtectedRoute>
-                  <AddOuterCarousel />
+                  <EditCarousel />
                 </ProtectedRoute>
               }
             />

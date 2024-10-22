@@ -30,7 +30,7 @@ export default function AddInnerCarousel() {
   const [mobilethumbnailPreview, setMobileThumbnailPreview] = useState("");
 
   useEffect(() => {
-    dispatch(setCurrentPage({ currentPage: "Add Inner Carousel" }));
+    dispatch(setCurrentPage({ currentPage: "Add Carousel" }));
     SetVideo_id(id);
   }, []);
 
@@ -65,7 +65,7 @@ export default function AddInnerCarousel() {
     try {
       const formData = new FormData();
 
-      formData.append("video_id", video_id);
+      video_id!="without-video"&&formData.append("video_id", video_id);
       formData.append("tag", type);
       formData.append("image", thumbnail);
       formData.append("image", mobilethumbnail);
@@ -97,7 +97,7 @@ export default function AddInnerCarousel() {
     <div>
       <Card className="user-table ">
         <Container className="input-fieleds p-4">
-          <Row className="align-items-center mb-4">
+          {video_id!="without-video"?<Row className="align-items-center mb-4">
             <Col className="mb-2" sm={12} md={3}>
               <label>Video Id</label>
             </Col>
@@ -108,7 +108,7 @@ export default function AddInnerCarousel() {
                 readOnly
               />
             </Col>
-          </Row>
+          </Row>:<></>}
 
           <Row className="align-items-center mb-4">
             <Col sm={12} md={3}>
