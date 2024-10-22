@@ -65,6 +65,9 @@ function EditVideo() {
   const [currentLanguage, setCurrentLanguage] = useState([]);
   const [currentUrl, setCurrentUrl] = useState([]);
   
+  useEffect(()=>{
+    setProgres(languages.map(lan=>0))
+  },[languages])
 
   useEffect(() => {
     if (token) {

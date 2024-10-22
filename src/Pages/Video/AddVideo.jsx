@@ -57,6 +57,10 @@ function AddVideo() {
     }
   }, [token, dispatch]);
 
+  useEffect(()=>{
+    setProgres(languages.map(lan=>0))
+  },[languages])
+
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Add Video" }));
   }, []);
@@ -413,7 +417,7 @@ function AddVideo() {
                 onChange={handleGenreChange}
               >
                 <option value="">Select Genre</option>
-                {availableGenres.map((genre) => (
+                {availableGenres.filter(genre=>genre.name!="Carousel").map((genre) => (
                   <option key={genre._id} value={genre.name}>
                     {genre.name}
                   </option>

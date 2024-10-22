@@ -98,7 +98,11 @@ const Carousel = () => {
                   carousels.map((data, index) => {
                     return (
                       <tr key={index}>
-                        <td>{data.video_id ? data.video_id.title : "N/A"}</td>
+                        <td>
+                          {data?.video_id?.title ||
+                            data.free_video_id?.title ||
+                            "N/A"}
+                        </td>
                         <td>
                           <LazyLoadImage
                             alt={"Profile"}
