@@ -325,7 +325,7 @@ export const getAllVideos = async (
   try {
     dispatch(setLoading());
     const { data } = await axios.get(
-      `/api/video/get-carousel-videos?language=${language}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&carousel=${carousel}`,
       {
         headers: {
           authorization: `Bearer ${token}`,
