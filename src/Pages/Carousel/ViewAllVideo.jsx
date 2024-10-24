@@ -7,6 +7,7 @@ import { FaSearch } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCarousels,
+  getAllCarouselVideos,
   getAllGenres,
   getAllLanguages,
   getAllVideos,
@@ -45,7 +46,7 @@ const ViewAllVideo = () => {
 
   useEffect(() => {
     if (token) {
-      getAllVideos(
+      getAllCarouselVideos(
         dispatch,
         token,
         language,

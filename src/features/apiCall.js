@@ -347,6 +347,40 @@ export const getAllVideos = async (
   }
 };
 
+export const getAllCarouselVideos = async (
+  dispatch,
+  token,
+  language,
+  genres,
+  query,
+  curPage,
+  resultPerPage,
+  carousel = false
+) => {
+  try {
+    dispatch(setLoading());
+    const { data } = await axios.get(
+      `/api/video/get-carousel-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&carousel=${carousel}`,
+      {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (data.success) {
+      dispatch(setLoading());
+      dispatch(
+        setVideos({
+          videos: data.videos,
+          totalVideoCount: data.totalVideoCount,
+        })
+      );
+    }
+  } catch (error) {
+    dispatch(setLoading());
+    toast.error(error.message);
+  }
+};
 export const getAllFreeVideos = async (
   dispatch,
   token,
