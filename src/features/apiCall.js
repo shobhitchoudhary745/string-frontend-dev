@@ -320,12 +320,12 @@ export const getAllVideos = async (
   query,
   curPage,
   resultPerPage,
-  carousel = false
+  carousel = false,
 ) => {
   try {
     dispatch(setLoading());
     const { data } = await axios.get(
-      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&carousel=${carousel}`,
+      `/api/video/get-videos?language=${language}&genres=${genres}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&carousel=${carousel}&admin=true`,
       {
         headers: {
           authorization: `Bearer ${token}`,
@@ -392,7 +392,7 @@ export const getAllFreeVideos = async (
   try {
     dispatch(setLoading());
     const { data } = await axios.get(
-      `/api/free-video/get-videos?language=${language}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`,
+      `/api/free-video/get-videos?language=${language}&keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}&admin=true`,
       {
         headers: {
           authorization: `Bearer ${token}`,

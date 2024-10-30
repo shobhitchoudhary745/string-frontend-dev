@@ -28,7 +28,6 @@ function EditVideo() {
   const { languages } = useSelector((state) => state.language);
   const { loading } = useSelector((state) => state.general);
   const { video: video1 } = useSelector((state) => state.video);
-  
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Edit Video" }));
@@ -40,7 +39,7 @@ function EditVideo() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  // const [language, setLanguage] = useState("");
+  const [status, setStatus] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
   const [genres_id, setGenres_id] = useState([]);
@@ -64,10 +63,10 @@ function EditVideo() {
   const [progres, setProgres] = useState(languages.map((lan) => 0));
   const [currentLanguage, setCurrentLanguage] = useState([]);
   const [currentUrl, setCurrentUrl] = useState([]);
-  
-  useEffect(()=>{
-    setProgres(languages.map(lan=>0))
-  },[languages])
+
+  useEffect(() => {
+    setProgres(languages.map((lan) => 0));
+  }, [languages]);
 
   useEffect(() => {
     if (token) {
@@ -85,7 +84,6 @@ function EditVideo() {
       setCurrentLanguage(video1?.language?.map((lan) => lan._id));
       setCurrentUrl(
         video1?.video_url?.map((url) => {
-          
           return {
             language: url?.language?._id,
             value: url?.value,
@@ -105,6 +103,7 @@ function EditVideo() {
         setCategories(cat_name);
         setCategories_id(cat_id);
       }
+      setStatus(video1?.status);
       setAccess(video1.access);
       setThumbnailPreview(
         `${process.env.REACT_APP_URL}/${video1.thumbnail_url}`
@@ -253,7 +252,8 @@ function EditVideo() {
           formData.append("description", description);
           formData.append("keywords", keywords);
           formData.append("genres", genres_id);
-          // formData.append("language", language);
+          console.log("gvgvgvgvgv", status);
+          formData.append("status", status);
           thumbnail && formData.append("image", thumbnail);
           video && formData.append("video_url", data.data.imageName);
           formData.append("access", access);
@@ -276,10 +276,8 @@ function EditVideo() {
           }
         }
       } else {
-        
       }
     } catch (error) {
-     
       dispatch(setLoading());
       toast.error(error.message);
     }
@@ -328,7 +326,7 @@ function EditVideo() {
     formData.append("fileName", fileName);
 
     const response = await axiosInstance.post("/api/video/upload", formData);
-    
+
     return response.data;
   };
 
@@ -431,6 +429,7 @@ function EditVideo() {
     formData.append("video_url", JSON.stringify(urls));
     formData.append("access", access);
     formData.append("categories", categories_id);
+    formData.append("status", status);
 
     const data4 = await axiosInstance.patch(
       `/api/video/update-video/${id}`,
@@ -531,7 +530,6 @@ function EditVideo() {
               <Form.Label>Video Description</Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              
               <ReactQuill
                 value={description}
                 onChange={handleChange}
@@ -542,7 +540,17 @@ function EditVideo() {
             </Col>
           </Row>
 
-         
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Status</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="Active">Active</option>
+                <option value="InActive">InActive</option>
+              </select>
+            </Col>
+          </Row>
 
           <Row
             className={`align-items-center ${
@@ -805,13 +813,10 @@ function EditVideo() {
                       ? "Processing..."
                       : `Uploading - ${progress}%`}
                   </Button>
-                  
                 </div>
               </Col>
             </Row>
           )}
-
-          
 
           {progress === 0 && (
             <Row className="align-items-center">
@@ -820,7 +825,11 @@ function EditVideo() {
               </Col>
 
               <Col sm={12} md={8}>
-                <Button disabled={loading} onClick={uploadFileInChunks} className="pt-2 pb-2">
+                <Button
+                  disabled={loading}
+                  onClick={uploadFileInChunks}
+                  className="pt-2 pb-2"
+                >
                   {loading ? (
                     <Spinner animation="border" size="sm" />
                   ) : (

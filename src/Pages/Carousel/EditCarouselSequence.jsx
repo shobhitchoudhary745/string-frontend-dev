@@ -31,14 +31,12 @@ export default function EditCarousel() {
   }, [tag]);
 
   useEffect(() => {
-    if (carousels.length) setSequence([...carousels]);
+    setSequence([...carousels]);
   }, [carousels]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-     
-
       dispatch(setLoading());
       const { data } = await axios.patch(
         `/api/carousel/edit-carousel-sequence`,
@@ -96,7 +94,7 @@ export default function EditCarousel() {
                   {sequence?.length === 0 ? (
                     <tr>
                       <td colSpan="3" className="text-center">
-                        No Carousel Found`
+                        No Carousel Found
                       </td>
                     </tr>
                   ) : (
@@ -133,13 +131,17 @@ export default function EditCarousel() {
                   )}
                 </tbody>
               </Table>
-              <Row className="align-items-center mb-4">
-                <Col className="input-fieleds" sm={12} md={8}>
-                  <Button onClick={submitHandler}>
-                    {loading ? <Spinner /> : "Update"}
-                  </Button>
-                </Col>
-              </Row>
+              {sequence.length > 0 ? (
+                <Row className="align-items-center mb-4">
+                  <Col className="input-fieleds" sm={12} md={8}>
+                    <Button onClick={submitHandler}>
+                      {loading ? <Spinner /> : "Update"}
+                    </Button>
+                  </Col>
+                </Row>
+              ) : (
+                <></>
+              )}
             </>
           )}
         </Card.Body>

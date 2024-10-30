@@ -29,6 +29,7 @@ function AddVideo() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("Active");
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
@@ -57,9 +58,9 @@ function AddVideo() {
     }
   }, [token, dispatch]);
 
-  useEffect(()=>{
-    setProgres(languages.map(lan=>0))
-  },[languages])
+  useEffect(() => {
+    setProgres(languages.map((lan) => 0));
+  }, [languages]);
 
   useEffect(() => {
     dispatch(setCurrentPage({ currentPage: "Add Video" }));
@@ -111,10 +112,8 @@ function AddVideo() {
             j += 1;
           } else data.push({});
         }
-       
 
         resolve(data);
-        
       } catch (error) {
         reject(error);
       }
@@ -238,7 +237,7 @@ function AddVideo() {
     formData.append("genres", genres_id);
     formData.append("language", JSON.stringify(language));
     formData.append("image", thumbnail);
-    // formData.append("image", video);
+    formData.append("status", status);
     formData.append("video_url", JSON.stringify(urls));
     formData.append("access", access);
     formData.append("categories", categories_id);
@@ -402,6 +401,18 @@ function AddVideo() {
             </Col>
           </Row>
 
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Status</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="Active">Active</option>
+                <option value="InActive">InActive</option>
+              </select>
+            </Col>
+          </Row>
+
           <Row
             className={`align-items-center ${
               genres && genres.length > 0 ? "mb-5" : "mb-4"
@@ -417,11 +428,13 @@ function AddVideo() {
                 onChange={handleGenreChange}
               >
                 <option value="">Select Genre</option>
-                {availableGenres.filter(genre=>genre.name!="Carousel").map((genre) => (
-                  <option key={genre._id} value={genre.name}>
-                    {genre.name}
-                  </option>
-                ))}
+                {availableGenres
+                  .filter((genre) => genre.name != "Carousel")
+                  .map((genre) => (
+                    <option key={genre._id} value={genre.name}>
+                      {genre.name}
+                    </option>
+                  ))}
               </select>
               <div className="video_keywords">
                 {genres &&

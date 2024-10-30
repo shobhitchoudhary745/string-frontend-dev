@@ -48,7 +48,8 @@ const Video = () => {
         genres,
         query,
         curPage,
-        resultPerPage
+        resultPerPage,
+        
       );
     }
   }, [language, genres, query, curPage, resultPerPage]);

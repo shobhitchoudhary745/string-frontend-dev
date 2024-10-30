@@ -26,6 +26,7 @@ function AddFreeVideo() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("Active");
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
@@ -50,7 +51,7 @@ function AddFreeVideo() {
   const [file, setFile] = useState("");
   const [parts, setParts] = useState([]);
   const [files, setFiles] = useState([]);
- 
+
   useEffect(() => {
     if (token) {
       getAllGenres(dispatch, token);
@@ -122,9 +123,8 @@ function AddFreeVideo() {
           }
         }
 
-      
         const response = await Promise.all(temp);
-        
+
         const data = [];
         let j = 0;
 
@@ -139,7 +139,7 @@ function AddFreeVideo() {
         }
 
         resolve(data);
-        
+
         // setFileName(response.data.fileName);
       } catch (error) {
         reject(error);
@@ -157,7 +157,7 @@ function AddFreeVideo() {
     formData.append("access", "free");
 
     const response = await axiosInstance.post("/api/video/upload", formData);
-    
+
     return response.data;
   };
 
@@ -282,6 +282,7 @@ function AddFreeVideo() {
       formData.append("access", access);
       formData.append("categories", categories_id);
       formData.append("video_type", video_type);
+      formData.append("status", status);
       long_video &&
         video_type === "shorts" &&
         formData.append("long_video_url", "/video/" + long_video);
@@ -372,7 +373,6 @@ function AddFreeVideo() {
               <Form.Label>Video Description</Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              
               <ReactQuill
                 value={description}
                 onChange={handleChange}
@@ -380,6 +380,18 @@ function AddFreeVideo() {
                 formats={formats}
                 style={{ border: "1px solid black", color: "black" }}
               />
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Status</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <select onChange={(e) => setStatus(e.target.value)}>
+                <option value="Active">Active</option>
+                <option value="InActive">InActive</option>
+              </select>
             </Col>
           </Row>
 
@@ -658,7 +670,6 @@ function AddFreeVideo() {
                       ? "Processing..."
                       : `Uploading - ${progress}%`}
                   </Button>
-                 
                 </div>
               </Col>
             </Row>

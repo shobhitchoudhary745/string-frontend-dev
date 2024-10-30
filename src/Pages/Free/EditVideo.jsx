@@ -39,6 +39,7 @@ function EditFreeVideo() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [status,setStatus] = useState("")
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
@@ -83,6 +84,7 @@ function EditFreeVideo() {
       setKeywords(video1.keywords);
       setAccess(video1.access);
       setVideoType(video1.video_type);
+      setStatus(video1?.status);
       setThumbnailPreview(
         `${process.env.REACT_APP_URL}/${video1.thumbnail_url}`
       );
@@ -362,6 +364,7 @@ function EditFreeVideo() {
       formData.append("genres", genres_id);
       formData.append("language", JSON.stringify(lan));
       formData.append("video_type", video_type);
+      formData.append("status", status);
       thumbnail && formData.append("image", thumbnail);
       formData.append("video_url", JSON.stringify(urls));
       long_video &&
@@ -425,6 +428,18 @@ function EditFreeVideo() {
                 formats={formats}
                 style={{ border: "1px solid black", color: "black" }}
               />
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Status</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                <option value="Active">Active</option>
+                <option value="InActive">InActive</option>
+              </select>
             </Col>
           </Row>
 
