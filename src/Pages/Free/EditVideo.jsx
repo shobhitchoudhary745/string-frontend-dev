@@ -39,7 +39,8 @@ function EditFreeVideo() {
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status,setStatus] = useState("")
+  const [status, setStatus] = useState("");
+  const [nickName, setNickName] = useState("");
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
@@ -85,6 +86,7 @@ function EditFreeVideo() {
       setAccess(video1.access);
       setVideoType(video1.video_type);
       setStatus(video1?.status);
+      setNickName(video1?.nick_name || "");
       setThumbnailPreview(
         `${process.env.REACT_APP_URL}/${video1.thumbnail_url}`
       );
@@ -264,7 +266,24 @@ function EditFreeVideo() {
       toast.warning("Please fill Atleast one fieled");
       return;
     }
+    if (nickName && nickName.length < 6) {
+      toast.warning("NickName must be of 6 Characters");
+      return;
+    }
     try {
+      await axiosInstance.post(
+        "/api/free-video/check-uniqueness",
+        {
+          nick_name: nickName,
+          id,
+          update: "true",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const video_extension = video_type == "shorts" ? "" : "";
       dispatch(setLoading());
       let data = {};
@@ -365,6 +384,7 @@ function EditFreeVideo() {
       formData.append("language", JSON.stringify(lan));
       formData.append("video_type", video_type);
       formData.append("status", status);
+      formData.append("nick_name", nickName);
       thumbnail && formData.append("image", thumbnail);
       formData.append("video_url", JSON.stringify(urls));
       long_video &&
@@ -387,7 +407,7 @@ function EditFreeVideo() {
         }, 1200);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error?.response?.data?.message||"Something went wrong");
     }
   };
 
@@ -436,10 +456,29 @@ function EditFreeVideo() {
               <Form.Label>Status</Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
                 <option value="Active">Active</option>
                 <option value="InActive">InActive</option>
               </select>
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Nick Name</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <Form.Control
+                value={nickName}
+                onChange={(e) =>
+                  setNickName(e.target.value.trim().replaceAll(" ", ""))
+                }
+                type="text"
+                placeholder="Enter Nick Name"
+              />
             </Col>
           </Row>
 

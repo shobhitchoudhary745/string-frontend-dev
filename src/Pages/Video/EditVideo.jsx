@@ -40,6 +40,7 @@ function EditVideo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
+  const [nickName, setNickName] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
   const [genres_id, setGenres_id] = useState([]);
@@ -80,6 +81,7 @@ function EditVideo() {
     if (video1.description) {
       setDescription(video1.description);
       setTitle(video1.title);
+      setNickName(video1?.nick_name||"");
       // setLanguage(video1.language?._id);
       setCurrentLanguage(video1?.language?.map((lan) => lan._id));
       setCurrentUrl(
@@ -331,120 +333,146 @@ function EditVideo() {
   };
 
   const uploadFileInChunks = async (e) => {
-    e.preventDefault();
+    try {
+      e.preventDefault();
+      if (nickName && nickName.length < 6) {
+        toast.warning("NickName must be of 6 Characters");
+        return;
+      }
 
-    if (
-      !files.length &&
-      !thumbnail &&
-      !title &&
-      // !access &&
-      !description &&
-      !genres.length &&
-      !keywords.length &&
-      !categories.length
-    ) {
-      toast.warning("Please fill Atleast one fieled");
-      return;
-    }
+      if (
+        !files.length &&
+        !thumbnail &&
+        !title &&
+        // !access &&
+        !description &&
+        !genres.length &&
+        !keywords.length &&
+        !categories.length
+      ) {
+        toast.warning("Please fill Atleast one fieled");
+        return;
+      }
 
-    dispatch(setLoading());
-    const data = !files.length ? true : await startUpload();
-    for (let counter = 0; counter < files.length; ++counter) {
-      if (!files[counter]) continue;
-      const chunkSize = 100 * 1024 * 1024;
-      const totalChunks = Math.ceil(files[counter].size / chunkSize);
-      let currentUploaded = 0;
+      dispatch(setLoading());
+      await axiosInstance.post(
+        "/api/video/check-uniqueness",
+        {
+          nick_name: nickName,
+          id,
+          update: "true",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = !files.length ? true : await startUpload();
+      for (let counter = 0; counter < files.length; ++counter) {
+        if (!files[counter]) continue;
+        const chunkSize = 100 * 1024 * 1024;
+        const totalChunks = Math.ceil(files[counter].size / chunkSize);
+        let currentUploaded = 0;
 
-      const uploadParts = [];
+        const uploadParts = [];
 
-      for (let i = 0; i < totalChunks; i++) {
-        const start = i * chunkSize;
-        const end = Math.min(start + chunkSize, files[counter].size);
-        const chunk = files[counter].slice(start, end);
+        for (let i = 0; i < totalChunks; i++) {
+          const start = i * chunkSize;
+          const end = Math.min(start + chunkSize, files[counter].size);
+          const chunk = files[counter].slice(start, end);
 
-        const partNumber = i + 1;
-        const uploadData = await uploadChunk(
-          chunk,
-          partNumber,
-          data[counter].fileName,
-          data[counter].uploadId
-        );
+          const partNumber = i + 1;
+          const uploadData = await uploadChunk(
+            chunk,
+            partNumber,
+            data[counter].fileName,
+            data[counter].uploadId
+          );
 
-        uploadParts.push({
-          ETag: uploadData.ETag,
-          PartNumber: partNumber,
-        });
-
-        currentUploaded += chunkSize;
-        if (files[counter].size <= currentUploaded) {
-          setProgres((p) => {
-            let arr = [...p];
-            p[counter] = 100;
-            return arr;
+          uploadParts.push({
+            ETag: uploadData.ETag,
+            PartNumber: partNumber,
           });
-        } else {
-          setProgres((p) => {
-            let arr = [...p];
-            p[counter] = parseFloat(
-              (currentUploaded / files[counter].size) * 100
-            ).toFixed(2);
-            return arr;
+
+          currentUploaded += chunkSize;
+          if (files[counter].size <= currentUploaded) {
+            setProgres((p) => {
+              let arr = [...p];
+              p[counter] = 100;
+              return arr;
+            });
+          } else {
+            setProgres((p) => {
+              let arr = [...p];
+              p[counter] = parseFloat(
+                (currentUploaded / files[counter].size) * 100
+              ).toFixed(2);
+              return arr;
+            });
+          }
+        }
+
+        setParts(uploadParts);
+        // completeUpload(uploadParts, data);
+        const { data3 } = await axiosInstance.post(
+          "/api/video/complete-upload",
+          {
+            uploadId: data[counter].uploadId,
+            fileName: data[counter].fileName,
+            parts: uploadParts,
+          }
+        );
+      }
+      const formData = new FormData();
+      let language = [],
+        urls = [];
+      for (let count = 0; count < files.length; ++count) {
+        if (files[count]) {
+          language.push(languages[count]._id);
+          urls.push({
+            language: languages[count]._id,
+            value: data[count].fileName.split("/")[1],
           });
         }
       }
+      language = Array.from(new Set([...language, ...currentLanguage]));
 
-      setParts(uploadParts);
-      // completeUpload(uploadParts, data);
-      const { data3 } = await axiosInstance.post("/api/video/complete-upload", {
-        uploadId: data[counter].uploadId,
-        fileName: data[counter].fileName,
-        parts: uploadParts,
-      });
-    }
-    const formData = new FormData();
-    let language = [],
-      urls = [];
-    for (let count = 0; count < files.length; ++count) {
-      if (files[count]) {
-        language.push(languages[count]._id);
-        urls.push({
-          language: languages[count]._id,
-          value: data[count].fileName.split("/")[1],
-        });
+      const curr = urls.map((url) => url.language);
+      for (let u of currentUrl) {
+        if (!curr.includes(u.language)) urls.push(u);
       }
-    }
-    language = Array.from(new Set([...language, ...currentLanguage]));
 
-    const curr = urls.map((url) => url.language);
-    for (let u of currentUrl) {
-      if (!curr.includes(u.language)) urls.push(u);
-    }
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("keywords", keywords);
+      formData.append("genres", genres_id);
+      formData.append("language", JSON.stringify(language));
+      thumbnail && formData.append("image", thumbnail);
+      formData.append("video_url", JSON.stringify(urls));
+      formData.append("access", access);
+      formData.append("categories", categories_id);
+      formData.append("status", status);
+      formData.append("nick_name", nickName);
 
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("keywords", keywords);
-    formData.append("genres", genres_id);
-    formData.append("language", JSON.stringify(language));
-    thumbnail && formData.append("image", thumbnail);
-    formData.append("video_url", JSON.stringify(urls));
-    formData.append("access", access);
-    formData.append("categories", categories_id);
-    formData.append("status", status);
-
-    const data4 = await axiosInstance.patch(
-      `/api/video/update-video/${id}`,
-      formData,
-      {
-        headers: { authorization: `Bearer ${token}` },
+      const data4 = await axiosInstance.patch(
+        `/api/video/update-video/${id}`,
+        formData,
+        {
+          headers: { authorization: `Bearer ${token}` },
+        }
+      );
+      if (data4.data.success) {
+        toast.success("Video Updated Successfully.    ...Redirecting");
+        dispatch(setLoading());
+        resetForm();
+        setTimeout(() => {
+          navigate("/admin/videos");
+        }, 1200);
       }
-    );
-    if (data4.data.success) {
-      toast.success("Video Updated Successfully.    ...Redirecting");
+    } catch (error) {
       dispatch(setLoading());
-      resetForm();
-      setTimeout(() => {
-        navigate("/admin/videos");
-      }, 1200);
+      toast.error(error?.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -545,10 +573,30 @@ function EditVideo() {
               <Form.Label>Status</Form.Label>
             </Col>
             <Col sm={12} md={8}>
-              <select value={status} onChange={(e) => setStatus(e.target.value)}>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
                 <option value="Active">Active</option>
                 <option value="InActive">InActive</option>
               </select>
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Nick Name</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <Form.Control
+                value={nickName}
+                maxLength={10}
+                onChange={(e) =>
+                  setNickName(e.target.value.trim().replaceAll(" ", ""))
+                }
+                type="text"
+                placeholder="Enter Nick Name"
+              />
             </Col>
           </Row>
 

@@ -27,6 +27,7 @@ function AddFreeVideo() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("Active");
+  const [nickName, setNickName] = useState("");
   const [language, setLanguage] = useState("");
   const [access, setAccess] = useState("");
   const [genres, setGenres] = useState([]);
@@ -172,6 +173,10 @@ function AddFreeVideo() {
         toast.warning("Enter Valid Long Video URL");
         return;
       }
+      if (nickName.length < 6) {
+        toast.warning("NickName must be of 6 Characters");
+        return;
+      }
       if (
         !files.length ||
         !thumbnail ||
@@ -183,6 +188,17 @@ function AddFreeVideo() {
         toast.warning("All fields are required");
         return;
       }
+      await axiosInstance.post(
+        "/api/free-video/check-uniqueness",
+        {
+          nick_name: nickName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const video_extension = video_type == "shorts" ? "" : "";
       dispatch(setLoading());
       const data = await startUpload(video_extension);
@@ -283,6 +299,7 @@ function AddFreeVideo() {
       formData.append("categories", categories_id);
       formData.append("video_type", video_type);
       formData.append("status", status);
+      formData.append("nick_name", nickName);
       long_video &&
         video_type === "shorts" &&
         formData.append("long_video_url", "/video/" + long_video);
@@ -303,7 +320,7 @@ function AddFreeVideo() {
         }, 1200);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error?.response?.data?.message||"Something went wrong");
     }
   };
 
@@ -392,6 +409,22 @@ function AddFreeVideo() {
                 <option value="Active">Active</option>
                 <option value="InActive">InActive</option>
               </select>
+            </Col>
+          </Row>
+
+          <Row className="align-items-center mb-4">
+            <Col sm={12} md={3}>
+              <Form.Label>Nick Name</Form.Label>
+            </Col>
+            <Col sm={12} md={8}>
+              <Form.Control
+                value={nickName}
+                onChange={(e) =>
+                  setNickName(e.target.value.trim().replaceAll(" ", ""))
+                }
+                type="text"
+                placeholder="Enter Nick Name"
+              />
             </Col>
           </Row>
 
