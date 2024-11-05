@@ -66,12 +66,13 @@ const ViewQuery = () => {
                   <strong>Submitted At</strong>
                 </p>
                 <p>
-                  {(query?.createdAt)
-                    .split("T")[0]
-                    .split("-")
-                    .reverse()
-                    .join("-")}{" "}
-                  || {(query?.createdAt).split("T")[1].split(".")[0]}
+                  {new Date(query.createdAt).toLocaleDateString() +
+                    " " +
+                    new Date(query.createdAt).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    })}
                 </p>
               </Col>
             )}
